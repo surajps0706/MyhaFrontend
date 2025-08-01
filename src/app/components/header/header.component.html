@@ -1,0 +1,32 @@
+<header class="header">
+  <!-- Logo -->
+  <div class="logo">
+    <a routerLink="/">Myha</a>
+  </div>
+
+  <!-- Desktop Navigation -->
+  <nav class="nav-links">
+    <a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+    <a routerLink="/products" routerLinkActive="active-link">Shop</a>
+    <a routerLink="/track" routerLinkActive="active-link">Track Order</a>
+  </nav>
+
+  <!-- Cart Icon -->
+  <div class="cart-icon">
+    <a routerLink="/cart">
+      <span class="icon">🛒</span>
+      <span class="badge">1</span>
+    </a>
+  </div>
+
+  <!-- Hamburger -->
+  <button class="hamburger" (click)="toggleMenu()">☰</button>
+</header>
+
+<!-- Mobile Nav -->
+<div *ngIf="isMobileMenuOpen" class="mobile-menu">
+  <a routerLink="/" (click)="toggleMenu()">Home</a>
+  <a routerLink="/products" (click)="toggleMenu()">Shop</a>
+  <a routerLink="/track" (click)="toggleMenu()">Track Order</a>
+  <a routerLink="/cart" (click)="toggleMenu()">Cart 🛒</a>
+</div>

@@ -1,0 +1,25 @@
+<div class="product-detail-container">
+  <div class="image-gallery">
+    <img *ngFor="let img of product.images" [src]="img" alt="product image" />
+  </div>
+
+  <div class="product-info">
+    <h2>{{ product.name }}</h2>
+    <p class="price">{{ product.price }}</p>
+    <p class="description">{{ product.description }}</p>
+
+    <div class="selectors">
+      <label>Size:</label>
+      <select [(ngModel)]="product.selectedSize">
+        <option *ngFor="let size of product.sizes" [value]="size">{{ size }}</option>
+      </select>
+
+      <label>Color:</label>
+      <select [(ngModel)]="product.selectedColor">
+        <option *ngFor="let color of product.colors" [value]="color">{{ color }}</option>
+      </select>
+    </div>
+
+    <button class="add-btn" (click)="addToCart()">Add to Cart</button>
+  </div>
+</div>

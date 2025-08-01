@@ -1,0 +1,81 @@
+.hero {
+  background-image: url('https://res.cloudinary.com/dw35epojg/image/upload/v1754020493/logo_v5px6x.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.hero-content {
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 40px;
+  border-radius: 10px;
+  max-width: 600px;
+}
+
+.hero-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+}
+
+.hero-content p {
+  font-size: 1rem;
+  margin-bottom: 25px;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.btn {
+  padding: 10px 24px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.btn.primary {
+  background-color: #000;
+  color: white;
+}
+
+.btn.primary:hover {
+  background-color: #333;
+}
+
+.btn.secondary {
+  background-color: white;
+  color: #000;
+  border: 1px solid #ccc;
+}
+
+.btn.secondary:hover {
+  background-color: #f1f1f1;
+}
+
+.highlight-section {
+  padding: 40px 20px;
+  text-align: center;
+  background-color: #fff;
+}
+
+.highlight-section h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.explore-btn {
+  margin-top: 15px;
+  display: inline-block;
+  background-color: #000;
+  color: #fff;
+}
