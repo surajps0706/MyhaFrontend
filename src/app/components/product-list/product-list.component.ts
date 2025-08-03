@@ -1,55 +1,29 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-product-list',
-  standalone: true,
+  templateUrl: './product-list.component.html',
   imports: [CommonModule, RouterModule],
   styleUrls: ['./product-list.component.css'],
-  templateUrl: './product-list.component.html'
+  standalone: true,
 })
-export class ProductListComponent {
-  products = [
-    {
-      id: 1,
-      name: 'Brindha Dress',
-      price: '₹2,499',
-      images: [
-        'https://res.cloudinary.com/dw35epojg/image/upload/v1753624789/temp-image_m0qua0.jpg',
-        'https://res.cloudinary.com/dw35epojg/image/upload/v1753624789/temp-image_m0qua0.jpg',
-        'https://res.cloudinary.com/dw35epojg/image/upload/v1753624789/temp-image_m0qua0.jpg'
-      ]
-    },
-    {
-      id: 2,
-      name: 'Sita Anarkali',
-      price: '₹2,199',
-      images: [
-        'https://res.cloudinary.com/dw35epojg/image/upload/v1753624789/temp-image_m0qua0.jpg',
-        'https://res.cloudinary.com/dw35epojg/image/upload/v1753624789/temp-image_m0qua0.jpg',
-        'https://res.cloudinary.com/dw35epojg/image/upload/v1753624789/temp-image_m0qua0.jpg'
-      ]
-    },
-    {
-      id: 3,
-      name: 'Divya Gown',
-      price: '₹2,799',
-      images: [
-        'https://res.cloudinary.com/dw35epojg/image/upload/v1753624789/temp-image_m0qua0.jpg',
-        'https://res.cloudinary.com/dw35epojg/image/upload/v1753624789/temp-image_m0qua0.jpg',
-        'https://res.cloudinary.com/dw35epojg/image/upload/v1753624789/temp-image_m0qua0.jpg'
-      ]
-    },
-       {
-      id: 4,
-      name: 'Divya Gown',
-      price: '₹2,799',
-      images: [
-        'https://res.cloudinary.com/dw35epojg/image/upload/v1753624789/temp-image_m0qua0.jpg',
-        'https://res.cloudinary.com/dw35epojg/image/upload/v1753624789/temp-image_m0qua0.jpg',
-        'https://res.cloudinary.com/dw35epojg/image/upload/v1753624789/temp-image_m0qua0.jpg'
-      ]
-    }
-  ];
+export class ProductListComponent implements OnInit {
+  products: any[] = [];
+
+  constructor(private http: HttpClient) {}
+
+  ngOnInit(): void {
+    this.http.get<any[]>('http://localhost:8000/products').subscribe({
+      next: (data) => {
+        this.products = data;
+        console.log('✅ Products fetched:', this.products);
+      },
+      error: (err) => {
+        console.error('❌ Error fetching products:', err);
+      }
+    });
+  }
 }

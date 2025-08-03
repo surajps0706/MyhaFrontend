@@ -1,38 +1,48 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CartService } from '../../services/cart.service';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
-  styleUrls: ['./cart.component.css'],
-  templateUrl: './cart.component.html'
+  imports: [CommonModule, FormsModule],
+  templateUrl: './cart.component.html',
+  styleUrls: ['./cart.component.css']
 })
-export class CartComponent {
-  cartItems = [
-    {
-      id: 1,
-      name: 'Brindha Dress',
-      price: 2499,
-      quantity: 1,
-      image: 'https://res.cloudinary.com/dw35epojg/image/upload/v1753624789/temp-image_m0qua0.jpg'
-    },
-    {
-      id: 2,
-      name: 'Sita Anarkali',
-      price: 2199,
-      quantity: 2,
-      image: 'https://res.cloudinary.com/dw35epojg/image/upload/v1753624789/temp-image_m0qua0.jpg'
-    }
-  ];
+export class CartComponent implements OnInit {
+  cartItems: any[] = [];
+  objectKeys = Object.keys;
 
-  getTotal() {
-    return this.cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+  constructor(private cartService: CartService) {}
+
+  ngOnInit(): void {
+    this.cartItems = this.cartService.getCart();
+    // If quantity is missing, set it to 1
+    this.cartItems.forEach(item => {
+      if (!item.quantity) item.quantity = 1;
+    });
+    this.updateTotal();
   }
 
-  removeItem(id: number) {
-    this.cartItems = this.cartItems.filter(item => item.id !== id);
+  updateQuantity(index: number, quantity: number) {
+    this.cartItems[index].quantity = quantity;
+    this.cartService.updateCart(this.cartItems);
+    this.updateTotal();
+  }
+
+  removeItem(index: number) {
+    this.cartItems.splice(index, 1);
+    this.cartService.updateCart(this.cartItems);
+    this.updateTotal();
+  }
+
+  total: number = 0;
+
+  updateTotal() {
+    this.total = this.cartItems.reduce((sum, item) => {
+      const price = Number(item.price.replace(/[^0-9]/g, ''));
+      return sum + price * item.quantity;
+    }, 0);
   }
 }

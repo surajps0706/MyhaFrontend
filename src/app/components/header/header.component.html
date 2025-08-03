@@ -11,20 +11,25 @@
     <a routerLink="/track" routerLinkActive="active-link">Track Order</a>
   </nav>
 
-  <!-- Cart Icon -->
-  <div class="cart-icon">
-    <a routerLink="/cart">
+  <!-- Right Icons -->
+  <div class="right-section">
+    <!-- Cart -->
+    <a class="cart-icon" routerLink="/cart" aria-label="Cart">
       <span class="icon">🛒</span>
       <span class="badge">1</span>
     </a>
-  </div>
 
-  <!-- Hamburger -->
-  <button class="hamburger" (click)="toggleMenu()">☰</button>
+    <!-- Hamburger -->
+    <button class="hamburger" (click)="toggleMenu()" aria-label="Toggle Menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+  </div>
 </header>
 
-<!-- Mobile Nav -->
-<div *ngIf="isMobileMenuOpen" class="mobile-menu">
+<!-- Mobile Dropdown -->
+<div *ngIf="isMobileMenuOpen" class="mobile-menu animate-slide">
   <a routerLink="/" (click)="toggleMenu()">Home</a>
   <a routerLink="/products" (click)="toggleMenu()">Shop</a>
   <a routerLink="/track" (click)="toggleMenu()">Track Order</a>

@@ -1,11 +1,11 @@
 <div class="product-list-container">
   <h2>Our Collection</h2>
+  <div *ngIf="products.length === 0">No products available.</div>
+
   <div class="product-grid">
     <div class="product-card" *ngFor="let product of products">
       <div class="carousel">
-        <img [src]="product.images[0]" alt="image1" />
-        <img [src]="product.images[1]" alt="image2" />
-        <img [src]="product.images[2]" alt="image3" />
+        <img *ngFor="let img of product.images" [src]="img" alt="{{ product.name }}" />
       </div>
       <div class="product-info">
         <h3>{{ product.name }}</h3>

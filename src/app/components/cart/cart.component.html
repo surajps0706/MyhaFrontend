@@ -1,25 +1,43 @@
-<div class="cart-container">
+<div class="cart-container" *ngIf="cartItems.length > 0; else emptyCart">
   <h2>Your Cart</h2>
 
-  <div *ngIf="cartItems.length > 0; else emptyCart">
-    <div class="cart-item" *ngFor="let item of cartItems">
-      <img [src]="item.image" alt="{{ item.name }}" />
-      <div class="details">
-        <h3>{{ item.name }}</h3>
-        <p>₹{{ item.price }}</p>
-        <label>Qty:</label>
-        <input type="number" [(ngModel)]="item.quantity" min="1" />
-        <button (click)="removeItem(item.id)">Remove</button>
-      </div>
-    </div>
+  <div class="cart-item" *ngFor="let item of cartItems; let i = index">
+    <img [src]="item.images[0]" alt="{{ item.name }}" class="product-image" />
 
-    <div class="cart-total">
-      <h3>Total: ₹{{ getTotal() }}</h3>
-      <a routerLink="/checkout" class="checkout-btn">Proceed to Checkout</a>
+    <div class="cart-details">
+      <h3>{{ item.name }}</h3>
+      <p><strong>Price:</strong> {{ item.price }}</p>
+
+      <!-- Quantity Dropdown -->
+      <label><strong>Quantity:</strong></label>
+      <select style="margin-left: 6px;" [(ngModel)]="item.quantity" (change)="updateQuantity(i, item.quantity)">
+        <option *ngFor="let qty of [1,2,3,4,5,6,7,8,9,10]" [value]="qty">{{ qty }}</option>
+      </select>
+
+      <p><strong>Selected Size:</strong> {{ item.selectedSize }}</p>
+
+      <div class="measurement-summary">
+        <h4>Measurements:</h4>
+        <ul>
+          <li *ngFor="let key of objectKeys(item.measurements)">
+            <strong>{{ key }}:</strong> {{ item.measurements[key] }} in
+          </li>
+        </ul>
+      </div>
+
+      <!-- Remove Button -->
+      <button class="remove-btn" (click)="removeItem(i)">Remove</button>
     </div>
   </div>
 
-  <ng-template #emptyCart>
-    <p>Your cart is empty.</p>
-  </ng-template>
+  <!-- 🧮 Total Section -->
+  <div class="cart-total">
+    <h3>Total Price: ₹{{ total }}</h3>
+    
+    <button class="pay-btn">Proceed to Pay</button>
+  </div>
 </div>
+
+<ng-template #emptyCart>
+  <p>Your cart is empty.</p>
+</ng-template>

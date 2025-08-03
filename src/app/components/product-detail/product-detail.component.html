@@ -1,25 +1,118 @@
 <div class="product-detail-container">
-  <div class="image-gallery">
-    <img *ngFor="let img of product.images" [src]="img" alt="product image" />
+  <!-- Left: Image Section -->
+  <div class="image-section">
+    <div class="thumbnails">
+      <img *ngFor="let img of product.images"
+           [src]="img"
+           [alt]="product.name"
+           (click)="selectImage(img)"
+           [class.active]="img === selectedImage" />
+    </div>
+    <div class="main-image">
+      <img [src]="selectedImage" [alt]="product.name" />
+    </div>
   </div>
 
-  <div class="product-info">
+  <!-- Right: Info Section -->
+  <div class="info-section">
     <h2>{{ product.name }}</h2>
-    <p class="price">{{ product.price }}</p>
-    <p class="description">{{ product.description }}</p>
 
-    <div class="selectors">
-      <label>Size:</label>
-      <select [(ngModel)]="product.selectedSize">
-        <option *ngFor="let size of product.sizes" [value]="size">{{ size }}</option>
-      </select>
-
-      <label>Color:</label>
-      <select [(ngModel)]="product.selectedColor">
-        <option *ngFor="let color of product.colors" [value]="color">{{ color }}</option>
-      </select>
+    <!-- Price -->
+    <div class="price-container">
+      <span class="price-label">Price:</span>
+      <span class="price-value">{{ product.price }}</span>
     </div>
 
-    <button class="add-btn" (click)="addToCart()">Add to Cart</button>
+    <!-- Size Selection -->
+    <div class="select-row">
+      <label for="size">Size:</label>
+      <select id="size" [(ngModel)]="product.selectedSize">
+        <option *ngFor="let size of standardSizes" [value]="size">{{ size }}</option>
+      </select>
+
+      <div class="size-chart-link" (click)="showSizeChart = !showSizeChart">📏 View Size Chart</div>
+      <div class="size-chart-img" *ngIf="showSizeChart">
+        <img src="https://res.cloudinary.com/dw35epojg/image/upload/v1754143979/size-chart_bu3k4d.jpg" alt="Size chart" />
+      </div>
+    </div>
+
+    <!-- Measurements -->
+    <div class="measurements-section">
+      <h4>Measurements:</h4>
+      <div class="measurements-grid">
+        <div class="measurement-row" *ngFor="let field of measurementFields">
+          <label>
+            {{ field.label }}
+            <span *ngIf="isRequired(field.key)" class="required-star">*</span>
+          </label>
+          <input
+            type="text"
+            [(ngModel)]="measurements[field.key]"
+            [name]="field.key"
+            placeholder="in inches"
+            [required]="isRequired(field.key)"
+            #inputRef="ngModel"
+            [ngClass]="{ 'invalid': isRequired(field.key) && inputRef.invalid && inputRef.touched }"
+            (blur)="inputRef.control.markAsTouched()"
+          />
+          <div *ngIf="isRequired(field.key) && inputRef.invalid && inputRef.touched" class="error-msg">
+            {{ field.label }} is required
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sleeve Selection -->
+    <div class="sleeve-options">
+      <h4>Sleeve Type:</h4>
+      <div class="sleeve-list">
+        <label *ngFor="let option of sleeveOptions">
+          <input
+            type="radio"
+            name="sleeve"
+            [value]="option"
+            [(ngModel)]="selectedSleeve"
+          />
+          {{ option.name }} ({{ option.price > 0 ? '+₹' + option.price : 'Included' }})
+        </label>
+      </div>
+    </div>
+
+    <!-- Customization Notes -->
+    <div class="customization-section">
+      <h4>Customization Notes <span class="optional-text">(Optional)</span></h4>
+      <p class="customization-hint">Mention preferences like neck style, height, or additional comments.</p>
+      <textarea
+        rows="3"
+        [(ngModel)]="customizationNotes"
+        placeholder="e.g., V-neck preferred, height 42 inches"
+      ></textarea>
+    </div>
+
+    <!-- Description -->
+    <div class="description">
+      <h4>Description:</h4>
+      <p>{{ product.description }}</p>
+    </div>
+
+
+    <!-- Order Button -->
+   <!-- Sticky Footer -->
+<div class="sticky-footer" *ngIf="product">
+  <div class="footer-content">
+    <div class="footer-price">
+     <div class="final-price">Total Price: {{ product.price }} + ₹{{ totalPrice }}</div>
+    </div>
+    <button
+      class="footer-add-btn"
+      type="button"
+      [disabled]="!isFormValid()"
+      (click)="addToCart()"
+    >
+      Add to Cart
+    </button>
+  </div>
+</div>
+
   </div>
 </div>
