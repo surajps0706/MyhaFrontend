@@ -18,12 +18,16 @@ export class ProductDetailComponent implements OnInit {
   selectedImage: string = '';
   showSizeChart = false;
   customizationNotes: string = '';
-  selectedSleeve:any=null;
+  selectedSleeve: any = null;
+   showDescription: boolean = false;
+  isKurti: boolean = false;
+  preferredHeight: string = '';
+  extraHeightPrice: number = 0;
 
   standardSizes = ['XXS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'];
 
   measurementFields = [
-    { key: 'bust', label: 'Bust' },
+    { key: 'Bust', label: 'Bust' },
     { key: 'waist', label: 'Waist' },
     { key: 'hips', label: 'Hips' },
     { key: 'shoulders', label: 'Shoulders' },
@@ -34,14 +38,14 @@ export class ProductDetailComponent implements OnInit {
   ];
 
   measurements: any = {
-    bust: '',
+    Bust: '',
     waist: '',
     hips: '',
     shoulders: '',
     upperArm: '',
     biceps: '',
     wrist: '',
-    sleeveLength: ''
+    sleeveLength: '',
   };
 
   sleeveOptions = [
@@ -50,7 +54,6 @@ export class ProductDetailComponent implements OnInit {
     { name: 'Elbow Sleeve', price: 150 },
     { name: 'Full Sleeve', price: 200 }
   ];
-
 
   constructor(
     private route: ActivatedRoute,
@@ -66,6 +69,7 @@ export class ProductDetailComponent implements OnInit {
           this.product = data;
           this.selectedImage = this.product.images[0];
           this.selectedSleeve = this.sleeveOptions[0];
+          this.isKurti = this.product.category?.toLowerCase() === 'kurti';
         },
         error: (err) => {
           console.error('Error fetching product:', err);
@@ -87,13 +91,45 @@ export class ProductDetailComponent implements OnInit {
     return ['bust', 'waist', 'biceps', 'upperArm'].includes(fieldKey);
   }
 
+  onHeightChange(value: string) {
+    this.preferredHeight = value.trim();
+    this.extraHeightPrice = this.preferredHeight ? 100 : 0;
+  }
+
+get basePrice(): number {
+  return parseFloat(this.product?.price?.toString().replace(/[^0-9.]/g, '')) || 0;
+}
+
+get sleeveExtra(): number {
+  return this.selectedSleeve?.price || 0;
+}
+
+get heightExtra(): number {
+  return this.isKurti && this.preferredHeight?.trim() ? this.extraHeightPrice : 0;
+}
+
 get totalPrice(): number {
-  if (!this.product) return 0;
+  return this.basePrice + this.sleeveExtra + this.heightExtra;
+}
 
-  const basePrice = parseFloat(this.product.price) || 0;
-  const sleevePrice = this.selectedSleeve?.price || 0;
+  toggleDescription(): void {
+    this.showDescription = !this.showDescription;
+  }
 
-  return basePrice + sleevePrice;
+  get formattedDescription() {
+  return this.product?.description ? this.product.description.replace(/\n/g, '<br>') : '';
+}
+
+getWhatsappLink(): string {
+  const phoneNumber = '9710759208'; // Replace with your business number in international format
+  const message = `Hello, I'm interested in the following product:
+  
+Product: ${this.product.name}
+Price: ₹${this.totalPrice || this.product.price}
+Size: ${this.product.selectedSize || 'Not selected'}
+Link: ${window.location.href}`;
+
+  return `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 }
 
 
@@ -109,9 +145,11 @@ get totalPrice(): number {
       ...this.product,
       selectedSize: this.product.selectedSize,
       measurements: this.measurements,
-      sleeveType: this.selectedSleeve.name,
       sleevePrice: this.selectedSleeve.price,
-      customizationNotes: this.customizationNotes
+      sleeveType: this.selectedSleeve?.name || 'None',
+      customizationNotes: this.customizationNotes,
+      preferredHeight: this.preferredHeight,
+      extraHeightPrice: this.extraHeightPrice
     };
 
     this.cartService.addToCart(cartItem);

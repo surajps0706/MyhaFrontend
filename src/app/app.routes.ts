@@ -28,6 +28,15 @@ export const routes: Routes = [
       ),
   },
 
+  {
+  path: 'checkout',
+  loadComponent: () =>
+    import('./components/checkout/checkout.component').then(
+      (m) => m.CheckoutComponent
+    ),
+},
+
+
   { path: 'checkout', component: CheckoutComponent },
   { path: 'order-success', component: OrderSuccessComponent },
   { path: 'track', component: TrackOrderComponent },

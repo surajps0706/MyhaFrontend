@@ -16,7 +16,8 @@
     <!-- Cart -->
     <a class="cart-icon" routerLink="/cart" aria-label="Cart">
       <span class="icon">🛒</span>
-      <span class="badge">1</span>
+      <!-- Dynamically show badge only if cartCount > 0 -->
+      <span class="badge" *ngIf="cartCount > 0">{{ cartCount }}</span>
     </a>
 
     <!-- Hamburger -->
@@ -33,5 +34,7 @@
   <a routerLink="/" (click)="toggleMenu()">Home</a>
   <a routerLink="/products" (click)="toggleMenu()">Shop</a>
   <a routerLink="/track" (click)="toggleMenu()">Track Order</a>
-  <a routerLink="/cart" (click)="toggleMenu()">Cart 🛒</a>
+  <a routerLink="/cart" (click)="toggleMenu()">Cart 🛒 
+    <span *ngIf="cartCount > 0">({{ cartCount }})</span>
+  </a>
 </div>

@@ -23,6 +23,16 @@
       <span class="price-value">{{ product.price }}</span>
     </div>
 
+    <!-- Collapsible Description -->
+    <div class="collapsible-description">
+      <button class="toggle-btn" (click)="toggleDescription()">
+        {{ showDescription ? 'Hide' : 'Show' }} Description
+        <span [class.rotated]="showDescription">▼</span>
+      </button>
+     <div class="description-content" [class.open]="showDescription" [innerHTML]="formattedDescription"></div>
+
+    </div>
+
     <!-- Size Selection -->
     <div class="select-row">
       <label for="size">Size:</label>
@@ -78,6 +88,15 @@
       </div>
     </div>
 
+    <div *ngIf="isKurti" class="extra-height-section">
+      <h4>Extra Height (₹{{ extraHeightPrice }})</h4>
+      <input class="extra-height"
+             type="text"
+             [(ngModel)]="preferredHeight"
+             (ngModelChange)="onHeightChange($event)"
+             placeholder="Enter desired height in inches" />
+    </div>
+
     <!-- Customization Notes -->
     <div class="customization-section">
       <h4>Customization Notes <span class="optional-text">(Optional)</span></h4>
@@ -89,30 +108,39 @@
       ></textarea>
     </div>
 
-    <!-- Description -->
-    <div class="description">
-      <h4>Description:</h4>
-      <p>{{ product.description }}</p>
+    <!-- Sticky Footer -->
+    <div class="sticky-footer" *ngIf="product">
+      <div class="footer-content">
+        <div class="footer-price">
+          <p>
+            Base Price: ₹{{ basePrice }}
+            <span *ngIf="sleeveExtra"> + ₹{{ sleeveExtra }}</span>
+            <span *ngIf="heightExtra"> + ₹{{ heightExtra }}</span>
+            <span *ngIf="sleeveExtra || heightExtra"> = ₹{{ totalPrice }}</span>
+          </p>
+        </div>
+
+        <button
+          class="footer-add-btn"
+          type="button"
+          [disabled]="!isFormValid()"
+          (click)="addToCart()"
+        >
+          Add to Cart
+        </button>
+
+        <!-- WhatsApp Floating Button -->
+<a
+  class="whatsapp-float"
+  [href]="getWhatsappLink()"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Chat on WhatsApp"
+>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
+</a>
+
+      </div>
     </div>
-
-
-    <!-- Order Button -->
-   <!-- Sticky Footer -->
-<div class="sticky-footer" *ngIf="product">
-  <div class="footer-content">
-    <div class="footer-price">
-     <div class="final-price">Total Price: {{ product.price }} + ₹{{ totalPrice }}</div>
-    </div>
-    <button
-      class="footer-add-btn"
-      type="button"
-      [disabled]="!isFormValid()"
-      (click)="addToCart()"
-    >
-      Add to Cart
-    </button>
-  </div>
-</div>
-
   </div>
 </div>
