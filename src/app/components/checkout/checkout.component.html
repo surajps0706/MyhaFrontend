@@ -71,7 +71,9 @@
         <strong class="total-amount">₹{{ totalAmount }}</strong>
       </div>
 
-      <button type="submit" form="checkoutForm" class="place-order-btn">✅ Place Order</button>
+<form id="checkoutForm" class="billing-form section" (ngSubmit)="placeOrder()" #checkoutForm="ngForm">
+  <button type="submit" class="place-order-btn">✅ Place Order</button>
+</form>
     </aside>
   </div>
 </div>

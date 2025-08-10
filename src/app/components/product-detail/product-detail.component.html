@@ -33,18 +33,19 @@
 
     </div>
 
-    <!-- Size Selection -->
-    <div class="select-row">
-      <label for="size">Size:</label>
-      <select id="size" [(ngModel)]="product.selectedSize">
-        <option *ngFor="let size of standardSizes" [value]="size">{{ size }}</option>
-      </select>
+<!-- Size Selection -->
+<div class="select-row">
+  <label for="size">Size:</label>
+  <select id="size" class="size-dropdown" [(ngModel)]="product.selectedSize">
+    <option *ngFor="let size of standardSizes" [value]="size">{{ size }}</option>
+  </select>
 
-      <div class="size-chart-link" (click)="showSizeChart = !showSizeChart">📏 View Size Chart</div>
-      <div class="size-chart-img" *ngIf="showSizeChart">
-        <img src="https://res.cloudinary.com/dw35epojg/image/upload/v1754143979/size-chart_bu3k4d.jpg" alt="Size chart" />
-      </div>
-    </div>
+  <div class="size-chart-link" (click)="showSizeChart = !showSizeChart">📏 View Size Chart</div>
+  <div class="size-chart-img" *ngIf="showSizeChart">
+    <img src="https://res.cloudinary.com/dw35epojg/image/upload/v1754143979/size-chart_bu3k4d.jpg" alt="Size chart" />
+  </div>
+</div>
+
 
     <!-- Measurements -->
     <div class="measurements-section">
@@ -83,19 +84,23 @@
             [value]="option"
             [(ngModel)]="selectedSleeve"
           />
-          {{ option.name }} ({{ option.price > 0 ? '+₹' + option.price : 'Included' }})
+          {{ option.name }} ({{ option.price > 0 ? '+₹' + option.price : 'Free' }})
         </label>
       </div>
     </div>
 
-    <div *ngIf="isKurti" class="extra-height-section">
-      <h4>Extra Height (₹{{ extraHeightPrice }})</h4>
-      <input class="extra-height"
-             type="text"
-             [(ngModel)]="preferredHeight"
-             (ngModelChange)="onHeightChange($event)"
-             placeholder="Enter desired height in inches" />
-    </div>
+   <div *ngIf="isKurti" class="extra-height-section">
+  <h4>Extra Height (₹{{ extraHeightPrice }})</h4>
+  <input class="extra-height"
+         type="text"
+         [(ngModel)]="preferredHeight"
+         (ngModelChange)="onHeightChange($event)"
+         placeholder="Enter desired height in inches" />
+  <p class="extra-height-note">
+    *Extra ₹150 will be charged if height exceeds 35 inches.
+  </p>
+</div>
+
 
     <!-- Customization Notes -->
     <div class="customization-section">

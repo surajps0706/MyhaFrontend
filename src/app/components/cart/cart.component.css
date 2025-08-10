@@ -207,22 +207,37 @@ select {
 }
 
 .clear-cart-btn {
-  background-color: transparent;
-  color: #d9534f;
-  border: 2px solid #d9534f;
-  padding: 8px 16px;
-  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #fef2f2, #fde8e8);
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+  padding: 8px 14px;
+  border-radius: 8px;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 6px rgba(185, 28, 28, 0.08);
 }
 
 .clear-cart-btn:hover {
-  /* background-color: #d9534f; */
-  color: white;
+  background: linear-gradient(135deg, #fee2e2, #fecaca);
+  color: #991b1b;
+  border-color: #f87171;
+  box-shadow: 0 4px 10px rgba(185, 28, 28, 0.15);
   transform: translateY(-1px);
 }
+
+.clear-cart-btn:active {
+  transform: scale(0.98);
+}
+
+.clear-cart-btn .material-icons {
+  font-size: 18px;
+}
+
 
 
 /* Responsive */

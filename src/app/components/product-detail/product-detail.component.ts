@@ -19,15 +19,15 @@ export class ProductDetailComponent implements OnInit {
   showSizeChart = false;
   customizationNotes: string = '';
   selectedSleeve: any = null;
-   showDescription: boolean = false;
+  showDescription: boolean = false;
   isKurti: boolean = false;
   preferredHeight: string = '';
-  extraHeightPrice: number = 0;
+  extraHeightPrice = 150; // Price if height > 35
 
   standardSizes = ['XXS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'];
 
   measurementFields = [
-    { key: 'Bust', label: 'Bust' },
+    { key: 'bust', label: 'Bust' },
     { key: 'waist', label: 'Waist' },
     { key: 'hips', label: 'Hips' },
     { key: 'shoulders', label: 'Shoulders' },
@@ -38,7 +38,7 @@ export class ProductDetailComponent implements OnInit {
   ];
 
   measurements: any = {
-    Bust: '',
+    bust: '',
     waist: '',
     hips: '',
     shoulders: '',
@@ -49,10 +49,10 @@ export class ProductDetailComponent implements OnInit {
   };
 
   sleeveOptions = [
-    { name: 'Sleeveless', price: 0 },
-    { name: 'Short Sleeve', price: 100 },
-    { name: 'Elbow Sleeve', price: 150 },
-    { name: 'Full Sleeve', price: 200 }
+    { name: 'Small Sleeves', price: 0 },
+    { name: 'Elbow Sleeves', price: 50 },
+    { name: '3/4 Sleeves', price: 70 },
+    { name: 'Full Sleeve', price: 100 }
   ];
 
   constructor(
@@ -67,7 +67,7 @@ export class ProductDetailComponent implements OnInit {
       this.http.get<any>(`http://localhost:8000/product/${this.productId}`).subscribe({
         next: (data) => {
           this.product = data;
-          this.selectedImage = this.product.images[0];
+          this.selectedImage = this.product.images?.[0] || '';
           this.selectedSleeve = this.sleeveOptions[0];
           this.isKurti = this.product.category?.toLowerCase() === 'kurti';
         },
@@ -91,49 +91,48 @@ export class ProductDetailComponent implements OnInit {
     return ['bust', 'waist', 'biceps', 'upperArm'].includes(fieldKey);
   }
 
-  onHeightChange(value: string) {
-    this.preferredHeight = value.trim();
-    this.extraHeightPrice = this.preferredHeight ? 100 : 0;
+  onHeightChange(height: string | number) {
+    // No direct assignment, price updates automatically
   }
 
-get basePrice(): number {
-  return parseFloat(this.product?.price?.toString().replace(/[^0-9.]/g, '')) || 0;
-}
+  get basePrice(): number {
+    return parseFloat(this.product?.price?.toString().replace(/[^0-9.]/g, '')) || 0;
+  }
 
-get sleeveExtra(): number {
-  return this.selectedSleeve?.price || 0;
-}
+  get sleeveExtra(): number {
+    return this.selectedSleeve?.price || 0;
+  }
 
-get heightExtra(): number {
-  return this.isKurti && this.preferredHeight?.trim() ? this.extraHeightPrice : 0;
-}
+  get heightExtra(): number {
+    const h = Number(this.preferredHeight);
+    return this.isKurti && !isNaN(h) && h > 35 ? this.extraHeightPrice : 0;
+  }
 
-get totalPrice(): number {
-  return this.basePrice + this.sleeveExtra + this.heightExtra;
-}
+  get totalPrice(): number {
+    return this.basePrice + this.sleeveExtra + this.heightExtra;
+  }
 
   toggleDescription(): void {
     this.showDescription = !this.showDescription;
   }
 
   get formattedDescription() {
-  return this.product?.description ? this.product.description.replace(/\n/g, '<br>') : '';
-}
+    return this.product?.description
+      ? this.product.description.replace(/\n/g, '<br>')
+      : '';
+  }
 
-getWhatsappLink(): string {
-  const phoneNumber = '9710759208'; // Replace with your business number in international format
-  const message = `Hello, I'm interested in the following product:
-  
-Product: ${this.product.name}
-Price: ₹${this.totalPrice || this.product.price}
-Size: ${this.product.selectedSize || 'Not selected'}
+  getWhatsappLink(): string {
+    const phoneNumber = '9710759208'; // Add country code if needed
+    const message = `Hello, I'm interested in the following product:
+
+Product: ${this.product?.name}
+Price: ₹${this.totalPrice}
+Size: ${this.product?.selectedSize || 'Not selected'}
 Link: ${window.location.href}`;
 
-  return `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-}
-
-
-
+    return `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+  }
 
   addToCart(): void {
     if (!this.product.selectedSize) {

@@ -1,13 +1,12 @@
 <div class="cart-container" *ngIf="cartItems.length > 0">
 
- <div class="cart-header">
-  <h2 class="cart-heading">Your Cart</h2>
-  <button class="clear-cart-btn" (click)="clearCart()">
-    🗑️ Clear Cart
-  </button>
-</div>
-
-
+  <div class="cart-header">
+    <h2 class="cart-heading">Your Cart</h2>
+    <button class="clear-cart-btn" (click)="clearCart()">
+      <span class="material-icons">delete_outline</span>
+      Clear Cart
+    </button>
+  </div>
 
   <div class="cart-item" *ngFor="let item of cartItems; let i = index">
     <div class="image-wrapper">
@@ -27,32 +26,26 @@
 
       <p class="size">Selected Size: <span>{{ item.selectedSize }}</span></p>
 
-      <!-- Redesigned Measurements -->
-    <div class="measurement-summary" *ngIf="hasMeasurements(item.measurements)">
-  <h4>Measurements:</h4>
-  <div class="measurement-tags">
-  <ng-container *ngFor="let key of objectKeys(item.measurements)">
-  <span *ngIf="item.measurements[key]?.trim()">
-    {{ key }}: {{ item.measurements[key] }}
-  </span>
-</ng-container>
-
-  </div>
-</div>
-
+      <div class="measurement-summary" *ngIf="hasMeasurements(item.measurements)">
+        <h4>Measurements:</h4>
+        <div class="measurement-tags">
+          <ng-container *ngFor="let key of objectKeys(item.measurements)">
+            <span *ngIf="item.measurements[key]?.trim()">
+              {{ key }}: {{ item.measurements[key] }}
+            </span>
+          </ng-container>
+        </div>
+      </div>
 
       <p class="sleeve">Selected Sleeve: <span>{{ item.sleeveType }}</span> (+₹{{ item.sleevePrice }})</p>
 
-      <!-- Redesigned Remove Button -->
-     <button class="remove-btn" (click)="removeItem(i)" title="Remove this item">
-  <span class="material-icons">delete_outline</span>
-  <span>Remove</span>
-</button>
-
+      <button class="remove-btn" (click)="removeItem(i)" title="Remove this item">
+        <span class="material-icons">delete_outline</span>
+        <span>Remove</span>
+      </button>
     </div>
   </div>
 
-  <!-- Total Section -->
   <div class="cart-total">
     <div class="price-breakup">
       <p><span>Base Price Total:</span> ₹{{ baseTotal }}</p>
@@ -61,12 +54,12 @@
       <hr />
       <p class="grand-total"><span>Grand Total:</span> ₹{{ total }}</p>
     </div>
-<button class="pay-btn" 
-        [disabled]="cartItems.length === 0"
-        (click)="goToCheckout()">
-  Proceed to Pay
-</button>
+
+    <button class="pay-btn" 
+            [disabled]="cartItems.length === 0"
+            (click)="goToCheckout()">
+      Proceed to Pay
+    </button>
+  </div>
 
 </div>
-
-

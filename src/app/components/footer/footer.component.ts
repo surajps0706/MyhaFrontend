@@ -9,4 +9,18 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./footer.component.css'],
   templateUrl: './footer.component.html'
 })
-export class FooterComponent {}
+export class FooterComponent {
+  currentYear = new Date().getFullYear();
+
+  footerLinks = [
+    { label: 'Home', route: '/' },
+    { label: 'Shop', route: '/products' },
+    { label: 'Track Order', route: '/track' }
+  ];
+
+  contactInfo = {
+    phone: '+91 9344539530',
+    email: 'couturemyha@gmail.com',
+    instagram: 'https://www.instagram.com/myha_couture?igsh=MTkxdWNuNHViZnBrOA=='
+  };
+}
