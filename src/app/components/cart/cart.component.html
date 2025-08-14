@@ -39,6 +39,11 @@
 
       <p class="sleeve">Selected Sleeve: <span>{{ item.sleeveType }}</span> (+₹{{ item.sleevePrice }})</p>
 
+      <p *ngIf="item.preferredHeight">Preferred Height: <span>{{ item.preferredHeight }} inches</span>
+  <span *ngIf="item.extraHeightPrice > 0"> (+₹{{ item.extraHeightPrice }})</span>
+</p>
+
+
       <button class="remove-btn" (click)="removeItem(i)" title="Remove this item">
         <span class="material-icons">delete_outline</span>
         <span>Remove</span>

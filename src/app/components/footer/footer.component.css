@@ -42,6 +42,10 @@
 .footer-links li,
 .contact-list li {
   margin: 6px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .footer-links a,
@@ -63,6 +67,13 @@
   text-align: center;
 }
 
+/* Icons */
+.icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
 /* Responsive: Desktop */
 @media (min-width: 768px) {
   .footer-container {
@@ -74,5 +85,8 @@
   }
   .footer-section {
     flex: 1;
+  }
+  .contact-list li {
+    justify-content: flex-start;
   }
 }

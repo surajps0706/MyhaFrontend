@@ -1,12 +1,15 @@
-<div class="product-detail-container">
+<div class="product-detail-container" *ngIf="product; else loading">
   <!-- Left: Image Section -->
   <div class="image-section">
     <div class="thumbnails">
-      <img *ngFor="let img of product.images"
-           [src]="img"
-           [alt]="product.name"
-           (click)="selectImage(img)"
-           [class.active]="img === selectedImage" />
+      <img
+        *ngFor="let img of product.images; let i = index"
+        [src]="img"
+        [alt]="product.name + ' thumbnail ' + (i + 1)"
+        loading="lazy"
+        (click)="selectImage(img)"
+        [class.active]="img === selectedImage"
+      />
     </div>
     <div class="main-image">
       <img [src]="selectedImage" [alt]="product.name" />
@@ -15,7 +18,7 @@
 
   <!-- Right: Info Section -->
   <div class="info-section">
-    <h2>{{ product.name }}</h2>
+    <h2 class="product-name">{{ product.name }}</h2>
 
     <!-- Price -->
     <div class="price-container">
@@ -25,52 +28,105 @@
 
     <!-- Collapsible Description -->
     <div class="collapsible-description">
-      <button class="toggle-btn" (click)="toggleDescription()">
+      <button class="toggle-btn" type="button" (click)="toggleDescription()">
         {{ showDescription ? 'Hide' : 'Show' }} Description
         <span [class.rotated]="showDescription">▼</span>
       </button>
-     <div class="description-content" [class.open]="showDescription" [innerHTML]="formattedDescription"></div>
-
+      <div
+        class="description-content"
+        [class.open]="showDescription"
+        [innerHTML]="formattedDescription"
+      ></div>
     </div>
 
-<!-- Size Selection -->
-<div class="select-row">
-  <label for="size">Size:</label>
-  <select id="size" class="size-dropdown" [(ngModel)]="product.selectedSize">
-    <option *ngFor="let size of standardSizes" [value]="size">{{ size }}</option>
-  </select>
+    <!-- Sizing Mode Switch -->
+    <div class="select-row" style="gap:10px; align-items:flex-start;">
+      <div style="font-weight:600; color:#222;">Choose Sizing Mode:</div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button
+          type="button"
+          (click)="setSizingMode('size')"
+          [attr.aria-pressed]="sizingMode==='size' ? 'true' : 'false'"
+          class="footer-add-btn"
+          style="padding:6px 14px; border-radius:16px;"
+        >
+          Use Standard Size
+        </button>
+        <button
+          type="button"
+          (click)="setSizingMode('measurements')"
+          [attr.aria-pressed]="sizingMode==='measurements' ? 'true' : 'false'"
+          class="footer-add-btn"
+          style="padding:6px 14px; border-radius:16px; background:#7b1fa2;"
+        >
+          Use Custom Measurements
+        </button>
+      </div>
+    </div>
 
-  <div class="size-chart-link" (click)="showSizeChart = !showSizeChart">📏 View Size Chart</div>
-  <div class="size-chart-img" *ngIf="showSizeChart">
-    <img src="https://res.cloudinary.com/dw35epojg/image/upload/v1754143979/size-chart_bu3k4d.jpg" alt="Size chart" />
-  </div>
-</div>
+    <!-- Size Selection -->
+    <div class="select-row">
+      <label for="size">Size:</label>
+      <select
+        id="size"
+        class="size-dropdown"
+        [(ngModel)]="product.selectedSize"
+        (ngModelChange)="onSizeChange($event)"
+        [disabled]="sizeDisabled"
+      >
+        <option *ngFor="let size of standardSizes" [value]="size">{{ size }}</option>
+      </select>
 
+      <div class="size-chart-link" (click)="showSizeChart = !showSizeChart">📏 View Size Chart</div>
+      <div class="size-chart-img" *ngIf="showSizeChart">
+        <img
+          src="https://res.cloudinary.com/dw35epojg/image/upload/v1754143979/size-chart_bu3k4d.jpg"
+          alt="Size chart"
+        />
+      </div>
+
+      <p *ngIf="sizeModeNote" class="customization-hint" style="margin-top:6px;">
+        {{ sizeModeNote }}
+      </p>
+    </div>
 
     <!-- Measurements -->
-    <div class="measurements-section">
+    <div class="measurements-section" [class.disabled]="measurementsDisabled">
       <h4>Measurements:</h4>
       <div class="measurements-grid">
         <div class="measurement-row" *ngFor="let field of measurementFields">
           <label>
             {{ field.label }}
-            <span *ngIf="isRequired(field.key)" class="required-star">*</span>
+            <span *ngIf="isRequired(field.key) && !measurementsDisabled" class="required-star">*</span>
           </label>
+
           <input
             type="text"
             [(ngModel)]="measurements[field.key]"
+            (ngModelChange)="onMeasurementChanged(field.key, $event)"
             [name]="field.key"
             placeholder="in inches"
-            [required]="isRequired(field.key)"
+            [required]="isRequired(field.key) && !measurementsDisabled"
+            [disabled]="measurementsDisabled"
             #inputRef="ngModel"
-            [ngClass]="{ 'invalid': isRequired(field.key) && inputRef.invalid && inputRef.touched }"
+            [ngClass]="{
+              'invalid': !measurementsDisabled && isRequired(field.key) && inputRef.invalid && inputRef.touched
+            }"
             (blur)="inputRef.control.markAsTouched()"
           />
-          <div *ngIf="isRequired(field.key) && inputRef.invalid && inputRef.touched" class="error-msg">
+
+          <div
+            *ngIf="!measurementsDisabled && isRequired(field.key) && inputRef.invalid && inputRef.touched"
+            class="error-msg"
+          >
             {{ field.label }} is required
           </div>
         </div>
       </div>
+
+      <p *ngIf="measModeNote" class="customization-hint" style="margin-top:6px;">
+        {{ measModeNote }}
+      </p>
     </div>
 
     <!-- Sleeve Selection -->
@@ -89,18 +145,32 @@
       </div>
     </div>
 
-   <div *ngIf="isKurti" class="extra-height-section">
-  <h4>Extra Height (₹{{ extraHeightPrice }})</h4>
-  <input class="extra-height"
-         type="text"
-         [(ngModel)]="preferredHeight"
-         (ngModelChange)="onHeightChange($event)"
-         placeholder="Enter desired height in inches" />
-  <p class="extra-height-note">
-    *Extra ₹150 will be charged if height exceeds 35 inches.
-  </p>
-</div>
+    <!-- Extra Height -->
+    <div *ngIf="isKurti" class="extra-height-section">
+      <h4>Extra Height (₹{{ extraHeightPrice }})</h4>
+      <input
+        class="extra-height"
+        type="text"
+        [(ngModel)]="preferredHeight"
+        (ngModelChange)="onHeightChange($event)"
+        placeholder="Enter desired height in inches"
+      />
+      <p class="extra-height-note">
+        *Extra ₹150 will be charged if height exceeds 35 inches.
+      </p>
+    </div>
 
+    <div *ngIf="!isKurti" class="extra-height-section">
+      <h4>Extra Height (Optional)</h4>
+      <input
+        class="extra-height"
+        type="text"
+        [(ngModel)]="preferredHeight"
+        (ngModelChange)="onHeightChange($event)"
+        placeholder="Enter desired height in inches"
+      />
+      <p class="extra-height-note">Free Of Cost</p>
+    </div>
 
     <!-- Customization Notes -->
     <div class="customization-section">
@@ -135,17 +205,20 @@
         </button>
 
         <!-- WhatsApp Floating Button -->
-<a
-  class="whatsapp-float"
-  [href]="getWhatsappLink()"
-  target="_blank"
-  rel="noopener noreferrer"
-  aria-label="Chat on WhatsApp"
->
-  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
-</a>
-
+        <a
+          class="whatsapp-float"
+          [href]="getWhatsappLink()"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Chat on WhatsApp"
+        >
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
+        </a>
       </div>
     </div>
   </div>
 </div>
+
+<ng-template #loading>
+  <div class="loading-skeleton">Loading product…</div>
+</ng-template>

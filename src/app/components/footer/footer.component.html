@@ -22,13 +22,16 @@
       <h3>Contact Us</h3>
       <ul class="contact-list">
         <li>
-          📞 <a [href]="'tel:' + contactInfo.phone">{{ contactInfo.phone }}</a>
+          <img src="https://img.icons8.com/color/20/phone.png" alt="Phone" class="icon" />
+          <a [href]="'tel:' + contactInfo.phone">{{ contactInfo.phone }}</a>
         </li>
         <li>
-          ✉️ <a [href]="'mailto:' + contactInfo.email">{{ contactInfo.email }}</a>
+          <img src="https://img.icons8.com/color/20/new-post.png" alt="Email" class="icon" />
+          <a [href]="'mailto:' + contactInfo.email">{{ contactInfo.email }}</a>
         </li>
         <li>
-          📷 <a [href]="contactInfo.instagram" target="_blank" rel="noopener">Instagram</a>
+          <img src="https://img.icons8.com/fluency/20/instagram-new.png" alt="Instagram" class="icon" />
+          <a [href]="contactInfo.instagram" target="_blank" rel="noopener">Instagram</a>
         </li>
       </ul>
     </div>

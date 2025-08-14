@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CartService } from '../../services/cart.service';
 
+type SizingMode = 'size' | 'measurements';
+
 @Component({
   selector: 'app-product-detail',
   standalone: true,
@@ -23,6 +25,9 @@ export class ProductDetailComponent implements OnInit {
   isKurti: boolean = false;
   preferredHeight: string = '';
   extraHeightPrice = 150; // Price if height > 35
+
+  // NEW: sizing mode (user can switch anytime)
+  sizingMode: SizingMode = 'size';
 
   standardSizes = ['XXS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'];
 
@@ -70,6 +75,13 @@ export class ProductDetailComponent implements OnInit {
           this.selectedImage = this.product.images?.[0] || '';
           this.selectedSleeve = this.sleeveOptions[0];
           this.isKurti = this.product.category?.toLowerCase() === 'kurti';
+
+          // Choose an initial mode (prefer size if present)
+          const hasSize = !!String(this.product?.selectedSize || '').trim();
+          const hasAnyMeasurement = Object.values(this.measurements).some(
+            (v: any) => String(v ?? '').trim() !== ''
+          );
+          this.sizingMode = hasSize ? 'size' : (hasAnyMeasurement ? 'measurements' : 'size');
         },
         error: (err) => {
           console.error('Error fetching product:', err);
@@ -78,23 +90,64 @@ export class ProductDetailComponent implements OnInit {
     }
   }
 
+  /* =========================
+     Mode helpers
+     ========================= */
+  setSizingMode(mode: SizingMode): void {
+    this.sizingMode = mode;
+  }
+  get sizeDisabled(): boolean { return this.sizingMode === 'measurements'; }
+  get measurementsDisabled(): boolean { return this.sizingMode === 'size'; }
+
+  /** Small hint you can show above each section */
+  get sizeModeNote(): string | null {
+    return this.sizeDisabled ? 'Disabled because Custom Measurements mode is active.' : null;
+  }
+  get measModeNote(): string | null {
+    return this.measurementsDisabled ? 'Disabled because Size mode is active.' : null;
+  }
+
+  /* =========================
+     UI helpers / events
+     ========================= */
   selectImage(img: string): void {
     this.selectedImage = img;
   }
 
-  isFormValid(): boolean {
-    const requiredFields = ['bust', 'waist', 'biceps', 'upperArm'];
-    return requiredFields.every(field => this.measurements[field]?.trim() !== '');
+  onSizeChange(_size: string): void {
+    // If user picks a size while in measurements mode (e.g. via future toggle), switch to size
+    if (this.sizingMode !== 'size') this.sizingMode = 'size';
+  }
+
+  onMeasurementChanged(_key: string, value: string): void {
+    // If user types any value while in size mode, auto-switch to measurements
+    if (this.sizingMode !== 'measurements' && String(value ?? '').trim() !== '') {
+      this.sizingMode = 'measurements';
+    }
   }
 
   isRequired(fieldKey: string): boolean {
     return ['bust', 'waist', 'biceps', 'upperArm'].includes(fieldKey);
   }
 
-  onHeightChange(height: string | number) {
-    // No direct assignment, price updates automatically
+  /** Valid if: (Size mode + size chosen) OR (Measurements mode + required fields filled) */
+  isFormValid(): boolean {
+    if (this.sizingMode === 'size') {
+      return !!String(this.product?.selectedSize || '').trim();
+    }
+    const requiredFields = ['bust', 'waist', 'biceps', 'upperArm'];
+    return requiredFields.every(
+      (field) => String(this.measurements[field] ?? '').trim() !== ''
+    );
   }
 
+  onHeightChange(_height: string | number) {
+    // totals recompute via getters
+  }
+
+  /* =========================
+     Pricing
+     ========================= */
   get basePrice(): number {
     return parseFloat(this.product?.price?.toString().replace(/[^0-9.]/g, '')) || 0;
   }
@@ -112,6 +165,9 @@ export class ProductDetailComponent implements OnInit {
     return this.basePrice + this.sleeveExtra + this.heightExtra;
   }
 
+  /* =========================
+     Description + WhatsApp
+     ========================= */
   toggleDescription(): void {
     this.showDescription = !this.showDescription;
   }
@@ -123,35 +179,37 @@ export class ProductDetailComponent implements OnInit {
   }
 
   getWhatsappLink(): string {
-    const phoneNumber = '9710759208'; // Add country code if needed
+    const phoneNumber = '9710759208'; // include country code if needed, e.g., 91xxxxxxxxxx
     const message = `Hello, I'm interested in the following product:
 
 Product: ${this.product?.name}
 Price: ₹${this.totalPrice}
 Size: ${this.product?.selectedSize || 'Not selected'}
 Link: ${window.location.href}`;
-
     return `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
   }
 
+  /* =========================
+     Cart
+     ========================= */
   addToCart(): void {
-    if (!this.product.selectedSize) {
-      alert('Please select a size before adding to cart!');
+    if (!this.isFormValid()) {
+      alert('Please select a size OR provide the required measurements before adding to cart!');
       return;
     }
 
     const cartItem = {
       ...this.product,
-      selectedSize: this.product.selectedSize,
-      measurements: this.measurements,
-      sleevePrice: this.selectedSleeve.price,
+      selectedSize: this.sizingMode === 'size' ? (this.product?.selectedSize || null) : null,
+      measurements: this.sizingMode === 'measurements' ? this.measurements : {},
+      sleevePrice: this.selectedSleeve?.price || 0,
       sleeveType: this.selectedSleeve?.name || 'None',
       customizationNotes: this.customizationNotes,
       preferredHeight: this.preferredHeight,
-      extraHeightPrice: this.extraHeightPrice
+      extraHeightPrice: this.heightExtra // store applied height extra
     };
 
     this.cartService.addToCart(cartItem);
-    alert(`${this.product.name} added to cart!`);
+    alert(`${this.product?.name} added to cart!`);
   }
 }

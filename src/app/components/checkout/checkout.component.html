@@ -54,15 +54,18 @@
       <h3>🛍️ Order Summary</h3>
 
       <div *ngFor="let item of cartItems" class="summary-item">
-        <div>
+        <div class="item-image">
+          <img [src]="item.images[0]" [alt]="item.name" />
+        </div>
+        <div class="item-details">
           <strong>{{ item.name }}</strong>
           <div class="item-meta">
             <span *ngIf="item.selectedSize">Size: {{ item.selectedSize }}</span>
             <span *ngIf="item.sleeveType">Sleeve: {{ item.sleeveType }} (+₹{{ item.sleevePrice }})</span>
             <span *ngIf="item.extraHeightPrice">Height: +₹{{ item.extraHeightPrice }}</span>
           </div>
+          <div class="item-total">₹{{ getItemTotal(item) }}</div>
         </div>
-        <div class="item-total">₹{{ getItemTotal(item) }}</div>
       </div>
 
       <hr>
@@ -71,9 +74,7 @@
         <strong class="total-amount">₹{{ totalAmount }}</strong>
       </div>
 
-<form id="checkoutForm" class="billing-form section" (ngSubmit)="placeOrder()" #checkoutForm="ngForm">
-  <button type="submit" class="place-order-btn">✅ Place Order</button>
-</form>
+      <button type="submit" class="place-order-btn">✅ Place Order</button>
     </aside>
   </div>
 </div>

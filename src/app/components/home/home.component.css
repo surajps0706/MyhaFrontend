@@ -1,160 +1,193 @@
-/* HERO SECTION */
+/* ---------- HERO SECTION ---------- */
 .hero {
-  background-image: url('https://res.cloudinary.com/dw35epojg/image/upload/v1754020493/logo_v5px6x.jpg');
-  background-repeat: no-repeat;
-  background-size: contain; /* ✅ Full image visibility */
-  background-position: top center;
+  position: relative;
+  /* use small-viewport units for mobile browser chrome */
+  min-height: 100svh;
   height: 100vh;
+  background: url('https://res.cloudinary.com/dw35epojg/image/upload/v1754020493/logo_v5px6x.jpg')
+    no-repeat top center;
+  /* top center showcases your logo better than exact center */
+  background-size: cover;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0 16px;
   color: #fff;
   text-align: center;
-  position: relative;
   overflow: hidden;
 }
 
-.hero::after {
-  content: '';
+/* Dark overlay for better text contrast (softened so logo remains visible) */
+.hero-overlay {
   position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.6); /* darker tint */
+  inset: 0;
+  background:
+    radial-gradient(900px 520px at 30% 35%, rgba(0,0,0,.35) 0%, rgba(0,0,0,.52) 65%, rgba(0,0,0,.6) 100%),
+    linear-gradient(90deg, rgba(0,0,0,.42) 0%, rgba(0,0,0,.2) 50%, rgba(0,0,0,0) 85%);
   z-index: 1;
 }
 
-/* HERO CONTENT */
-.hero-content {
-  position: relative;
-  z-index: 2;
-  background-color: rgba(255, 255, 255, 0.06);
-  padding: 36px 20px;
-  border-radius: 16px;
-  max-width: 90%;
-  backdrop-filter: blur(8px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+/* Slightly stronger overlay on small screens for readability */
+@media (max-width: 768px){
+  .hero-overlay {
+    background: rgba(0,0,0,.45);
+  }
 }
 
-/* TITLE */
+/* Content Box */
+.hero-content {
+  position: relative;
+  z-index: 2; /* sits above overlay */
+  background-color: rgba(255, 255, 255, 0.06);
+  padding: clamp(24px, 4vw, 50px);
+  border-radius: 16px;
+  max-width: min(92%, 640px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.22);
+}
+
+/* Title */
 .brand-title {
-  font-size: 2.4rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
+  font-size: clamp(2rem, 1.6rem + 2vw, 3rem);
+  font-weight: 800;
   color: #fff;
   margin-bottom: 12px;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+  line-height: 1.2;
+  letter-spacing: .2px;
 }
 
 .brand-name {
-  color: #fdd835;
+  color: #fdd835; /* gold accent */
   font-family: 'Playfair Display', serif;
+  font-weight: 800;
 }
 
-/* TAGLINE */
+/* Tagline */
 .tagline {
-  font-size: 1rem;
-  line-height: 1.5;
-  color: #eee;
+  font-size: clamp(0.98rem, 0.9rem + .2vw, 1.1rem);
+  line-height: 1.7;
+  color: #f1f1f1;
   margin-bottom: 28px;
+  text-wrap: pretty;
 }
 
-/* BUTTONS */
+/* ---------- BUTTONS ---------- */
 .hero-buttons {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  align-items: stretch;
 }
 
 .btn {
-  padding: 12px 20px;
-  border-radius: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  border-radius: 999px;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 1rem;
-  transition: all 0.3s ease;
-  display: inline-block;
-  text-align: center;
+  letter-spacing: .2px;
+  transition: transform .15s ease, box-shadow .2s ease, background-color .2s ease, color .2s ease, border-color .2s ease;
+  will-change: transform;
 }
 
+/* Make primary CTA unmistakably visible on any background */
 .btn.primary {
   background-color: #ffffff;
-  color: #000;
+  color: #111;
+  border: 1px solid rgba(0,0,0,.1);
+  box-shadow: 0 10px 22px rgba(0,0,0,.16);
 }
 
 .btn.primary:hover {
   background-color: #fdd835;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(253, 216, 53, 0.4);
+  color: #111;
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(0,0,0,.2);
 }
 
+.btn.primary:focus-visible{
+  outline: 3px solid #fdd83588;
+  outline-offset: 2px;
+}
+
+/* Secondary CTA */
 .btn.secondary {
   background-color: transparent;
   color: #fff;
-  border: 2px solid #fff;
+  border: 2px solid rgba(255,255,255,.92);
 }
 
 .btn.secondary:hover {
   background-color: #fff;
-  color: #000;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(255, 255, 255, 0.4);
+  color: #111;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(255,255,255,.22);
 }
 
-/* NEW ARRIVALS */
+/* Side-by-side CTAs on wider screens */
+@media (min-width: 768px) {
+  .hero-buttons {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+
+/* ---------- NEW ARRIVALS SECTION ---------- */
 .highlight-section {
-  padding: 60px 20px;
+  padding: clamp(48px, 6vw, 80px) 20px;
   text-align: center;
   background-color: #fdf8f2;
   color: #333;
 }
 
 .highlight-section h2 {
-  font-size: 1.6rem;
+  font-size: clamp(1.4rem, 1rem + 1.2vw, 1.9rem);
   margin-bottom: 10px;
-  font-weight: 600;
+  font-weight: 800;
+  color: #111;
 }
 
 .highlight-section p {
   font-size: 1rem;
   margin-bottom: 18px;
+  color: #444;
 }
 
 .explore-btn {
   background-color: #000;
   color: #fff;
   padding: 12px 28px;
-  border-radius: 40px;
-  transition: all 0.3s ease;
+  border-radius: 999px;
+  transition: all 0.25s ease;
+  font-weight: 700;
+  letter-spacing: .2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .explore-btn:hover {
   background-color: #333;
-  transform: scale(1.05);
+  transform: translateY(-1px);
 }
 
-/* RESPONSIVE TWEAKS */
-@media (min-width: 768px) {
-  .hero {
-    background-size: cover;
-    background-position: center center;
-  }
-
-  .hero-content {
-    max-width: 600px;
-    padding: 50px;
-  }
-
-  .hero-buttons {
-    flex-direction: row;
-    justify-content: center;
-  }
-
+/* ---------- RESPONSIVE TWEAKS ---------- */
+@media (max-width: 480px) {
   .brand-title {
-    font-size: 3rem;
+    font-size: 1.8rem;
   }
 
   .tagline {
-    font-size: 1.1rem;
+    font-size: 0.96rem;
+  }
+
+  /* Make buttons full width on small screens for comfort */
+  .btn {
+    width: 100%;
   }
 }
