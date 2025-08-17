@@ -36,6 +36,14 @@ export const routes: Routes = [
     ),
 },
 
+{
+  path: 'admin/orders',
+  loadComponent: () => import('./admin/orders/orders.component').then(m => m.OrdersComponent)
+},
+
+
+
+
 
   { path: 'checkout', component: CheckoutComponent },
   { path: 'order-success', component: OrderSuccessComponent },

@@ -39,30 +39,27 @@
       ></div>
     </div>
 
-    <!-- Sizing Mode Switch -->
-    <div class="select-row" style="gap:10px; align-items:flex-start;">
-      <div style="font-weight:600; color:#222;">Choose Sizing Mode:</div>
-      <div style="display:flex; gap:8px; flex-wrap:wrap;">
-        <button
-          type="button"
-          (click)="setSizingMode('size')"
-          [attr.aria-pressed]="sizingMode==='size' ? 'true' : 'false'"
-          class="footer-add-btn"
-          style="padding:6px 14px; border-radius:16px;"
-        >
-          Use Standard Size
-        </button>
-        <button
-          type="button"
-          (click)="setSizingMode('measurements')"
-          [attr.aria-pressed]="sizingMode==='measurements' ? 'true' : 'false'"
-          class="footer-add-btn"
-          style="padding:6px 14px; border-radius:16px; background:#7b1fa2;"
-        >
-          Use Custom Measurements
-        </button>
-      </div>
-    </div>
+<!-- Sizing Mode Switch -->
+<div class="sizing-mode-container">
+  <div class="sizing-mode-label">Choose Sizing Mode:</div>
+  <div class="sizing-mode-switch">
+    <button
+      type="button"
+      (click)="setSizingMode('size')"
+      [class.active]="sizingMode === 'size'"
+    >
+      Standard Size
+    </button>
+    <button
+      type="button"
+      (click)="setSizingMode('measurements')"
+      [class.active]="sizingMode === 'measurements'"
+    >
+      Custom Measurements
+    </button>
+  </div>
+</div>
+
 
     <!-- Size Selection -->
     <div class="select-row">
@@ -175,7 +172,6 @@
     <!-- Customization Notes -->
     <div class="customization-section">
       <h4>Customization Notes <span class="optional-text">(Optional)</span></h4>
-      <p class="customization-hint">Mention preferences like neck style, height, or additional comments.</p>
       <textarea
         rows="3"
         [(ngModel)]="customizationNotes"

@@ -45,7 +45,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   placeOrder(): void {
-    if (!this.checkoutData.name || !this.checkoutData.phone || !this.checkoutData.addressLine1) {
+    if (!this.checkoutData.name || !this.checkoutData.phone || !this.checkoutData.addressLine1 || !this.checkoutData.email) {
       alert('⚠️ Please fill all required fields before placing your order.');
       return;
     }
@@ -62,17 +62,40 @@ export class CheckoutComponent implements OnInit {
 
   openRazorpay(order: any) {
     const options = {
-      key: 'rzp_test_VSPMG0czjNmS4T', // Replace with your Razorpay Test Key
+      key: 'rzp_test_VSPMG0czjNmS4T', // Your Razorpay Test Key
       amount: order.amount,
       currency: order.currency,
-      name: 'MyhaCouture',
+      name: 'Myha Couture',
       description: 'Order Payment',
       order_id: order.id,
       handler: (response: any) => {
         console.log('Payment successful:', response);
-        alert('✅ Payment successful!');
-        localStorage.removeItem('cart');
-        this.cartItems = [];
+
+        const tempOrderId = `TEMP-${order.id}`;
+        const orderData = {
+          tempOrderId: tempOrderId,
+          paymentId: response.razorpay_payment_id,
+          orderId: response.razorpay_order_id,
+          checkoutData: this.checkoutData,
+          items: this.cartItems,
+          totalAmount: this.totalAmount,
+          status: 'Pending Delivery',
+          createdAt: new Date()
+        };
+
+        // Save order to backend (which will also send confirmation email)
+        this.http.post('http://localhost:8000/save-order', orderData)
+          .subscribe({
+            next: () => {
+              alert(`✅ Payment successful! Your Order ID: ${tempOrderId}`);
+              localStorage.removeItem('cart');
+              this.cartItems = [];
+            },
+            error: err => {
+              console.error('Error saving order:', err);
+              alert('⚠️ Payment done but could not save order.');
+            }
+          });
       },
       prefill: {
         name: this.checkoutData.name,
@@ -86,5 +109,10 @@ export class CheckoutComponent implements OnInit {
 
     const rzp = new Razorpay(options);
     rzp.open();
+
+    rzp.on('payment.success', () => {
+  localStorage.removeItem('cart');
+  this.cartItems = [];
+});
   }
 }

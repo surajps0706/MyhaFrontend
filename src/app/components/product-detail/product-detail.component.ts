@@ -189,27 +189,26 @@ Link: ${window.location.href}`;
     return `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
   }
 
-  /* =========================
-     Cart
-     ========================= */
-  addToCart(): void {
-    if (!this.isFormValid()) {
-      alert('Please select a size OR provide the required measurements before adding to cart!');
-      return;
-    }
 
-    const cartItem = {
-      ...this.product,
-      selectedSize: this.sizingMode === 'size' ? (this.product?.selectedSize || null) : null,
-      measurements: this.sizingMode === 'measurements' ? this.measurements : {},
-      sleevePrice: this.selectedSleeve?.price || 0,
-      sleeveType: this.selectedSleeve?.name || 'None',
-      customizationNotes: this.customizationNotes,
-      preferredHeight: this.preferredHeight,
-      extraHeightPrice: this.heightExtra // store applied height extra
-    };
-
-    this.cartService.addToCart(cartItem);
-    alert(`${this.product?.name} added to cart!`);
+addToCart(): void {
+  if (!this.isFormValid()) {
+    alert('Please select a size OR provide the required measurements before adding to cart!');
+    return;
   }
+
+  const cartItem = {
+    ...this.product,
+    selectedSize: this.sizingMode === 'size' ? (this.product?.selectedSize || null) : null,
+    measurements: this.sizingMode === 'measurements' ? this.measurements : {},
+    sleevePrice: this.selectedSleeve?.price || 0,
+    sleeveType: this.selectedSleeve?.name || 'None',
+    customizationNotes: this.customizationNotes || null, // ✅ only once now
+    preferredHeight: this.preferredHeight,
+    extraHeightPrice: this.heightExtra // store applied height extra
+  };
+
+  this.cartService.addToCart(cartItem);
+  alert(`${this.product?.name} added to cart!`);
+}
+
 }

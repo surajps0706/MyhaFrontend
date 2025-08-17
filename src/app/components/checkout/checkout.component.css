@@ -11,6 +11,7 @@
   margin-bottom: 20px;
   font-weight: 700;
   text-align: center;
+  color: #222;
 }
 
 .checkout-wrapper {
@@ -25,17 +26,51 @@
   background: #fff;
   padding: 25px;
   border-radius: 12px;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eee;
 }
 
 .billing-form legend {
-  font-size: 1.3rem;
-  font-weight: 600;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #222;
   margin-bottom: 15px;
+  border-bottom: 2px solid #f5f5f5;
+  padding-bottom: 8px;
 }
 
 .form-group {
-  margin-bottom: 18px;
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+label i {
+  margin-right: 8px;
+  color: #ff3f6c; /* Myntra pink accent */
+}
+
+input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  background-color: #fafafa;
+}
+
+input:focus {
+  outline: none;
+  border-color: #ff3f6c;
+  box-shadow: 0 0 6px rgba(255, 63, 108, 0.3);
+  background-color: #fff;
 }
 
 .form-row {
@@ -45,27 +80,6 @@
 
 .form-row .form-group {
   flex: 1;
-}
-
-label {
-  display: block;
-  font-weight: 500;
-  margin-bottom: 6px;
-}
-
-input {
-  width: 100%;
-  padding: 10px 14px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  transition: all 0.2s ease;
-}
-
-input:focus {
-  outline: none;
-  border-color: #6a11cb;
-  box-shadow: 0 0 6px rgba(106, 17, 203, 0.2);
 }
 
 /* ===== Order Summary ===== */
@@ -110,10 +124,9 @@ input:focus {
 }
 
 .item-meta span {
-  display: block; /* ✅ Makes each span go to a new line */
-  margin-bottom: 3px; /* Small gap between lines */
+  display: block; /* Each on new line */
+  margin-bottom: 3px;
 }
-
 
 .item-total {
   font-weight: 600;
@@ -129,7 +142,7 @@ input:focus {
 }
 
 .total-amount {
-  color: #6a11cb;
+  color: #ff3f6c; /* Myntra pink for emphasis */
 }
 
 /* ===== Place Order Button ===== */
@@ -137,7 +150,7 @@ input:focus {
   width: 100%;
   padding: 14px 18px;
   margin-top: 18px;
-  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  background: #ff3f6c; /* Myntra pink */
   color: #fff;
   font-weight: 700;
   font-size: 1rem;
@@ -145,22 +158,22 @@ input:focus {
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.25s ease;
-  box-shadow: 0 6px 15px rgba(37, 117, 252, 0.3);
+  box-shadow: 0 6px 15px rgba(255, 63, 108, 0.3);
 }
 
 .place-order-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(37, 117, 252, 0.35);
+  box-shadow: 0 10px 20px rgba(255, 63, 108, 0.4);
 }
 
 .place-order-btn:active {
   transform: translateY(0);
-  box-shadow: 0 4px 12px rgba(37, 117, 252, 0.25);
+  box-shadow: 0 4px 12px rgba(255, 63, 108, 0.25);
 }
 
 .place-order-btn:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.5);
+  box-shadow: 0 0 0 3px rgba(255, 63, 108, 0.5);
 }
 
 /* ===== Empty Cart ===== */
@@ -205,7 +218,7 @@ input:focus {
 
   input {
     font-size: 0.9rem;
-    padding: 8px 12px;
+    padding: 10px 12px;
   }
 
   .place-order-btn {

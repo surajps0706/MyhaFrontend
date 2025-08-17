@@ -43,6 +43,13 @@
   <span *ngIf="item.extraHeightPrice > 0"> (+₹{{ item.extraHeightPrice }})</span>
 </p>
 
+<p class="custom-notes" *ngIf="item.customizationNotes">
+  <strong>Customization Notes:</strong> {{ item.customizationNotes }}
+</p>
+
+
+
+
 
       <button class="remove-btn" (click)="removeItem(i)" title="Remove this item">
         <span class="material-icons">delete_outline</span>
