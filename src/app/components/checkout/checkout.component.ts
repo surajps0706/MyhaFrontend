@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 declare var Razorpay: any;
 
@@ -26,7 +27,7 @@ export class CheckoutComponent implements OnInit {
     pincode: ''
   };
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   ngOnInit(): void {
     this.cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -87,9 +88,12 @@ export class CheckoutComponent implements OnInit {
         this.http.post('http://localhost:8000/save-order', orderData)
           .subscribe({
             next: () => {
-              alert(`✅ Payment successful! Your Order ID: ${tempOrderId}`);
               localStorage.removeItem('cart');
               this.cartItems = [];
+              // ✅ Redirect to success page with orderId
+              this.router.navigate(['/order-success'], { 
+                queryParams: { orderId: tempOrderId }
+              });
             },
             error: err => {
               console.error('Error saving order:', err);
@@ -109,10 +113,5 @@ export class CheckoutComponent implements OnInit {
 
     const rzp = new Razorpay(options);
     rzp.open();
-
-    rzp.on('payment.success', () => {
-  localStorage.removeItem('cart');
-  this.cartItems = [];
-});
   }
 }

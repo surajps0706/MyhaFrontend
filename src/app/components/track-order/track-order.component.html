@@ -1,1 +1,27 @@
-<p>track-order works!</p>
+<div class="track-order-container">
+  <h2>Track Your Order</h2>
+
+  <!-- Input Form -->
+  <div class="form">
+    <input type="text" placeholder="Enter Order ID" [(ngModel)]="orderId" />
+    <input type="email" placeholder="Enter Email" [(ngModel)]="email" />
+    <button (click)="trackOrder()" [disabled]="loading">Track</button>
+  </div>
+
+  <!-- Loading -->
+  <p *ngIf="loading" class="loading">⏳ Checking your order...</p>
+
+  <!-- Error -->
+  <p *ngIf="error" class="error">{{ error }}</p>
+
+  <!-- Order Details -->
+  <div *ngIf="order" class="order-details">
+    <h3>Order Details</h3>
+    <p><strong>Order ID:</strong> {{ order.orderId }}</p>
+    <p><strong>Status:</strong> {{ order.status || 'Pending' }}</p>
+    <p><strong>Name:</strong> {{ order.checkoutData?.name }}</p>
+    <p><strong>Email:</strong> {{ order.checkoutData?.email }}</p>
+    <p><strong>Phone:</strong> {{ order.checkoutData?.phone }}</p>
+    <p><strong>Total:</strong> ₹{{ order.totalAmount }}</p>
+  </div>
+</div>

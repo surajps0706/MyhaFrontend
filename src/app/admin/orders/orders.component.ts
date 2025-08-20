@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-orders',
@@ -15,21 +16,37 @@ export class OrdersComponent implements OnInit {
   filteredOrders: any[] = [];
   searchQuery: string = '';
   filterStatus: string = '';
-  ADMIN_TOKEN = 'super-secret-admin'; // must match backend
+  token: string | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   ngOnInit(): void {
+    // Get token from localStorage
+    this.token = localStorage.getItem('admin_token');
+
+    if (!this.token) {
+      // If no token → redirect to login
+      this.router.navigate(['/login']);
+      return;
+    }
+
     this.loadOrders();
   }
 
   // Fetch all orders
   loadOrders() {
     this.http.get('http://localhost:8000/orders', {
-      headers: { Authorization: 'Bearer ' + this.ADMIN_TOKEN }
+      headers: { Authorization: 'Bearer ' + this.token }
     }).subscribe((res: any) => {
       this.orders = res;
       this.filteredOrders = [...this.orders];
+    }, error => {
+      console.error(error);
+      if (error.status === 401) {
+        alert('Session expired, please log in again.');
+        localStorage.removeItem('admin_token');
+        this.router.navigate(['/login']);
+      }
     });
   }
 
@@ -52,8 +69,8 @@ export class OrdersComponent implements OnInit {
     this.http.put(
       `http://localhost:8000/orders/${order.id}/status`,
       { status: newStatus },
-      { headers: { Authorization: 'Bearer ' + this.ADMIN_TOKEN } }
-    ).subscribe({
+      { headers: { Authorization: 'Bearer ' + this.token }
+    }).subscribe({
       next: () => {
         alert(`✅ Order ${order.id} updated to ${newStatus}`);
         this.loadOrders();
@@ -68,8 +85,8 @@ export class OrdersComponent implements OnInit {
   // Download all orders as Excel
   downloadExcel() {
     this.http.get('http://localhost:8000/orders/export', {
-      headers: { Authorization: 'Bearer ' + this.ADMIN_TOKEN },
-      responseType: 'blob' // important for file download
+      headers: { Authorization: 'Bearer ' + this.token },
+      responseType: 'blob'
     }).subscribe((res: Blob) => {
       const blob = new Blob([res], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       const url = window.URL.createObjectURL(blob);

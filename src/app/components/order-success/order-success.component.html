@@ -1,1 +1,14 @@
-<p>order-success works!</p>
+<div class="success-container">
+  <div class="success-card">
+    <h2>🎉 Order Placed Successfully!</h2>
+    <p>Thank you for shopping with <b>Myha Couture</b>.</p>
+
+    <div class="order-info" *ngIf="orderId">
+      <p><strong>Your Order ID:</strong> {{ orderId }}</p>
+      <p>We’ll notify you once it is shipped.</p>
+    </div>
+
+    <a routerLink="/products" class="btn">🛍️ Continue Shopping</a>
+    <a routerLink="/track" class="btn secondary">📦 Track My Order</a>
+  </div>
+</div>

@@ -1,11 +1,27 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { CartService } from '../../services/cart.service'; // 👈 import service
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-order-success',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './order-success.component.html',
-  styleUrl: './order-success.component.css'
+  styleUrls: ['./order-success.component.css']
 })
-export class OrderSuccessComponent {
+export class OrderSuccessComponent implements OnInit {
+  orderId: string | null = null;
 
+  constructor(
+    private route: ActivatedRoute,
+    private cartService: CartService // 👈 inject service
+  ) {}
+
+  ngOnInit(): void {
+    this.orderId = this.route.snapshot.queryParamMap.get('orderId');
+
+    // ✅ Clear cart once order success page is reached
+    this.cartService.clearCart();
+  }
 }

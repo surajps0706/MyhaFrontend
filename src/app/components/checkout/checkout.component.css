@@ -1,14 +1,14 @@
 /* ===== Base Layout ===== */
 .checkout-container {
   max-width: 1200px;
-  margin: auto;
+  margin: 30px auto;
   padding: 20px;
   font-family: 'Segoe UI', sans-serif;
 }
 
 .checkout-title {
   font-size: 2rem;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   font-weight: 700;
   text-align: center;
   color: #222;
@@ -16,7 +16,7 @@
 
 .checkout-wrapper {
   display: flex;
-  gap: 30px;
+  gap: 32px;
   align-items: flex-start;
 }
 
@@ -24,23 +24,23 @@
 .billing-form {
   flex: 2;
   background: #fff;
-  padding: 25px;
+  padding: 28px;
   border-radius: 12px;
   box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
   border: 1px solid #eee;
 }
 
 .billing-form legend {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 700;
   color: #222;
-  margin-bottom: 15px;
+  margin-bottom: 18px;
   border-bottom: 2px solid #f5f5f5;
   padding-bottom: 8px;
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 label {
@@ -69,7 +69,7 @@ input {
 input:focus {
   outline: none;
   border-color: #ff3f6c;
-  box-shadow: 0 0 6px rgba(255, 63, 108, 0.3);
+  box-shadow: 0 0 6px rgba(255, 63, 108, 0.25);
   background-color: #fff;
 }
 
@@ -86,32 +86,33 @@ input:focus {
 .order-summary {
   flex: 1;
   background: #fdfdfd;
-  padding: 20px;
+  padding: 22px;
   border-radius: 12px;
-  top: 20px;
+  position: sticky;
+  top: 25px;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
 }
 
 .order-summary h3 {
-  margin-bottom: 15px;
-  font-size: 1.4rem;
+  margin-bottom: 18px;
+  font-size: 1.3rem;
   font-weight: 600;
 }
 
 .summary-item {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   border-bottom: 1px solid #eee;
-  padding: 10px 0;
+  padding: 12px 0;
 }
 
 .item-image img {
-  width: 55px;
-  height: 55px;
+  width: 65px;
+  height: 85px;
   object-fit: cover;
   border-radius: 6px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 
 .item-details {
@@ -124,33 +125,35 @@ input:focus {
 }
 
 .item-meta span {
-  display: block; /* Each on new line */
+  display: block;
   margin-bottom: 3px;
 }
 
 .item-total {
   font-weight: 600;
   margin-top: 4px;
+  font-size: 0.95rem;
 }
 
 .summary-total {
   display: flex;
   justify-content: space-between;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 700;
-  margin-top: 12px;
+  margin-top: 15px;
 }
 
 .total-amount {
-  color: #ff3f6c; /* Myntra pink for emphasis */
+  color: #ff3f6c;
+  font-size: 1.25rem;
 }
 
 /* ===== Place Order Button ===== */
 .place-order-btn {
   width: 100%;
-  padding: 14px 18px;
-  margin-top: 18px;
-  background: #ff3f6c; /* Myntra pink */
+  padding: 15px 18px;
+  margin-top: 20px;
+  background: #ff3f6c;
   color: #fff;
   font-weight: 700;
   font-size: 1rem;
@@ -179,10 +182,11 @@ input:focus {
 /* ===== Empty Cart ===== */
 .empty-message {
   text-align: center;
-  padding: 50px;
+  padding: 60px 20px;
   font-size: 1.1rem;
   background: #fafafa;
   border-radius: 10px;
+  color: #555;
 }
 
 /* ===== Responsive Design ===== */
@@ -190,9 +194,9 @@ input:focus {
   .checkout-wrapper {
     flex-direction: column;
   }
-
   .order-summary {
     margin-top: 20px;
+    position: static;
   }
 }
 
@@ -212,8 +216,8 @@ input:focus {
 
   .billing-form,
   .order-summary {
-    padding: 16px;
-    width: 92%;
+    padding: 18px;
+    width: 100%;
   }
 
   input {
