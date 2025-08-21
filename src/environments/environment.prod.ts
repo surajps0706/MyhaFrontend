@@ -1,6 +1,6 @@
 // src/environments/environment.prod.ts
 export const environment = {
-  production: true,
-  apiUrl: 'https://myhabackend.onrender.com',
+  production: false,
+  apiUrl:'http://localhost:8000',
   razorpayKey: 'rzp_test_VSPMG0czjNmS4T'
 };

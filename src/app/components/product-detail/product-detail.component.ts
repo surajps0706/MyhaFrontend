@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CartService } from '../../services/cart.service';
-import { environment } from '../../../environments/environment';
+import { ProductService } from '../../services/product.service';
 
 type SizingMode = 'size' | 'measurements';
 
@@ -22,12 +21,12 @@ export class ProductDetailComponent implements OnInit {
   showSizeChart = false;
   customizationNotes: string = '';
   selectedSleeve: any = null;
-  showDescription: boolean = false;
-  isKurti: boolean = false;
+  showDescription = false;
+  isKurti = false;
   preferredHeight: string = '';
-  extraHeightPrice = 150; // Price if height > 35
+  extraHeightPrice = 150;
 
-  // NEW: sizing mode (user can switch anytime)
+  // sizing mode
   sizingMode: SizingMode = 'size';
 
   standardSizes = ['XXS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'];
@@ -63,63 +62,50 @@ export class ProductDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private http: HttpClient,
+    private productService: ProductService,
     private cartService: CartService
   ) {}
 
-ngOnInit(): void {
-  this.productId = this.route.snapshot.paramMap.get('id');
+  ngOnInit(): void {
+    this.productId = this.route.snapshot.paramMap.get('id');
 
-  if (this.productId) {
-    // ✅ Use environment variable for backend URL
-    this.http.get<any>(`${environment.apiUrl}/product/${this.productId}`).subscribe({
-      next: (data) => {
-        this.product = data;
-        this.selectedImage = this.product.images?.[0] || '';
-        this.selectedSleeve = this.sleeveOptions[0];
-        this.isKurti = this.product.category?.toLowerCase() === 'kurti';
+    if (this.productId) {
+      this.productService.getProductById(this.productId).subscribe({
+        next: (data) => {
+          this.product = data;
+          this.selectedImage = this.product.images?.[0] || '';
+          this.selectedSleeve = this.sleeveOptions[0];
+          this.isKurti = this.product.category?.toLowerCase() === 'kurti';
 
-        // Default size empty
-        this.product.selectedSize = '';
-      },
-      error: (err) => {
-        console.error('Error fetching product:', err);
-      }
-    });
+          // init
+          this.product.selectedSize = '';
+        },
+        error: (err) => console.error('Error fetching product:', err)
+      });
+    }
   }
-}
 
-  /* =========================
-     Mode helpers
-     ========================= */
+  // =========================
+  // Mode helpers
+  // =========================
   setSizingMode(mode: SizingMode): void {
     this.sizingMode = mode;
   }
   get sizeDisabled(): boolean { return this.sizingMode === 'measurements'; }
   get measurementsDisabled(): boolean { return this.sizingMode === 'size'; }
 
-  /** Small hint you can show above each section */
-  get sizeModeNote(): string | null {
-    return this.sizeDisabled ? 'Disabled because Custom Measurements mode is active.' : null;
-  }
-  get measModeNote(): string | null {
-    return this.measurementsDisabled ? 'Disabled because Size mode is active.' : null;
-  }
-
-  /* =========================
-     UI helpers / events
-     ========================= */
+  // =========================
+  // UI events
+  // =========================
   selectImage(img: string): void {
     this.selectedImage = img;
   }
 
   onSizeChange(_size: string): void {
-    // If user picks a size while in measurements mode (e.g. via future toggle), switch to size
     if (this.sizingMode !== 'size') this.sizingMode = 'size';
   }
 
   onMeasurementChanged(_key: string, value: string): void {
-    // If user types any value while in size mode, auto-switch to measurements
     if (this.sizingMode !== 'measurements' && String(value ?? '').trim() !== '') {
       this.sizingMode = 'measurements';
     }
@@ -129,45 +115,36 @@ ngOnInit(): void {
     return ['bust', 'waist', 'biceps', 'upperArm'].includes(fieldKey);
   }
 
-  /** Valid if: (Size mode + size chosen) OR (Measurements mode + required fields filled) */
- isFormValid(): boolean {
-  if (this.sizingMode === 'size') {
-    return !!this.product?.selectedSize;   // ✅ now works
-  }
-  const requiredFields = ['bust', 'waist', 'biceps', 'upperArm'];
-  return requiredFields.every(
-    (field) => String(this.measurements[field] ?? '').trim() !== ''
-  );
-}
-
-
-  onHeightChange(_height: string | number) {
-    // totals recompute via getters
+  isFormValid(): boolean {
+    if (this.sizingMode === 'size') {
+      return !!this.product?.selectedSize;
+    }
+    const requiredFields = ['bust', 'waist', 'biceps', 'upperArm'];
+    return requiredFields.every(
+      (field) => String(this.measurements[field] ?? '').trim() !== ''
+    );
   }
 
-  /* =========================
-     Pricing
-     ========================= */
+  // =========================
+  // Pricing
+  // =========================
   get basePrice(): number {
     return parseFloat(this.product?.price?.toString().replace(/[^0-9.]/g, '')) || 0;
   }
-
   get sleeveExtra(): number {
     return this.selectedSleeve?.price || 0;
   }
-
   get heightExtra(): number {
     const h = Number(this.preferredHeight);
     return this.isKurti && !isNaN(h) && h > 35 ? this.extraHeightPrice : 0;
   }
-
   get totalPrice(): number {
     return this.basePrice + this.sleeveExtra + this.heightExtra;
   }
 
-  /* =========================
-     Description + WhatsApp
-     ========================= */
+  // =========================
+  // Description + WhatsApp
+  // =========================
   toggleDescription(): void {
     this.showDescription = !this.showDescription;
   }
@@ -179,7 +156,7 @@ ngOnInit(): void {
   }
 
   getWhatsappLink(): string {
-    const phoneNumber = '9710759208'; // include country code if needed, e.g., 91xxxxxxxxxx
+    const phoneNumber = '9710759208'; // add +91 if needed
     const message = `Hello, I'm interested in the following product:
 
 Product: ${this.product?.name}
@@ -189,26 +166,27 @@ Link: ${window.location.href}`;
     return `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
   }
 
+  // =========================
+  // Cart
+  // =========================
+  addToCart(): void {
+    if (!this.isFormValid()) {
+      alert('Please select a size OR provide the required measurements before adding to cart!');
+      return;
+    }
 
-addToCart(): void {
-  if (!this.isFormValid()) {
-    alert('Please select a size OR provide the required measurements before adding to cart!');
-    return;
+    const cartItem = {
+      ...this.product,
+      selectedSize: this.sizingMode === 'size' ? (this.product?.selectedSize || null) : null,
+      measurements: this.sizingMode === 'measurements' ? this.measurements : {},
+      sleevePrice: this.selectedSleeve?.price || 0,
+      sleeveType: this.selectedSleeve?.name || 'None',
+      customizationNotes: this.customizationNotes || null,
+      preferredHeight: this.preferredHeight,
+      extraHeightPrice: this.heightExtra
+    };
+
+    this.cartService.addToCart(cartItem);
+    alert(`${this.product?.name} added to cart!`);
   }
-
-  const cartItem = {
-    ...this.product,
-    selectedSize: this.sizingMode === 'size' ? (this.product?.selectedSize || null) : null,
-    measurements: this.sizingMode === 'measurements' ? this.measurements : {},
-    sleevePrice: this.selectedSleeve?.price || 0,
-    sleeveType: this.selectedSleeve?.name || 'None',
-    customizationNotes: this.customizationNotes || null, // ✅ only once now
-    preferredHeight: this.preferredHeight,
-    extraHeightPrice: this.heightExtra // store applied height extra
-  };
-
-  this.cartService.addToCart(cartItem);
-  alert(`${this.product?.name} added to cart!`);
-}
-
 }
