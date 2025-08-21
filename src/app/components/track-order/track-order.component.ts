@@ -2,13 +2,14 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-track-order',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './track-order.component.html',
-  styleUrl: './track-order.component.css'
+  styleUrls: ['./track-order.component.css']
 })
 export class TrackOrderComponent {
   orderId: string = '';
@@ -24,7 +25,8 @@ export class TrackOrderComponent {
     this.order = null;
     this.loading = true;
 
-    this.http.post<any>('http://localhost:8000/track-order', {
+    // ✅ Use environment variable
+    this.http.post<any>(`${environment.apiUrl}/track-order`, {
       orderId: this.orderId,
       email: this.email
     }).subscribe({
