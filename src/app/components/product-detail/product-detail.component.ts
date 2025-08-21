@@ -189,4 +189,19 @@ Link: ${window.location.href}`;
     this.cartService.addToCart(cartItem);
     alert(`${this.product?.name} added to cart!`);
   }
+
+  // Add inside ProductDetailComponent
+get sizeModeNote(): string | null {
+  return this.sizeDisabled ? 'Disabled because Custom Measurements mode is active.' : null;
+}
+
+get measModeNote(): string | null {
+  return this.measurementsDisabled ? 'Disabled because Size mode is active.' : null;
+}
+
+onHeightChange(_height: string | number) {
+  // This is just to trigger Angular change detection
+  // your getters (heightExtra, totalPrice) already recompute automatically
+}
+
 }
