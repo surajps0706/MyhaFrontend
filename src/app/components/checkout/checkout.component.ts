@@ -78,7 +78,7 @@ export class CheckoutComponent implements OnInit {
           paymentId: response.razorpay_payment_id,
           orderId: response.razorpay_order_id,
           checkoutData: this.checkoutData,
-          items: this.cartItems,
+           cartItems: this.cartItems,
           totalAmount: this.totalAmount,
           status: 'Pending Delivery',
           createdAt: new Date()

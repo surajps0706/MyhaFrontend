@@ -66,8 +66,21 @@ export const routes: Routes = [
     component: ProductUploadComponent,
     canMatch: [adminGuard],
   },
+  
+  {
+  path: 'admin/upload',
+  loadComponent: () => import('./components/product-upload/product-upload.component').then(m => m.ProductUploadComponent)
+}
+,
 
   { path: 'admin/login', component: LoginComponent },
+
+  {
+  path: 'admin/products',
+  loadComponent: () => import('./components/product-list-admin/product-list-admin.component')
+    .then(m => m.ProductListAdminComponent)
+}
+,
 
 
   // fallback

@@ -1,1 +1,30 @@
-<p>product-upload works!</p>
+<div class="upload-container">
+  <h2>Add New Product</h2>
+
+  <!-- novalidate prevents browser auto-submit refresh -->
+  <form (ngSubmit)="uploadProduct()" #uploadForm="ngForm" novalidate>
+
+    <label>Product Name</label>
+    <input type="text" [(ngModel)]="product.name" name="name" required />
+
+    <label>Price</label>
+    <input type="number" [(ngModel)]="product.price" name="price" required />
+
+    <label>Description</label>
+    <textarea [(ngModel)]="product.description" name="description"></textarea>
+
+    <label>Category</label>
+    <input type="text" [(ngModel)]="product.category" name="category" required />
+
+    <label>Colors (comma separated)</label>
+    <input type="text" [(ngModel)]="product.colors" name="colors" placeholder="Lavender, Blue" />
+
+    <label>Cloudinary Image URLs (comma separated)</label>
+    <textarea [(ngModel)]="product.images" name="images" placeholder="Paste URLs here separated by commas"></textarea>
+
+    <!-- ✅ only submit type button -->
+    <button type="submit" class="btn" [disabled]="uploading">
+      {{ uploading ? 'Uploading...' : 'Save Product' }}
+    </button>
+  </form>
+</div>

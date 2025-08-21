@@ -1,7 +1,9 @@
 <header class="header">
   <!-- Logo -->
   <div class="logo">
-    <a routerLink="/">Myha</a>
+    <a routerLink="/">
+      <img src="https://res.cloudinary.com/dw35epojg/image/upload/v1754020493/logo_v5px6x.jpg" alt="Myha Logo" />
+    </a>
   </div>
 
   <!-- Desktop Navigation -->
@@ -11,26 +13,66 @@
     <a routerLink="/track" routerLinkActive="active-link">Track Order</a>
   </nav>
 
+<!-- Search Bar (only visible in /products) -->
+<div class="search-bar" *ngIf="showSearchBar">
+  <input 
+    type="text" 
+    placeholder="Search for products..." 
+    (input)="onSearch($event)" 
+    [(ngModel)]="searchQuery" />
+  <button aria-label="Search">🔍</button>
+
+  <!-- Suggestions -->
+  <div class="suggestions" *ngIf="suggestions.length > 0">
+    <div 
+      class="suggestion-item" 
+      *ngFor="let product of suggestions" 
+      [routerLink]="['/product', product.id]" 
+      (click)="clearSuggestions()">
+
+      <img [src]="product.images[0]" alt="{{ product.name }}" />
+      <div class="info">
+        <span class="name">{{ product.name }}</span>
+        <span class="price">₹{{ product.price }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
   <!-- Right Icons -->
   <div class="right-section">
     <!-- Cart -->
     <a class="cart-icon" routerLink="/cart" aria-label="Cart">
       <span class="icon">🛒</span>
-      <!-- Dynamically show badge only if cartCount > 0 -->
       <span class="badge" *ngIf="cartCount > 0">{{ cartCount }}</span>
     </a>
 
     <!-- Hamburger -->
-    <button class="hamburger" (click)="toggleMenu()" aria-label="Toggle Menu">
-      <span class="bar"></span>
-      <span class="bar"></span>
-      <span class="bar"></span>
+    <button class="hamburger" [class.open]="isMobileMenuOpen" (click)="toggleMenu()" aria-label="Toggle Menu">
+      <span></span>
+      <span></span>
+      <span></span>
     </button>
   </div>
 </header>
 
-<!-- Mobile Dropdown -->
-<div *ngIf="isMobileMenuOpen" class="mobile-menu animate-slide">
+<!-- ✅ Mobile Backdrop -->
+<div class="mobile-menu-backdrop" *ngIf="isMobileMenuOpen" (click)="toggleMenu()"></div>
+
+<!-- ✅ Sliding Mobile Drawer -->
+<div class="mobile-menu" [class.open]="isMobileMenuOpen">
+  <div class="mobile-menu-header">
+    <h3>Menu</h3>
+    <span class="close-btn" (click)="toggleMenu()">✕</span>
+  </div>
+
+  <!-- Mobile Search -->
+<div class="mobile-search">
+  <input type="text" placeholder="Search..." (input)="onSearch($event)" />
+</div>
+
   <a routerLink="/" (click)="toggleMenu()">Home</a>
   <a routerLink="/products" (click)="toggleMenu()">Shop</a>
   <a routerLink="/track" (click)="toggleMenu()">Track Order</a>

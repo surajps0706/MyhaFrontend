@@ -1,17 +1,52 @@
 <div class="product-list-container">
-  <h2>Our Collection</h2>
-  <div *ngIf="products.length === 0">No products available.</div>
+  <!-- Sidebar Filters -->
+  <aside class="filters" [class.open]="mobileFiltersOpen">
+    <div class="filters-header">
+      <h3>Filters</h3>
+      <button class="close-btn" (click)="toggleMobileFilters()">✕</button>
+    </div>
 
+    <!-- Category Filter -->
+    <div class="filter-group" [class.collapsed]="collapsed.category">
+      <h4 (click)="toggleCollapse('category')">Category</h4>
+      <div class="filter-options category-options">
+        <button (click)="applyCategory('all')" [class.active]="selectedCategory === 'all'">All</button>
+        <button (click)="applyCategory('kurta')" [class.active]="selectedCategory === 'kurta'">Kurta</button>
+        <button (click)="applyCategory('kurti')" [class.active]="selectedCategory === 'kurti'">Kurti</button>
+      </div>
+    </div>
+
+    <!-- Price Filter -->
+    <div class="filter-group" [class.collapsed]="collapsed.price">
+      <h4 (click)="toggleCollapse('price')">Price Range</h4>
+      <div class="filter-options price-slider">
+        <input type="range" min="300" max="3000" [(ngModel)]="priceRange" />
+        <span class="price-value">Up to ₹{{ priceRange }}</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Products Grid -->
   <div class="product-grid">
-    <div class="product-card" *ngFor="let product of products">
-      <div class="carousel">
-        <img *ngFor="let img of product.images" [src]="img" alt="{{ product.name }}" />
+    <div class="product-card" *ngFor="let product of paginatedProducts">
+      <div class="image-wrapper">
+        <img [src]="product.images[0]" [alt]="product.name" />
       </div>
       <div class="product-info">
-        <h3>{{ product.name }}</h3>
+        <h3 class="product-name">{{ product.name }}</h3>
         <p class="price">{{ product.price }}</p>
-        <a [routerLink]="['/product', product.id]" class="btn">View Details</a>
+        <a [routerLink]="['/product', product._id]" class="btn">View Details</a>
       </div>
     </div>
   </div>
 </div>
+
+<!-- ✅ Pagination OUTSIDE flex -->
+<div class="pagination" *ngIf="totalPages > 1">
+  <button (click)="prevPage()" [disabled]="currentPage === 1">⬅ Prev</button>
+  <span>Page {{ currentPage }} of {{ totalPages }}</span>
+  <button (click)="nextPage()" [disabled]="currentPage === totalPages">Next ➡</button>
+</div>
+
+<!-- Mobile Filter Toggle -->
+<button class="filter-toggle-btn" (click)="toggleMobileFilters()">Filters</button>
