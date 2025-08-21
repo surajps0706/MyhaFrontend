@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CartService } from '../../services/cart.service';
+import { environment } from '../../../environments/environment';
 
 type SizingMode = 'size' | 'measurements';
 
@@ -66,29 +67,27 @@ export class ProductDetailComponent implements OnInit {
     private cartService: CartService
   ) {}
 
-  ngOnInit(): void {
-    this.productId = this.route.snapshot.paramMap.get('id');
-    if (this.productId) {
-      this.http.get<any>(`http://localhost:8000/product/${this.productId}`).subscribe({
-        next: (data) => {
-          this.product = data;
-          this.selectedImage = this.product.images?.[0] || '';
-          this.selectedSleeve = this.sleeveOptions[0];
-          this.isKurti = this.product.category?.toLowerCase() === 'kurti';
+ngOnInit(): void {
+  this.productId = this.route.snapshot.paramMap.get('id');
 
-          // Choose an initial mode (prefer size if present)
-          const hasSize = !!String(this.product?.selectedSize || '').trim();
-          const hasAnyMeasurement = Object.values(this.measurements).some(
-            (v: any) => String(v ?? '').trim() !== ''
-          );
-          this.sizingMode = hasSize ? 'size' : (hasAnyMeasurement ? 'measurements' : 'size');
-        },
-        error: (err) => {
-          console.error('Error fetching product:', err);
-        }
-      });
-    }
+  if (this.productId) {
+    // ✅ Use environment variable for backend URL
+    this.http.get<any>(`${environment.apiUrl}/product/${this.productId}`).subscribe({
+      next: (data) => {
+        this.product = data;
+        this.selectedImage = this.product.images?.[0] || '';
+        this.selectedSleeve = this.sleeveOptions[0];
+        this.isKurti = this.product.category?.toLowerCase() === 'kurti';
+
+        // Default size empty
+        this.product.selectedSize = '';
+      },
+      error: (err) => {
+        console.error('Error fetching product:', err);
+      }
+    });
   }
+}
 
   /* =========================
      Mode helpers
@@ -131,15 +130,16 @@ export class ProductDetailComponent implements OnInit {
   }
 
   /** Valid if: (Size mode + size chosen) OR (Measurements mode + required fields filled) */
-  isFormValid(): boolean {
-    if (this.sizingMode === 'size') {
-      return !!String(this.product?.selectedSize || '').trim();
-    }
-    const requiredFields = ['bust', 'waist', 'biceps', 'upperArm'];
-    return requiredFields.every(
-      (field) => String(this.measurements[field] ?? '').trim() !== ''
-    );
+ isFormValid(): boolean {
+  if (this.sizingMode === 'size') {
+    return !!this.product?.selectedSize;   // ✅ now works
   }
+  const requiredFields = ['bust', 'waist', 'biceps', 'upperArm'];
+  return requiredFields.every(
+    (field) => String(this.measurements[field] ?? '').trim() !== ''
+  );
+}
+
 
   onHeightChange(_height: string | number) {
     // totals recompute via getters
