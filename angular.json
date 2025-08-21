@@ -20,7 +20,8 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+               "src/_redirects"
             ],
             "styles": [
               "node_modules/swiper/swiper-bundle.css",
@@ -83,7 +84,8 @@
             "tsConfig": "tsconfig.spec.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+               "src/_redirects"
             ],
             "styles": [
               "node_modules/swiper/swiper-bundle.css",
