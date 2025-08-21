@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-product-list',
@@ -26,7 +27,7 @@ export class ProductListComponent implements OnInit {
   currentPage: number = 1;
   pageSize: number = 8; // default (desktop)
 
-  private baseUrl: string = 'http://localhost:8000';
+  private baseUrl: string = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 

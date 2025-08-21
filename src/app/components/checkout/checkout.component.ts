@@ -3,13 +3,15 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
+
 
 declare var Razorpay: any;
 
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, HttpClientModule,],
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.css'],
 })
@@ -26,6 +28,9 @@ export class CheckoutComponent implements OnInit {
     state: '',
     pincode: ''
   };
+
+  // ✅ Base URL from environment
+  private baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -51,7 +56,8 @@ export class CheckoutComponent implements OnInit {
       return;
     }
 
-    this.http.post('http://localhost:8000/create-order', { amount: this.totalAmount })
+    // ✅ use environment URL
+    this.http.post(`${this.baseUrl}/create-order`, { amount: this.totalAmount })
       .subscribe({
         next: (order: any) => this.openRazorpay(order),
         error: err => {
@@ -63,7 +69,7 @@ export class CheckoutComponent implements OnInit {
 
   openRazorpay(order: any) {
     const options = {
-      key: 'rzp_test_VSPMG0czjNmS4T', // Your Razorpay Test Key
+      key: 'rzp_test_VSPMG0czjNmS4T', // Razorpay Test Key
       amount: order.amount,
       currency: order.currency,
       name: 'Myha Couture',
@@ -78,19 +84,18 @@ export class CheckoutComponent implements OnInit {
           paymentId: response.razorpay_payment_id,
           orderId: response.razorpay_order_id,
           checkoutData: this.checkoutData,
-           cartItems: this.cartItems,
+          cartItems: this.cartItems,
           totalAmount: this.totalAmount,
           status: 'Pending Delivery',
           createdAt: new Date()
         };
 
-        // Save order to backend (which will also send confirmation email)
-        this.http.post('http://localhost:8000/save-order', orderData)
+        // ✅ use environment URL
+        this.http.post(`${this.baseUrl}/save-order`, orderData)
           .subscribe({
             next: () => {
               localStorage.removeItem('cart');
               this.cartItems = [];
-              // ✅ Redirect to success page with orderId
               this.router.navigate(['/order-success'], { 
                 queryParams: { orderId: tempOrderId }
               });
