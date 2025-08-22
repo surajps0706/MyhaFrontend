@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { CartService } from '../../services/cart.service';
 import { ProductService } from '../../services/product.service';
 
-
 type SizingMode = 'size' | 'measurements';
 
 @Component({
@@ -61,6 +60,14 @@ export class ProductDetailComponent implements OnInit {
     { name: 'Full Sleeve', price: 100 }
   ];
 
+  // =========================
+  // Reviews
+  // =========================
+  reviews: any[] = [];
+  newReview: any = { name: '', rating: 5, comment: '' };
+  selectedImageFile: File | null = null;
+  previewImage: string | null = null;
+
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService,
@@ -80,6 +87,9 @@ export class ProductDetailComponent implements OnInit {
 
           // init
           this.product.selectedSize = '';
+
+          // load reviews once product is ready
+          this.loadReviews();
         },
         error: (err) => console.error('Error fetching product:', err)
       });
@@ -191,18 +201,69 @@ Link: ${window.location.href}`;
     alert(`${this.product?.name} added to cart!`);
   }
 
-  // Add inside ProductDetailComponent
-get sizeModeNote(): string | null {
-  return this.sizeDisabled ? 'Disabled because Custom Measurements mode is active.' : null;
+  // =========================
+  // Notes
+  // =========================
+  get sizeModeNote(): string | null {
+    return this.sizeDisabled ? 'Disabled because Custom Measurements mode is active.' : null;
+  }
+
+  get measModeNote(): string | null {
+    return this.measurementsDisabled ? 'Disabled because Size mode is active.' : null;
+  }
+
+  onHeightChange(_height: string | number) {
+    // trigger Angular change detection
+  }
+
+  // =========================
+  // Reviews Logic
+  // =========================
+  loadReviews(): void {
+    if (!this.productId) return;
+    this.productService.getReviews(this.productId).subscribe({
+      next: (res) => {
+        this.reviews = [...res]; // overwrite instead of pushing
+      },
+      error: (err) => console.error('Error loading reviews:', err)
+    });
+  }
+
+  // Handle image select + preview
+  onImageSelected(event: Event): void {
+    const fileInput = event.target as HTMLInputElement;
+    if (fileInput.files && fileInput.files[0]) {
+      this.selectedImageFile = fileInput.files[0];
+
+      // Preview in UI
+      const reader = new FileReader();
+      reader.onload = e => {
+        this.previewImage = e.target?.result as string;
+      };
+      reader.readAsDataURL(this.selectedImageFile);
+    }
+  }
+
+submitReview(): void {
+  if (!this.productId) return;
+
+  if (!this.newReview.name.trim() || !this.newReview.comment.trim()) {
+    alert('Please fill in all fields');
+    return;
+  }
+
+  // ✅ pass review object + file, NOT FormData
+  this.productService.addReview(this.productId, this.newReview, this.selectedImageFile ?? undefined).subscribe({
+    next: () => {
+      alert('✅ Review submitted');
+      this.newReview = { name: '', rating: 5, comment: '' };
+      this.selectedImageFile = null;
+      this.previewImage = null;
+      this.loadReviews();
+    },
+    error: (err) => alert('❌ Failed to submit: ' + err.message)
+  });
 }
 
-get measModeNote(): string | null {
-  return this.measurementsDisabled ? 'Disabled because Size mode is active.' : null;
-}
-
-onHeightChange(_height: string | number) {
-  // This is just to trigger Angular change detection
-  // your getters (heightExtra, totalPrice) already recompute automatically
-}
 
 }

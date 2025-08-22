@@ -198,6 +198,91 @@
       ></textarea>
     </div>
 
+   <!-- ✅ Reviews Section -->
+<div class="reviews-section">
+  <h3>Customer Reviews</h3>
+
+  <!-- Reviews List -->
+  <div *ngIf="reviews.length > 0; else noReviews">
+    <div *ngFor="let r of reviews" class="review-card">
+      <div class="review-header">
+        <span class="reviewer-name">{{ r.name }}</span>
+        <span class="review-rating">
+          <ng-container *ngFor="let star of [1,2,3,4,5]">
+            <span class="star" [class.filled]="star <= r.rating">★</span>
+          </ng-container>
+          <span class="rating-text">{{ r.rating }}/5</span>
+        </span>
+      </div>
+      <p class="review-comment">“{{ r.comment }}”</p>
+
+      <!-- ✅ Show uploaded image if available -->
+      <div *ngIf="r.imageUrl" class="review-image">
+        <img [src]="r.imageUrl" alt="Review image by {{ r.name }}" />
+      </div>
+    </div>
+  </div>
+  <ng-template #noReviews>
+    <p class="no-reviews">No reviews yet. Be the first to review!</p>
+  </ng-template>
+
+  <!-- Write Review -->
+  <h4>Write a Review</h4>
+<form (ngSubmit)="submitReview()" class="review-form">
+  <input
+    [(ngModel)]="newReview.name"
+    name="name"
+    placeholder="Your Name"
+    required
+    class="form-input"
+  />
+
+  <!-- ⭐ Star rating -->
+  <div class="star-input">
+    <label *ngFor="let star of [1,2,3,4,5]">
+      <input
+        type="radio"
+        name="rating"
+        [value]="star"
+        [(ngModel)]="newReview.rating"
+        required
+      />
+      <span class="star" [class.filled]="star <= newReview.rating">★</span>
+    </label>
+  </div>
+
+  <!-- Comment -->
+  <textarea
+    [(ngModel)]="newReview.comment"
+    name="comment"
+    placeholder="Write your review..."
+    required
+    class="form-textarea"
+  ></textarea>
+
+<div class="upload-section">
+  <label for="review-image" class="upload-label">
+    <i class="icon">
+      <svg xmlns="http://www.w3.org/2000/svg" class="feather" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M3 7h4l2-3h6l2 3h4v13H3V7z" />
+        <circle cx="12" cy="13" r="3" />
+      </svg>
+    </i>
+    Upload Photo
+  </label>
+  <input id="review-image" type="file" accept="image/*" (change)="onImageSelected($event)" class="form-file" />
+</div>
+
+
+<!-- Submit button -->
+<button type="submit" class="submit-btn">Submit Review</button>
+
+</form>
+
+</div>
+
+
     <!-- Sticky Footer -->
     <div class="sticky-footer" *ngIf="product">
       <div class="footer-content">

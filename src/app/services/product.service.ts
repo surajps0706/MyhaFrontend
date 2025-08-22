@@ -9,6 +9,9 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
+  // =========================
+  // Products
+  // =========================
   getProducts(): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseurl}/products`);
   }
@@ -16,4 +19,30 @@ export class ProductService {
   getProductById(id: string): Observable<any> {
     return this.http.get<any>(`${this.baseurl}/product/${id}`);
   }
+
+// =========================
+// Reviews
+// =========================
+getReviews(productId: string): Observable<any[]> {
+  return this.http.get<any[]>(`${this.baseurl}/products/${productId}/reviews`);
+}
+
+addReview(productId: string, review: any, imageFile?: File): Observable<any> {
+  const formData = new FormData();
+
+  // append fields
+  formData.append('name', review.name);
+  formData.append('rating', review.rating.toString());
+  formData.append('comment', review.comment);
+
+  // append file only if user selected one
+  if (imageFile) {
+    formData.append('image', imageFile);
+  }
+
+  return this.http.post(`${this.baseurl}/products/${productId}/reviews`, formData);
+}
+
+
+
 }

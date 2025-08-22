@@ -1,11 +1,36 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@400;500;600&display=swap');
+/* =====================
+   FONT IMPORTS
+===================== */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&family=Playfair+Display:wght@600&family=Great+Vibes&display=swap');
 
+/* =====================
+   GLOBAL
+===================== */
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Quicksand', sans-serif; /* default soft-rounded font */
+  margin: 0;
+  padding: 0;
+  background: #fff;
+  color: #222;
 }
 
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', serif; /* elegant for titles */
+  margin: 0;
+}
 
-/* HERO SECTION */
+/* Brand / Logo */
+.brand-title, .brand-name {
+  font-family: 'Great Vibes', cursive; /* girly calligraphy */
+  font-weight: 400;
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  color: #fdd835; /* golden highlight */
+}
+
+/* =====================
+   HERO SECTION
+===================== */
 .hero {
   position: relative;
   height: 100vh;
@@ -15,12 +40,11 @@ body {
   text-align: center;
   background: url('https://res.cloudinary.com/dw35epojg/image/upload/v1754020493/logo_v5px6x.jpg')
     no-repeat center center;
-  background-size: contain; /* ✅ logo visible fully */
-  background-color: #fdfaf7; /* soft beige background */
+  background-size: contain; /* logo fully visible */
+  background-color: #fdfaf7; /* soft beige */
   overflow: hidden;
 }
 
-/* Dark overlay for readability */
 .hero-overlay {
   position: absolute;
   inset: 0;
@@ -32,7 +56,6 @@ body {
   z-index: 1;
 }
 
-/* Content */
 .hero-content {
   position: relative;
   z-index: 2;
@@ -41,20 +64,9 @@ body {
   padding: 20px;
 }
 
-/* Title */
-.brand-title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: 700;
-  margin-bottom: 16px;
-}
-.brand-name {
-  color: #fdd835; /* golden highlight */
-}
-
 /* Tagline */
 .tagline {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Quicksand', sans-serif;
   font-size: clamp(1rem, 2vw, 1.25rem);
   margin-bottom: 28px;
   color: #f1f1f1;
@@ -66,29 +78,34 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  align-items: center;    /* ✅ force centering */
-  justify-content: center; /* ✅ fix horizontal centering */
+  align-items: center;
+  justify-content: center;
 }
+
 .btn {
   display: inline-block;
   padding: 14px 32px;
   border-radius: 999px;
   font-weight: 600;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Quicksand', sans-serif;
   text-decoration: none;
   transition: all 0.3s ease;
 }
+
 .btn.primary {
   background: #fff;
   color: #111;
 }
+
 .btn.secondary {
   border: 2px solid #fff;
   color: #fff;
 }
+
 .btn:hover {
   transform: translateY(-2px);
 }
+
 @media (min-width: 768px) {
   .hero-buttons {
     flex-direction: row;
@@ -98,56 +115,59 @@ body {
 
 @media (max-width: 768px) {
   .hero {
-    min-height: 80vh;  /* instead of 100vh */
+    min-height: 80vh;
   }
-}
-
-@media (max-width: 768px) {
   .hero-content {
     padding: 20px;
   }
 }
 
-
-
-/* Section */
+/* =====================
+   HIGHLIGHT SECTION
+===================== */
 .highlight-section {
   padding: 60px 20px;
   background: #fff;
 }
+
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 .section-header h2 {
   font-family: 'Playfair Display', serif;
   font-size: 1.8rem;
   font-weight: 600;
 }
+
 .section-header .view-all {
   font-size: 0.9rem;
   text-decoration: none;
   color: #000;
   font-weight: 500;
 }
+
 .subtext {
   font-size: 1rem;
   color: #777;
   margin: 10px 0 24px;
 }
 
-/* Grid */
+/* =====================
+   PRODUCT GRID
+===================== */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 28px;
 }
 
-/* Product Tile */
 .product-tile {
   text-align: left;
 }
+
 .img-box {
   position: relative;
   width: 100%;
@@ -158,12 +178,14 @@ body {
   align-items: center;
   overflow: hidden;
 }
+
 .img-box img {
-  max-height: 380px;   /* ✅ keeps image smaller */
+  max-height: 380px;
   width: auto;
-  object-fit: contain; /* ✅ full image shown */
+  object-fit: contain;
   transition: transform .3s ease;
 }
+
 .product-tile:hover img {
   transform: scale(1.05);
 }
@@ -181,9 +203,11 @@ body {
   background: linear-gradient(to top, rgba(0,0,0,0.5), transparent 60%);
   transition: opacity .3s ease;
 }
+
 .product-tile:hover .hover-actions {
   opacity: 1;
 }
+
 .btn-overlay {
   background: #fff;
   color: #000;
@@ -193,31 +217,39 @@ body {
   font-weight: 600;
   text-decoration: none;
 }
+
 .btn-overlay.secondary {
   background: #000;
   color: #fff;
 }
 
-/* Info */
+/* =====================
+   PRODUCT INFO
+===================== */
 .info {
   margin-top: 10px;
 }
+
 .info .brand {
   font-size: 0.75rem;
   color: #666;
   text-transform: uppercase;
 }
+
 .info .name {
+  font-family: 'Playfair Display', serif; /* stylish product names */
   font-size: 1rem;
   margin: 4px 0;
   font-weight: 600;
   color: #222;
 }
+
 .info .price {
   font-size: 1rem;
   font-weight: 700;
   color: #e53935;
 }
+
 .info .price .old {
   text-decoration: line-through;
   margin-left: 6px;
