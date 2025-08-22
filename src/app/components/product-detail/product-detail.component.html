@@ -39,27 +39,26 @@
       ></div>
     </div>
 
-<!-- Sizing Mode Switch -->
-<div class="sizing-mode-container">
-  <div class="sizing-mode-label">Choose Sizing Mode:</div>
-  <div class="sizing-mode-switch">
-    <button
-      type="button"
-      (click)="setSizingMode('size')"
-      [class.active]="sizingMode === 'size'"
-    >
-      Standard Size
-    </button>
-    <button
-      type="button"
-      (click)="setSizingMode('measurements')"
-      [class.active]="sizingMode === 'measurements'"
-    >
-      Custom Measurements
-    </button>
-  </div>
-</div>
-
+    <!-- Sizing Mode Switch -->
+    <div class="sizing-mode-container">
+      <div class="sizing-mode-label">Choose Sizing Mode:</div>
+      <div class="sizing-mode-switch">
+        <button
+          type="button"
+          (click)="setSizingMode('size')"
+          [class.active]="sizingMode === 'size'"
+        >
+          Standard Size
+        </button>
+        <button
+          type="button"
+          (click)="setSizingMode('measurements')"
+          [class.active]="sizingMode === 'measurements'"
+        >
+          Custom Measurements
+        </button>
+      </div>
+    </div>
 
     <!-- Size Selection -->
     <div class="select-row">
@@ -71,10 +70,14 @@
         (ngModelChange)="onSizeChange($event)"
         [disabled]="sizeDisabled"
       >
-        <option *ngFor="let size of standardSizes" [value]="size">{{ size }}</option>
+        <option *ngFor="let size of standardSizes" [value]="size">
+          {{ size }}
+        </option>
       </select>
 
-      <div class="size-chart-link" (click)="showSizeChart = !showSizeChart">📏 View Size Chart</div>
+      <div class="size-chart-link" (click)="showSizeChart = !showSizeChart">
+        📏 View Size Chart
+      </div>
       <div class="size-chart-img" *ngIf="showSizeChart">
         <img
           src="https://res.cloudinary.com/dw35epojg/image/upload/v1754143979/size-chart_bu3k4d.jpg"
@@ -82,7 +85,7 @@
         />
       </div>
 
-      <p *ngIf="sizeModeNote" class="customization-hint" style="margin-top:6px;">
+      <p *ngIf="sizeModeNote" class="customization-hint" style="margin-top: 6px">
         {{ sizeModeNote }}
       </p>
     </div>
@@ -94,7 +97,11 @@
         <div class="measurement-row" *ngFor="let field of measurementFields">
           <label>
             {{ field.label }}
-            <span *ngIf="isRequired(field.key) && !measurementsDisabled" class="required-star">*</span>
+            <span
+              *ngIf="isRequired(field.key) && !measurementsDisabled"
+              class="required-star"
+              >*</span
+            >
           </label>
 
           <input
@@ -107,13 +114,22 @@
             [disabled]="measurementsDisabled"
             #inputRef="ngModel"
             [ngClass]="{
-              'invalid': !measurementsDisabled && isRequired(field.key) && inputRef.invalid && inputRef.touched
+              invalid:
+                !measurementsDisabled &&
+                isRequired(field.key) &&
+                inputRef.invalid &&
+                inputRef.touched
             }"
             (blur)="inputRef.control.markAsTouched()"
           />
 
           <div
-            *ngIf="!measurementsDisabled && isRequired(field.key) && inputRef.invalid && inputRef.touched"
+            *ngIf="
+              !measurementsDisabled &&
+              isRequired(field.key) &&
+              inputRef.invalid &&
+              inputRef.touched
+            "
             class="error-msg"
           >
             {{ field.label }} is required
@@ -121,7 +137,7 @@
         </div>
       </div>
 
-      <p *ngIf="measModeNote" class="customization-hint" style="margin-top:6px;">
+      <p *ngIf="measModeNote" class="customization-hint" style="margin-top: 6px">
         {{ measModeNote }}
       </p>
     </div>
@@ -137,7 +153,8 @@
             [value]="option"
             [(ngModel)]="selectedSleeve"
           />
-          {{ option.name }} ({{ option.price > 0 ? '+₹' + option.price : 'Free' }})
+          {{ option.name }}
+          ({{ option.price > 0 ? '+₹' + option.price : 'Free' }})
         </label>
       </div>
     </div>
@@ -171,7 +188,9 @@
 
     <!-- Customization Notes -->
     <div class="customization-section">
-      <h4>Customization Notes <span class="optional-text">(Optional)</span></h4>
+      <h4>
+        Customization Notes <span class="optional-text">(Optional)</span>
+      </h4>
       <textarea
         rows="3"
         [(ngModel)]="customizationNotes"
@@ -182,13 +201,13 @@
     <!-- Sticky Footer -->
     <div class="sticky-footer" *ngIf="product">
       <div class="footer-content">
-        <div class="footer-price">
-          <p>
-            Base Price: ₹{{ basePrice }}
-            <span *ngIf="sleeveExtra"> + ₹{{ sleeveExtra }}</span>
-            <span *ngIf="heightExtra"> + ₹{{ heightExtra }}</span>
-            <span *ngIf="sleeveExtra || heightExtra"> = ₹{{ totalPrice }}</span>
-          </p>
+        <div class="price-breakdown">
+          <span>Base: ₹{{ basePrice }}</span>
+          <span *ngIf="sleeveExtra">Sleeve: +₹{{ sleeveExtra }}</span>
+          <span *ngIf="heightExtra">Height: +₹{{ heightExtra }}</span>
+          <strong *ngIf="sleeveExtra || heightExtra"
+            >Total: ₹{{ totalPrice }}</strong
+          >
         </div>
 
         <button
@@ -208,7 +227,10 @@
           rel="noopener noreferrer"
           aria-label="Chat on WhatsApp"
         >
-          <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+            alt="WhatsApp"
+          />
         </a>
       </div>
     </div>
@@ -223,4 +245,3 @@
     <div class="skeleton button"></div>
   </div>
 </ng-template>
-

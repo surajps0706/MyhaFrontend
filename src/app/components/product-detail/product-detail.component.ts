@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { CartService } from '../../services/cart.service';
 import { ProductService } from '../../services/product.service';
 
+
 type SizingMode = 'size' | 'measurements';
 
 @Component({
@@ -63,7 +64,7 @@ export class ProductDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService,
-    private cartService: CartService
+    private cartService: CartService,
   ) {}
 
   ngOnInit(): void {
@@ -156,7 +157,7 @@ export class ProductDetailComponent implements OnInit {
   }
 
   getWhatsappLink(): string {
-    const phoneNumber = '9710759208'; // add +91 if needed
+    const phoneNumber = '9344539530'; // add +91 if needed
     const message = `Hello, I'm interested in the following product:
 
 Product: ${this.product?.name}

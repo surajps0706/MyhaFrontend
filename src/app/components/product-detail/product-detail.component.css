@@ -180,7 +180,7 @@
 
 /* ---------- EXTRA HEIGHT ---------- */
 .extra-height {
-  width: 75%;
+  width: 88%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -304,7 +304,7 @@
 }
 
 .customization-section textarea {
-  width: 75%;
+  width: 85%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -399,6 +399,19 @@
   font-weight: 600;
 }
 
+.price-breakdown {
+  display: flex;
+  gap: 12px;
+  font-size: 0.95rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.price-breakdown strong {
+  color: #c1a57b;
+  font-weight: 700;
+}
+
 .footer-add-btn {
   background-color: #c1a57b;
   color: white;
@@ -409,6 +422,7 @@
   font-weight: 600;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   transition: 0.2s ease;
+  cursor: pointer;
 }
 
 .footer-add-btn:hover {
@@ -440,9 +454,7 @@
   transform: scale(1.1);
 }
 
-
 /* for switching */
-
 .sizing-mode-container {
   display: flex;
   flex-direction: column;
@@ -490,6 +502,7 @@
   border-right: 1px solid #ddd;
 }
 
+/* ---------- SKELETON LOADER ---------- */
 .skeleton-loader {
   display: flex;
   flex-direction: column;
@@ -525,12 +538,12 @@
   border-radius: 20px;
 }
 
+
+
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
-
-
 
 /* ---------- RESPONSIVE ---------- */
 @media screen and (max-width: 768px) {
@@ -559,5 +572,24 @@
 
   .order-btn {
     width: 100%;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .price-breakdown {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    width: 100%;
+  }
+
+  .footer-add-btn {
+    width: 90%;
+    max-width: 100%;
+    text-align: center;
+    margin-top: 8px;
   }
 }
