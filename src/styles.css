@@ -3,5 +3,25 @@
 @import 'swiper/css/navigation';
 @import 'swiper/swiper-bundle.css';
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Quicksand', sans-serif; /* ✅ new global font */
+  background: #fff;
+  color: #222;
+}
+
+/* Optional: Headings more elegant */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', serif;
+  margin: 0;
+}
+
+/* Optional: Brand/Logo calligraphy */
+.brand-title, .brand-name {
+  font-family: 'Great Vibes', cursive;
+  font-weight: 400;
+}
