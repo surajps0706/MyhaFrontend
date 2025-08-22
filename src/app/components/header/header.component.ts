@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { CartService } from '../../services/cart.service';
 import { SearchService } from '../../services/search.service';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment'; // ✅ import env
 
 @Component({
   selector: 'app-header',
@@ -18,7 +19,10 @@ export class HeaderComponent {
   cartCount = 0;
   searchQuery = '';
   suggestions: any[] = [];
-  showSearchBar = false; // 👈 flag
+  showSearchBar = false;
+
+  // ✅ Use API URL from environment
+  private apiUrl = environment.apiUrl;
 
   constructor(
     private cartService: CartService,
@@ -32,7 +36,7 @@ export class HeaderComponent {
       this.cartCount = count;
     });
 
-    // 👇 Detect route changes
+    // detect route changes
     this.router.events.subscribe(() => {
       this.showSearchBar = this.router.url.includes('/products');
     });
@@ -47,10 +51,10 @@ export class HeaderComponent {
     this.searchService.updateSearch(query);
 
     if (query.length > 1) {
-      this.http.get<any[]>('http://localhost:8000/products').subscribe(data => {
-        this.suggestions = data.filter(p =>
-          p.name.toLowerCase().includes(query.toLowerCase())
-        ).slice(0, 5);
+      this.http.get<any[]>(`${this.apiUrl}/products`).subscribe(data => {
+        this.suggestions = data
+          .filter(p => p.name.toLowerCase().includes(query.toLowerCase()))
+          .slice(0, 5);
       });
     } else {
       this.suggestions = [];
