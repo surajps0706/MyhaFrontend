@@ -3,6 +3,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-orders',
@@ -17,6 +18,8 @@ export class OrdersComponent implements OnInit {
   searchQuery: string = '';
   filterStatus: string = '';
   token: string | null = null;
+
+  private baseUrl: string = environment.apiUrl;  // ✅ dynamic API URL
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -35,7 +38,7 @@ export class OrdersComponent implements OnInit {
 
   // Fetch all orders
   loadOrders() {
-    this.http.get('http://localhost:8000/orders', {
+    this.http.get(`${this.baseUrl}/orders`, {
       headers: { Authorization: 'Bearer ' + this.token }
     }).subscribe((res: any) => {
       this.orders = res;
@@ -67,7 +70,7 @@ export class OrdersComponent implements OnInit {
   // Update order status
   updateStatus(order: any, newStatus: string) {
     this.http.put(
-      `http://localhost:8000/orders/${order.id}/status`,
+      `${this.baseUrl}/orders/${order.id}/status`,
       { status: newStatus },
       { headers: { Authorization: 'Bearer ' + this.token }
     }).subscribe({
@@ -84,7 +87,7 @@ export class OrdersComponent implements OnInit {
 
   // Download all orders as Excel
   downloadExcel() {
-    this.http.get('http://localhost:8000/orders/export', {
+    this.http.get(`${this.baseUrl}/orders/export`, {
       headers: { Authorization: 'Bearer ' + this.token },
       responseType: 'blob'
     }).subscribe((res: Blob) => {
