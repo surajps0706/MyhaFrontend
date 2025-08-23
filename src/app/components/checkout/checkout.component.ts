@@ -91,20 +91,23 @@ export class CheckoutComponent implements OnInit {
         };
 
         // ✅ use environment URL
-        this.http.post(`${this.baseUrl}/save-order`, orderData)
-          .subscribe({
-            next: () => {
-              localStorage.removeItem('cart');
-              this.cartItems = [];
-              this.router.navigate(['/order-success'], { 
-                queryParams: { orderId: tempOrderId }
-              });
-            },
-            error: err => {
-              console.error('Error saving order:', err);
-              alert('⚠️ Payment done but could not save order.');
-            }
-          });
+    this.http.post<any>(`${this.baseUrl}/save-order`, orderData)
+  .subscribe({
+    next: (res) => {
+      if (res.orderId) {
+        localStorage.removeItem('cart');
+        this.cartItems = [];
+        // ✅ Use backend-generated orderId
+        this.router.navigate(['/order-success'], { 
+          queryParams: { orderId: res.orderId }
+        });
+      }
+    },
+    error: (err) => {
+      console.error("❌ Order save failed:", err);
+    }
+  });
+
       },
       prefill: {
         name: this.checkoutData.name,

@@ -57,8 +57,8 @@ export class OrdersComponent implements OnInit {
   applyFilters() {
     this.filteredOrders = this.orders.filter(order => {
       const matchesSearch =
-        order.id.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-        order.checkoutData?.name.toLowerCase().includes(this.searchQuery.toLowerCase());
+        order.orderId?.toLowerCase().includes(this.searchQuery.toLowerCase()) || // ✅ use orderId, not id
+        order.checkoutData?.name?.toLowerCase().includes(this.searchQuery.toLowerCase());
 
       const matchesStatus =
         this.filterStatus === '' || order.status === this.filterStatus;
@@ -70,13 +70,13 @@ export class OrdersComponent implements OnInit {
   // Update order status
   updateStatus(order: any, newStatus: string) {
     this.http.put(
-      `${this.baseUrl}/orders/${order.id}/status`,
+      `${this.baseUrl}/orders/${order.orderId}/status`,   // ✅ use order.orderId, not order.id
       { status: newStatus },
-      { headers: { Authorization: 'Bearer ' + this.token }
-    }).subscribe({
-      next: () => {
-        alert(`✅ Order ${order.id} updated to ${newStatus}`);
-        this.loadOrders();
+      { headers: { Authorization: 'Bearer ' + this.token } }
+    ).subscribe({
+      next: (res: any) => {
+        alert(`✅ Order ${res.orderId} updated to ${res.status}`);
+        order.status = res.status; // ✅ keep UI in sync without full reload
       },
       error: (err) => {
         console.error(err);

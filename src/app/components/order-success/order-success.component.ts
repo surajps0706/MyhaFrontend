@@ -20,8 +20,9 @@ export class OrderSuccessComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.orderId = this.route.snapshot.queryParamMap.get('orderId');
-
+ this.route.queryParams.subscribe(params => {
+      this.orderId = params['orderId'] || null;
+    });
     // ✅ Clear cart once order success page is reached
     this.cartService.clearCart();
   }

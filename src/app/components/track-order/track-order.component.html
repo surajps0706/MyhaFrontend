@@ -18,10 +18,53 @@
   <div *ngIf="order" class="order-details">
     <h3>Order Details</h3>
     <p><strong>Order ID:</strong> {{ order.orderId }}</p>
-    <p><strong>Status:</strong> {{ order.status || 'Pending' }}</p>
+    <p><strong>Status:</strong> {{ order.status || 'Pending Delivery' }}</p>
     <p><strong>Name:</strong> {{ order.checkoutData?.name }}</p>
     <p><strong>Email:</strong> {{ order.checkoutData?.email }}</p>
     <p><strong>Phone:</strong> {{ order.checkoutData?.phone }}</p>
     <p><strong>Total:</strong> ₹{{ order.totalAmount }}</p>
+
+    <!-- 🚚 Status Pipeline -->
+<div class="status-pipeline">
+  <div class="step" [class.active]="isActive('Pending Delivery')">
+    <div class="circle">📝</div>
+    <div class="label">Pending</div>
+    <div class="time" *ngIf="order.statusTimeline?.['Pending Delivery']">
+      {{ order.statusTimeline['Pending Delivery'] | date:'medium' }}
+    </div>
+  </div>
+
+  <div class="line" [class.active]="isActive('Processing','Shipped','Delivered')"></div>
+
+  <div class="step" [class.active]="isActive('Processing')">
+    <div class="circle">⚙️</div>
+    <div class="label">Processing</div>
+    <div class="time" *ngIf="order.statusTimeline?.['Processing']">
+      {{ order.statusTimeline['Processing'] | date:'medium' }}
+    </div>
+  </div>
+
+  <div class="line" [class.active]="isActive('Shipped','Delivered')"></div>
+
+  <div class="step" [class.active]="isActive('Shipped')">
+    <div class="circle">🚚</div>
+    <div class="label">Shipped</div>
+    <div class="time" *ngIf="order.statusTimeline?.['Shipped']">
+      {{ order.statusTimeline['Shipped'] | date:'medium' }}
+    </div>
+  </div>
+
+  <div class="line" [class.active]="isActive('Delivered')"></div>
+
+  <div class="step" [class.active]="isActive('Delivered')">
+    <div class="circle">✅</div>
+    <div class="label">Delivered</div>
+    <div class="time" *ngIf="order.statusTimeline?.['Delivered']">
+      {{ order.statusTimeline['Delivered'] | date:'medium' }}
+    </div>
+  </div>
+</div>
+
+
   </div>
 </div>

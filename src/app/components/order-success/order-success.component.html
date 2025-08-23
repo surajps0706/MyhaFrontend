@@ -1,14 +1,31 @@
 <div class="success-container">
   <div class="success-card">
-    <h2>🎉 Order Placed Successfully!</h2>
-    <p>Thank you for shopping with <b>Myha Couture</b>.</p>
+    <!-- Success Icon -->
+    <div class="success-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+        <circle class="circle" cx="26" cy="26" r="25" fill="none"/>
+        <path class="check" fill="none" d="M14 27l7 7 17-17"/>
+      </svg>
+    </div>
 
+    <!-- Title & Subtitle -->
+    <h2>Order Placed Successfully!</h2>
+    <p class="thank-you">Thank you for shopping with <b>Myha Couture</b>.</p>
+
+    <!-- Order Info -->
     <div class="order-info" *ngIf="orderId">
-      <p><strong>Your Order ID:</strong> {{ orderId }}</p>
+      <!-- <p><strong>Order ID:</strong> {{ orderId }}</p> -->
       <p>We’ll notify you once it is shipped.</p>
     </div>
 
-    <a routerLink="/products" class="btn">🛍️ Continue Shopping</a>
-    <a routerLink="/track" class="btn secondary">📦 Track My Order</a>
+    <!-- Buttons -->
+    <div class="button-group">
+      <a routerLink="/products" class="btn primary">
+        <span class="icon">🛍️</span> Continue Shopping
+      </a>
+      <a routerLink="/track" class="btn secondary">
+        <span class="icon">📦</span> Track My Order
+      </a>
+    </div>
   </div>
 </div>
