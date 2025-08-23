@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../environments/environment';  // ✅ import env
 
 @Component({
   selector: 'app-product-upload',
@@ -20,20 +21,20 @@ export class ProductUploadComponent {
     images: ''
   };
 
-  uploading = false; // ✅ prevents double click
+  uploading = false;
 
   constructor(private http: HttpClient) {}
 
   uploadProduct() {
-    if (this.uploading) return; // ✅ block double submit
+    if (this.uploading) return;
     this.uploading = true;
 
     const payload = {
       name: this.product.name.trim(),
-      price: Number(this.product.price), // ensure number
+      price: Number(this.product.price),
       description: this.product.description.trim(),
       category: this.product.category.trim(),
-      sizes: ["Customizable"],   
+      sizes: ["Customizable"],
       colors: this.product.colors
         ? this.product.colors.split(',').map(c => c.trim())
         : ["Default"],
@@ -44,9 +45,11 @@ export class ProductUploadComponent {
         : []
     };
 
-    const headers = new HttpHeaders().set('Authorization', 'Bearer myha-secret');
+    // ✅ token from localStorage instead of hardcoded
+    const token = localStorage.getItem('admin_token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    this.http.post('http://localhost:8000/add-product-url', payload, { headers })
+    this.http.post(`${environment.apiUrl}/products`, payload, { headers })
       .subscribe({
         next: (res) => {
           console.log('✅ Uploaded:', res);
