@@ -1,51 +1,61 @@
-<h2>Manage Products</h2>
+<div class="admin-container">
+  <h2>📦 Manage Products</h2>
 
-<!-- Product List -->
-<div *ngIf="!editingProduct">
-  <table class="admin-table">
-    <tr>
-      <th>Image</th>
-      <th>Name</th>
-      <th>Price</th>
-      <th>Category</th>
-      <th>Actions</th>
-    </tr>
-    <tr *ngFor="let p of products">
-      <td><img [src]="p.images[0]" alt="{{p.name}}" class="thumb"></td>
-      <td>{{ p.name }}</td>
-      <td>{{ p.price }}</td>
-      <td>{{ p.category }}</td>
-      <td>
-        <button (click)="editProduct(p)">✏️ Edit</button>
-        <button (click)="deleteProduct(p.id)">🗑️ Delete</button>
-      </td>
-    </tr>
-  </table>
-</div>
+  <!-- Product List -->
+  <div *ngIf="!editingProduct" class="table-container">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Category</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of products">
+          <td>
+            <img [src]="p.images[0]" alt="{{p.name}}" class="thumb">
+          </td>
+          <td>{{ p.name }}</td>
+          <td>₹{{ p.price }}</td>
+          <td>{{ p.category }}</td>
+          <td>
+            <button class="btn edit" (click)="editProduct(p)">✏️ Edit</button>
+            <button class="btn delete" (click)="deleteProduct(p.id)">🗑️ Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-<!-- Edit Form -->
-<div *ngIf="editingProduct">
-  <h3>Edit Product</h3>
-  <form (ngSubmit)="saveProduct()">
-    <label>Name</label>
-    <input [(ngModel)]="editingProduct.name" name="name">
+  <!-- Edit Form -->
+  <div *ngIf="editingProduct" class="edit-form">
+    <h3>✏️ Edit Product</h3>
+    <form (ngSubmit)="saveProduct()">
+      <label>Name</label>
+      <input [(ngModel)]="editingProduct.name" name="name" required>
 
-    <label>Price</label>
-    <input [(ngModel)]="editingProduct.price" name="price">
+      <label>Price</label>
+      <input type="number" [(ngModel)]="editingProduct.price" name="price" required>
 
-    <label>Category</label>
-    <input [(ngModel)]="editingProduct.category" name="category">
+      <label>Category</label>
+      <input [(ngModel)]="editingProduct.category" name="category" required>
 
-    <label>Description</label>
-    <textarea [(ngModel)]="editingProduct.description" name="description"></textarea>
+      <label>Description</label>
+      <textarea [(ngModel)]="editingProduct.description" name="description"></textarea>
 
-    <label>Colors (comma separated)</label>
-    <input [(ngModel)]="editingProduct.colors" name="colors">
+      <label>Colors (comma separated)</label>
+      <input [(ngModel)]="editingProduct.colors" name="colors">
 
-    <label>Image URLs (comma separated)</label>
-    <textarea [(ngModel)]="editingProduct.images" name="images"></textarea>
+      <label>Image URLs (comma separated)</label>
+      <textarea [(ngModel)]="editingProduct.images" name="images"></textarea>
 
-    <button type="submit">💾 Save</button>
-    <button type="button" (click)="cancelEdit()">Cancel</button>
-  </form>
+      <div class="form-actions">
+        <button type="submit" class="btn save">💾 Save</button>
+        <button type="button" class="btn cancel" (click)="cancelEdit()">✖ Cancel</button>
+      </div>
+    </form>
+  </div>
 </div>

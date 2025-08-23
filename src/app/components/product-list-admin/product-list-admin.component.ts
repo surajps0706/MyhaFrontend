@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../environments/environment'; // ✅ import environment
 
 @Component({
   selector: 'app-product-list-admin',
@@ -14,25 +15,32 @@ export class ProductListAdminComponent implements OnInit {
   products: any[] = [];
   editingProduct: any = null;
 
+  private baseUrl = environment.apiUrl; // ✅ backend url from env
+
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
     this.loadProducts();
   }
 
+  // Load all products
   loadProducts() {
-    this.http.get<any[]>('http://localhost:8000/products').subscribe(res => {
+    this.http.get<any[]>(`${this.baseUrl}/products`).subscribe(res => {
       this.products = res;
     });
   }
 
+  // Start editing a product
   editProduct(product: any) {
-    this.editingProduct = { ...product }; // copy to avoid mutating list directly
+    this.editingProduct = { ...product };
   }
 
+  // Save product changes
   saveProduct() {
-    const headers = new HttpHeaders().set('Authorization', 'Bearer myha-secret');
-    this.http.put(`http://localhost:8000/products/${this.editingProduct.id}`, this.editingProduct, { headers })
+    const token = localStorage.getItem('admin_token'); // ✅ dynamic token
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    this.http.put(`${this.baseUrl}/products/${this.editingProduct.id}`, this.editingProduct, { headers })
       .subscribe({
         next: () => {
           alert('✅ Product updated');
@@ -43,15 +51,19 @@ export class ProductListAdminComponent implements OnInit {
       });
   }
 
+  // Cancel edit
   cancelEdit() {
     this.editingProduct = null;
   }
 
+  // Delete product
   deleteProduct(id: string) {
     if (!confirm('Are you sure you want to delete this product?')) return;
 
-    const headers = new HttpHeaders().set('Authorization', 'Bearer myha-secret');
-    this.http.delete(`http://localhost:8000/products/${id}`, { headers })
+    const token = localStorage.getItem('admin_token'); // ✅ dynamic token
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    this.http.delete(`${this.baseUrl}/products/${id}`, { headers })
       .subscribe({
         next: () => {
           alert('🗑️ Product deleted');
