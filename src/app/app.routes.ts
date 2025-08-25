@@ -18,6 +18,9 @@ function adminGuard() {
 }
 
 export const routes: Routes = [
+  // =========================
+  // 🏠 PUBLIC ROUTES
+  // =========================
   { path: '', component: HomeComponent },
   { path: 'products', component: ProductListComponent },
 
@@ -61,34 +64,39 @@ export const routes: Routes = [
       import('./admin/login/login.component').then((m) => m.LoginComponent),
   },
 
-  // ✅ Orders Dashboard
+  // ✅ Admin Dashboard Wrapper (guarded)
   {
-    path: 'admin/orders',
+    path: 'admin',
     loadComponent: () =>
-      import('./admin/orders/orders.component').then((m) => m.OrdersComponent),
+      import('./components/admin-dashboard/admin-dashboard.component').then(
+        (m) => m.AdminDashboardComponent
+      ),
     canMatch: [adminGuard],
+    children: [
+      {
+        path: 'orders',
+        loadComponent: () =>
+          import('./admin/orders/orders.component').then(
+            (m) => m.OrdersComponent
+          ),
+      },
+      {
+        path: 'products',
+        loadComponent: () =>
+          import('./components/product-list-admin/product-list-admin.component').then(
+            (m) => m.ProductListAdminComponent
+          ),
+      },
+      {
+        path: 'upload',
+        loadComponent: () =>
+          import('./components/product-upload/product-upload.component').then(
+            (m) => m.ProductUploadComponent
+          ),
+      },
+      { path: '', redirectTo: 'orders', pathMatch: 'full' }, // default
+    ],
   },
-
-// ✅ Product Upload
-{
-  path: 'admin/upload',
-  loadComponent: () =>
-    import('./components/product-upload/product-upload.component').then(
-      (m) => m.ProductUploadComponent
-    ),
-  canMatch: [adminGuard],
-},
-
-// ✅ Admin Product List
-{
-  path: 'admin/products',
-  loadComponent: () =>
-    import('./components/product-list-admin/product-list-admin.component').then(
-      (m) => m.ProductListAdminComponent
-    ),
-  canMatch: [adminGuard],
-},
-
 
   // ✅ Fallback → Home
   { path: '**', redirectTo: '', pathMatch: 'full' },

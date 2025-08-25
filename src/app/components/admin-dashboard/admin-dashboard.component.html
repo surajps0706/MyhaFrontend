@@ -1,0 +1,26 @@
+<div class="admin-dashboard">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2 class="logo">Myha Admin</h2>
+    <nav>
+      <a *ngFor="let link of adminLinks"
+         [routerLink]="link.path"
+         routerLinkActive="active">
+        {{ link.icon }} {{ link.label }}
+      </a>
+    </nav>
+
+    <!-- ✅ Logout button -->
+    <button class="logout-btn" (click)="logout()">🚪 Logout</button>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="content">
+    <header class="admin-header">
+      <h1>Admin Panel</h1>
+    </header>
+    <section class="admin-body">
+      <router-outlet></router-outlet>
+    </section>
+  </main>
+</div>
