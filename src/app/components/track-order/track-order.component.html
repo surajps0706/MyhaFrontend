@@ -30,7 +30,7 @@
     <div class="circle">📝</div>
     <div class="label">Pending</div>
     <div class="time" *ngIf="order.statusTimeline?.['Pending Delivery']">
-      {{ order.statusTimeline['Pending Delivery'] | date:'medium' }}
+{{ order.statusTimeline['Pending Delivery'] }}
     </div>
   </div>
 
@@ -40,7 +40,7 @@
     <div class="circle">⚙️</div>
     <div class="label">Processing</div>
     <div class="time" *ngIf="order.statusTimeline?.['Processing']">
-      {{ order.statusTimeline['Processing'] | date:'medium' }}
+      {{ order.statusTimeline['Processing'] }}
     </div>
   </div>
 
@@ -50,7 +50,7 @@
     <div class="circle">🚚</div>
     <div class="label">Shipped</div>
     <div class="time" *ngIf="order.statusTimeline?.['Shipped']">
-      {{ order.statusTimeline['Shipped'] | date:'medium' }}
+      {{ order.statusTimeline['Shipped'] }}
     </div>
   </div>
 
@@ -60,7 +60,7 @@
     <div class="circle">✅</div>
     <div class="label">Delivered</div>
     <div class="time" *ngIf="order.statusTimeline?.['Delivered']">
-      {{ order.statusTimeline['Delivered'] | date:'medium' }}
+      {{ order.statusTimeline['Delivered']}}
     </div>
   </div>
 </div>
