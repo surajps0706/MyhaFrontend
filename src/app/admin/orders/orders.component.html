@@ -42,7 +42,7 @@
         <td>
           <span class="status" [ngClass]="order.status.toLowerCase()">{{ order.status }}</span>
         </td>
-        <td>{{ order.createdAt | date:'short':'GMT+5:30' }}</td>
+<td>{{ order.createdAt | date:'yyyy-MM-dd' }}</td>
         <td>
           <select [(ngModel)]="order.status" (change)="updateStatus(order, order.status)">
             <option>Pending Delivery</option>
