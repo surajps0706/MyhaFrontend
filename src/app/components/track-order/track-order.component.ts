@@ -43,7 +43,7 @@ export class TrackOrderComponent implements OnInit {
     });
   }
 
-  trackOrder(skipEmailCheck = false) {
+  trackOrder(skipEmailCheck = true) {
     this.error = '';
     this.order = null;
     this.timeline = [];
