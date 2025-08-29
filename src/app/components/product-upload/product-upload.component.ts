@@ -49,7 +49,7 @@ export class ProductUploadComponent {
     const token = localStorage.getItem('admin_token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    this.http.post(`${environment.apiUrl}/products`, payload, { headers })
+this.http.post(`${environment.apiUrl}/add-product-url`, payload, { headers })
       .subscribe({
         next: (res) => {
           console.log('✅ Uploaded:', res);
