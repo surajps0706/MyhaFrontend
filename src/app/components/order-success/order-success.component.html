@@ -9,12 +9,12 @@
     </div>
 
     <!-- Title & Subtitle -->
-    <h2>Order Placed Successfully!</h2>
+    <h2>🎉 Order Placed Successfully!</h2>
     <p class="thank-you">Thank you for shopping with <b>Myha Couture</b>.</p>
 
     <!-- Order Info -->
     <div class="order-info" *ngIf="orderId">
-      <!-- <p><strong>Order ID:</strong> {{ orderId }}</p> -->
+      <p><strong>Your Order ID:</strong> {{ orderId }}</p>
       <p>We’ll notify you once it is shipped.</p>
     </div>
 
@@ -23,7 +23,7 @@
       <a routerLink="/products" class="btn primary">
         <span class="icon">🛍️</span> Continue Shopping
       </a>
-      <a routerLink="/track" class="btn secondary">
+      <a [routerLink]="['/track']" [queryParams]="{ orderId: orderId }" class="btn secondary" *ngIf="orderId">
         <span class="icon">📦</span> Track My Order
       </a>
     </div>

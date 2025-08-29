@@ -12,8 +12,8 @@
 
     <select [(ngModel)]="filterStatus" (change)="applyFilters()">
       <option value="">All Status</option>
-      <option>Pending Delivery</option>
-      <option>Processing</option>
+      <option>Preparing</option>
+      <option>Packed</option>
       <option>Shipped</option>
       <option>Delivered</option>
     </select>
@@ -30,6 +30,7 @@
         <th>Customer</th>
         <th>Total</th>
         <th>Status</th>
+        <th>AWB</th>
         <th>Created At</th>
         <th>Update</th>
       </tr>
@@ -42,14 +43,23 @@
         <td>
           <span class="status" [ngClass]="order.status.toLowerCase()">{{ order.status }}</span>
         </td>
-<td>{{ order.createdAt | date:'yyyy-MM-dd' }}</td>
+        <td>{{ order.awb || '—' }}</td>
+        <td>{{ order.createdAt | date:'yyyy-MM-dd' }}</td>
         <td>
-          <select [(ngModel)]="order.status" (change)="updateStatus(order, order.status)">
-            <option>Pending Delivery</option>
-            <option>Processing</option>
-            <option>Shipped</option>
-            <option>Delivered</option>
+          <!-- ✅ Admin can update only until Packed -->
+          <select
+            [(ngModel)]="order.status"
+            (change)="updateStatus(order, order.status)"
+            [disabled]="order.status !== 'Pending Delivery' && order.status !== 'Processing' && order.status !== 'Preparing' && order.status !== 'Packed'"
+          >
+            <option>Preparing</option>
+            <option>Packed</option>
           </select>
+
+          <!-- 🚚 Show courier status as read-only after Packed -->
+          <div *ngIf="order.status === 'Shipped' || order.status === 'Delivered'" class="courier-readonly">
+            <span>📦 Status via Courier</span>
+          </div>
         </td>
       </tr>
     </tbody>

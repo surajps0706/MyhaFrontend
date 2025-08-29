@@ -57,7 +57,7 @@ export class OrdersComponent implements OnInit {
   applyFilters() {
     this.filteredOrders = this.orders.filter(order => {
       const matchesSearch =
-        order.orderId?.toLowerCase().includes(this.searchQuery.toLowerCase()) || // ✅ use orderId, not id
+        order.orderId?.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
         order.checkoutData?.name?.toLowerCase().includes(this.searchQuery.toLowerCase());
 
       const matchesStatus =
@@ -67,16 +67,25 @@ export class OrdersComponent implements OnInit {
     });
   }
 
-  // Update order status
+  // Update order status (only until Packed)
   updateStatus(order: any, newStatus: string) {
+    // Block updates beyond Packed
+    if (["Shipped", "In Transit", "Out for Delivery", "Delivered"].includes(newStatus)) {
+      alert("❌ This status is controlled by the courier and cannot be updated manually.");
+      return;
+    }
+
     this.http.put(
-      `${this.baseUrl}/orders/${order.orderId}/status`,   // ✅ use order.orderId, not order.id
+      `${this.baseUrl}/orders/${order.orderId}/status`,
       { status: newStatus },
       { headers: { Authorization: 'Bearer ' + this.token } }
     ).subscribe({
       next: (res: any) => {
         alert(`✅ Order ${res.orderId} updated to ${res.status}`);
-        order.status = res.status; // ✅ keep UI in sync without full reload
+        order.status = res.status; // keep UI in sync
+        if (res.awb) {
+          order.awb = res.awb; // ⭐ NEW: Save AWB if backend returned it
+        }
       },
       error: (err) => {
         console.error(err);

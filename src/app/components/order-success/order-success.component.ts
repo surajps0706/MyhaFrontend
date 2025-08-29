@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CartService } from '../../services/cart.service'; // 👈 import service
+import { CartService } from '../../services/cart.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -16,13 +16,14 @@ export class OrderSuccessComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private cartService: CartService // 👈 inject service
+    private cartService: CartService
   ) {}
 
   ngOnInit(): void {
- this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe(params => {
       this.orderId = params['orderId'] || null;
     });
+
     // ✅ Clear cart once order success page is reached
     this.cartService.clearCart();
   }

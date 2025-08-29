@@ -5,13 +5,12 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 
-
 declare var Razorpay: any;
 
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule,],
+  imports: [CommonModule, FormsModule, HttpClientModule],
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.css'],
 })
@@ -29,7 +28,6 @@ export class CheckoutComponent implements OnInit {
     pincode: ''
   };
 
-  // ✅ Base URL from environment
   private baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient, private router: Router) {}
@@ -56,7 +54,6 @@ export class CheckoutComponent implements OnInit {
       return;
     }
 
-    // ✅ use environment URL
     this.http.post(`${this.baseUrl}/create-order`, { amount: this.totalAmount })
       .subscribe({
         next: (order: any) => this.openRazorpay(order),
@@ -76,38 +73,37 @@ export class CheckoutComponent implements OnInit {
       description: 'Order Payment',
       order_id: order.id,
       handler: (response: any) => {
-        console.log('Payment successful:', response);
+        console.log('✅ Payment successful:', response);
 
-        const tempOrderId = `TEMP-${order.id}`;
+        // Merge address lines into one full address for backend
+        const fullAddress = `${this.checkoutData.addressLine1}, ${this.checkoutData.addressLine2 || ''}`.trim();
+
         const orderData = {
-          tempOrderId: tempOrderId,
-          paymentId: response.razorpay_payment_id,
-          orderId: response.razorpay_order_id,
-          checkoutData: this.checkoutData,
+          razorpayPaymentId: response.razorpay_payment_id,
+          razorpayOrderId: response.razorpay_order_id,
+          checkoutData: {
+            ...this.checkoutData,
+            address: fullAddress // ✅ unified address field for backend
+          },
           cartItems: this.cartItems,
           totalAmount: this.totalAmount,
-          status: 'Pending Delivery',
-          createdAt: new Date()
+          paymentType: 'Prepaid'
         };
 
-        // ✅ use environment URL
-    this.http.post<any>(`${this.baseUrl}/save-order`, orderData)
-  .subscribe({
-    next: (res) => {
-      if (res.orderId) {
-        localStorage.removeItem('cart');
-        this.cartItems = [];
-        // ✅ Use backend-generated orderId
-        this.router.navigate(['/order-success'], { 
-          queryParams: { orderId: res.orderId }
-        });
-      }
-    },
-    error: (err) => {
-      console.error("❌ Order save failed:", err);
-    }
-  });
-
+        this.http.post<any>(`${this.baseUrl}/save-order`, orderData)
+          .subscribe({
+            next: (res) => {
+              if (res.orderId) {
+                localStorage.removeItem('cart');
+                this.cartItems = [];
+                this.router.navigate(['/order-success'], { queryParams: { orderId: res.orderId } });
+              }
+            },
+            error: (err) => {
+              console.error("❌ Order save failed:", err);
+              alert("❌ Could not save order.");
+            }
+          });
       },
       prefill: {
         name: this.checkoutData.name,

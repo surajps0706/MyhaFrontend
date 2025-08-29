@@ -1,31 +1,43 @@
+/* ========================= */
+/* 🔲 Container + Form */
+/* ========================= */
 .track-order-container {
-  max-width: 500px;
+  max-width: 650px;
   margin: 40px auto;
-  padding: 20px;
+  padding: 24px;
   border: 1px solid #eee;
-  border-radius: 12px;
+  border-radius: 16px;
   background: #fff;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  font-family: 'Segoe UI', sans-serif;
 }
 
 h2 {
   text-align: center;
-  margin-bottom: 20px;
-  font-size: 22px;
-  font-weight: 600;
+  margin-bottom: 24px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #222;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 input {
-  padding: 12px;
+  padding: 12px 14px;
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 15px;
+  transition: all 0.2s ease;
+}
+
+input:focus {
+  border-color: #d63384;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(214, 51, 132, 0.15);
 }
 
 button {
@@ -35,6 +47,7 @@ button {
   background: #d63384;
   color: white;
   font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
   transition: 0.2s;
 }
@@ -51,95 +64,205 @@ button:disabled {
 .loading {
   text-align: center;
   color: #555;
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 .error {
   color: red;
   text-align: center;
-  margin-top: 10px;
+  margin-top: 12px;
+  font-weight: 500;
 }
 
+/* ========================= */
+/* 📦 Order Details Box */
+/* ========================= */
 .order-details {
-  margin-top: 20px;
-  padding: 15px;
+  margin-top: 28px;
+  padding: 18px;
   border: 1px solid #eee;
-  border-radius: 8px;
+  border-radius: 12px;
   background: #fafafa;
 }
 
 .order-details h3 {
-  margin-bottom: 10px;
-  font-size: 18px;
+  margin-bottom: 18px;
+  font-size: 20px;
+  font-weight: 600;
   color: #333;
 }
 
-.status-pipeline {
+/* ========================= */
+/* ⭐ Horizontal Progress Bar */
+/* ========================= */
+.progress-container {
   display: flex;
-  align-items: flex-start;
   justify-content: space-between;
-  margin: 30px 0;
+  margin: 30px 0 40px;
   position: relative;
-  gap: 10px;
+  flex-wrap: wrap; /* ✅ wrap on mobile */
 }
 
-/* Step container */
-.step {
-  text-align: center;
+.progress-container::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 4px;
+  width: 100%;
+  background: #eee;
+  transform: translateY(-50%);
+  z-index: 1;
+  border-radius: 2px;
+}
+
+.progress-step {
+  position: relative;
+  z-index: 2;
   flex: 1;
-  position: relative;
+  text-align: center;
+  min-width: 70px; /* ✅ keeps spacing good */
+  margin-bottom: 15px;
 }
 
-/* Circle icons */
-.circle {
+.progress-step .circle {
+  width: 32px;
+  height: 32px;
+  margin: 0 auto 6px;
+  border-radius: 50%;
+  background: #eee;
+  color: #666;
+  font-size: 16px;
+  border: 2px solid #ccc;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
-  margin: 0 auto 8px;
-  border-radius: 50%;
-  background: #eee;
-  font-size: 22px;
-  transition: all 0.3s ease;
+  transition: all 0.3s;
 }
 
-.step.active .circle {
-  background: #28a745;
-  color: white;
-  box-shadow: 0 0 12px rgba(40, 167, 69, 0.4);
+.progress-step.active .circle,
+.progress-step.completed .circle {
+  background: #d63384;
+  border-color: #d63384;
+  color: #fff;
 }
 
-/* Labels */
-.label {
-  font-size: 14px;
+.progress-step span {
+  font-size: 13px;
   font-weight: 500;
-  color: #777;
-}
-
-.step.active .label {
-  color: #28a745;
-  font-weight: 600;
-}
-
-/* Timestamp */
-.time {
-  margin-top: 4px;
-  font-size: 12px;
   color: #444;
 }
 
-/* Connecting lines */
-.line {
+.progress-step.completed span {
+  color: #d63384;
+  font-weight: 600;
+}
+
+/* ========================= */
+/* ⭐ Vertical Timeline */
+/* ========================= */
+.timeline {
+  position: relative;
+  margin: 20px 0;
+  padding-left: 30px;
+  border-left: 3px solid #ddd;
+}
+
+.timeline-step {
+  position: relative;
+  margin-bottom: 22px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  animation: fadeInUp 0.6s ease forwards;
+  opacity: 0;
+}
+
+.timeline-step:last-child {
+  margin-bottom: 0;
+}
+
+.timeline-step .circle {
+  position: absolute;
+  left: -33px;
+  top: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  border: 2px solid #ccc;
+}
+
+.timeline-step .details {
+  background: #fff;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #eee;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   flex: 1;
-  height: 4px;
-  background: #ddd;
-  margin-top: 22px; /* aligns line with center of circles */
-  border-radius: 2px;
-  transition: all 0.3s ease;
 }
 
-.line.active {
-  background: #28a745;
+.timeline-step .status {
+  font-weight: 600;
+  font-size: 15px;
+  color: #333;
 }
 
+.timeline-step .time {
+  font-size: 13px;
+  color: #666;
+  margin-top: 3px;
+}
+
+.timeline-step .source {
+  font-size: 12px;
+  color: #999;
+  margin-top: 2px;
+}
+
+.timeline-step .location {
+  font-size: 13px;
+  color: #444;
+  margin-top: 4px;
+}
+
+/* Animation */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================= */
+/* 📱 Responsive Fixes */
+/* ========================= */
+@media (max-width: 768px) {
+  .progress-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .progress-container::before {
+    display: none; /* hide line on small screens */
+  }
+  .progress-step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-start;
+  }
+  .progress-step .circle {
+    margin: 0;
+  }
+  .progress-step span {
+    font-size: 14px;
+  }
+}

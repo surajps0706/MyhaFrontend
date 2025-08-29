@@ -1,70 +1,61 @@
 <div class="track-order-container">
   <h2>Track Your Order</h2>
 
-  <!-- Input Form -->
+  <!-- 🔍 Input Form -->
   <div class="form">
     <input type="text" placeholder="Enter Order ID" [(ngModel)]="orderId" />
     <input type="email" placeholder="Enter Email" [(ngModel)]="email" />
     <button (click)="trackOrder()" [disabled]="loading">Track</button>
   </div>
 
-  <!-- Loading -->
+  <!-- ⏳ Loading / Error -->
   <p *ngIf="loading" class="loading">⏳ Checking your order...</p>
-
-  <!-- Error -->
   <p *ngIf="error" class="error">{{ error }}</p>
 
-  <!-- Order Details -->
+  <!-- 📦 Order Tracking -->
   <div *ngIf="order" class="order-details">
-    <h3>Order Details</h3>
+    <h3>Order Progress</h3>
     <p><strong>Order ID:</strong> {{ order.orderId }}</p>
-    <p><strong>Status:</strong> {{ order.status || 'Pending Delivery' }}</p>
-    <p><strong>Name:</strong> {{ order.checkoutData?.name }}</p>
-    <p><strong>Email:</strong> {{ order.checkoutData?.email }}</p>
-    <p><strong>Phone:</strong> {{ order.checkoutData?.phone }}</p>
-    <p><strong>Total:</strong> ₹{{ order.totalAmount }}</p>
+    <p *ngIf="order.awb"><strong>AWB:</strong> {{ order.awb }}</p>
 
-    <!-- 🚚 Status Pipeline -->
-<div class="status-pipeline">
-  <div class="step" [class.active]="isActive('Pending Delivery')">
-    <div class="circle">📝</div>
-    <div class="label">Pending</div>
-    <div class="time" *ngIf="order.statusTimeline?.['Pending Delivery']">
-{{ order.statusTimeline['Pending Delivery'] }}
+    <!-- =============================== -->
+    <!-- ⭐ Horizontal Premium Progress -->
+    <!-- =============================== -->
+    <div class="progress-container">
+      <div
+        class="progress-step"
+        *ngFor="let step of progressSteps; let i = index"
+        [class.active]="isStepActive(step)"
+        [class.completed]="isStepCompleted(step)"
+      >
+        <div class="circle">
+          <!-- Icons by step -->
+          <span *ngIf="step.includes('Pending')">🕒</span>
+          <span *ngIf="step.includes('Processing')">⚙️</span>
+          <span *ngIf="step.includes('Preparing')">🛠️</span>
+          <span *ngIf="step.includes('Packed')">📦</span>
+          <span *ngIf="step.includes('Shipped')">🚚</span>
+          <span *ngIf="step.includes('Transit')">📍</span>
+          <span *ngIf="step.includes('Out for Delivery')">🚀</span>
+          <span *ngIf="step.includes('Delivered')">✅</span>
+        </div>
+        <span>{{ step }}</span>
+      </div>
     </div>
-  </div>
 
-  <div class="line" [class.active]="isActive('Processing','Shipped','Delivered')"></div>
-
-  <div class="step" [class.active]="isActive('Processing')">
-    <div class="circle">⚙️</div>
-    <div class="label">Processing</div>
-    <div class="time" *ngIf="order.statusTimeline?.['Processing']">
-      {{ order.statusTimeline['Processing'] }}
+    <!-- =============================== -->
+    <!-- 📜 Detailed Vertical Timeline -->
+    <!-- =============================== -->
+    <div class="timeline">
+      <div class="timeline-step" *ngFor="let step of animatedTimeline">
+        <div class="circle small">✔</div>
+        <div class="details">
+          <div class="status">{{ step.status }}</div>
+          <div class="time">{{ step.time | date:'medium' }}</div>
+          <div class="source">({{ step.source }})</div>
+          <div class="location" *ngIf="step.location">📍 {{ step.location }}</div>
+        </div>
+      </div>
     </div>
-  </div>
-
-  <div class="line" [class.active]="isActive('Shipped','Delivered')"></div>
-
-  <div class="step" [class.active]="isActive('Shipped')">
-    <div class="circle">🚚</div>
-    <div class="label">Shipped</div>
-    <div class="time" *ngIf="order.statusTimeline?.['Shipped']">
-      {{ order.statusTimeline['Shipped'] }}
-    </div>
-  </div>
-
-  <div class="line" [class.active]="isActive('Delivered')"></div>
-
-  <div class="step" [class.active]="isActive('Delivered')">
-    <div class="circle">✅</div>
-    <div class="label">Delivered</div>
-    <div class="time" *ngIf="order.statusTimeline?.['Delivered']">
-      {{ order.statusTimeline['Delivered']}}
-    </div>
-  </div>
-</div>
-
-
   </div>
 </div>

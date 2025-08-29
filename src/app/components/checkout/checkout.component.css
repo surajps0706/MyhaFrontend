@@ -88,7 +88,7 @@ input:focus {
   background: #fdfdfd;
   padding: 22px;
   border-radius: 12px;
-  position: sticky;
+  /* position: sticky; */
   top: 25px;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
 }

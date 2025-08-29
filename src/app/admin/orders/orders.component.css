@@ -27,6 +27,20 @@ h2 {
   flex: 1;
 }
 
+.export-btn {
+  background: #d63384;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.export-btn:hover {
+  background: #b82c6d;
+}
+
 .orders-table {
   width: 100%;
   border-collapse: collapse;
@@ -60,9 +74,39 @@ h2 {
   border-radius: 6px;
   font-size: 13px;
   font-weight: 500;
+  text-transform: capitalize;
 }
 
 .status.pending { background: #ffeeba; color: #856404; }
 .status.processing { background: #bee5eb; color: #0c5460; }
+.status.preparing { background: #e2e3ff; color: #383d7c; }   /* ⭐ NEW */
+.status.packed { background: #ffe0e0; color: #721c24; }      /* ⭐ NEW */
 .status.shipped { background: #c3e6cb; color: #155724; }
 .status.delivered { background: #d4edda; color: #155724; }
+
+/* AWB column styling */
+.orders-table td:nth-child(5) {
+  font-family: monospace;
+  font-size: 13px;
+  color: #444;
+}
+
+.orders-table td:nth-child(5):empty::after {
+  content: "—";
+  color: #aaa;
+}
+
+/* Status dropdown in table */
+.orders-table select {
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.orders-table select:focus {
+  outline: none;
+  border-color: #d63384;
+  box-shadow: 0 0 3px rgba(214, 51, 132, 0.5);
+}
