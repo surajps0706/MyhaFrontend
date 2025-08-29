@@ -4,7 +4,7 @@
   <!-- 🔍 Input Form -->
   <div class="form">
     <input type="text" placeholder="Enter Order ID" [(ngModel)]="orderId" />
-    <input type="email" placeholder="Enter Email" [(ngModel)]="email" />
+    <!-- <input type="email" placeholder="Enter Email" [(ngModel)]="email" /> -->
     <button (click)="trackOrder()" [disabled]="loading">Track</button>
   </div>
 
@@ -51,8 +51,8 @@
         <div class="circle small">✔</div>
         <div class="details">
           <div class="status">{{ step.status }}</div>
-          <div class="time">{{ step.time | date:'medium' }}</div>
-          <div class="source">({{ step.source }})</div>
+          <div class="time">{{ step.time | date:'mediumDate' }}</div>
+          <!-- <div class="source">({{ step.source }})</div> -->
           <div class="location" *ngIf="step.location">📍 {{ step.location }}</div>
         </div>
       </div>

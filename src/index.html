@@ -5,7 +5,12 @@
   <title>Myha</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="https://res.cloudinary.com/dw35epojg/image/upload/v1754020493/logo_v5px6x.jpg">
+  
+  <!-- Favicon (Browser Tab Icon) -->
+  <link rel="icon" type="image/png" href="https://res.cloudinary.com/dw35epojg/image/upload/v1754020493/logo_v5px6x.jpg">
+
+  <!-- Mobile Home Screen Icon -->
+  <link rel="apple-touch-icon" href="https://res.cloudinary.com/dw35epojg/image/upload/v1754020493/logo_v5px6x.jpg">
 
   <!-- Material Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -15,7 +20,18 @@
 
   <!-- ✅ Custom Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&family=Playfair+Display:wght@600&family=Great+Vibes&display=swap" rel="stylesheet">
+
+  <!-- ✅ Structured Data for Google (Logo) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "url": "https://myhacouture.com",
+    "logo": "https://res.cloudinary.com/dw35epojg/image/upload/v1754020493/logo_v5px6x.jpg"
+  }
+  </script>
 </head>
+
 <body class="mat-typography">
   <app-root></app-root>
 </body>
