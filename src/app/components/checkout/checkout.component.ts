@@ -66,7 +66,7 @@ export class CheckoutComponent implements OnInit {
 
   openRazorpay(order: any) {
     const options = {
-      key: 'rzp_test_VSPMG0czjNmS4T', // Razorpay Test Key
+      key: environment.razorpayKey, // Razorpay Test Key
       amount: order.amount,
       currency: order.currency,
       name: 'Myha Couture',
