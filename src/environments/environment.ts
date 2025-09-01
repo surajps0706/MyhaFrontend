@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:8000',
-  razorpayKey: 'rzp_test_VSPMG0czjNmS4T'
+  razorpayKey: 'rzp_live_RCNi39mnb91nXB'
 };
