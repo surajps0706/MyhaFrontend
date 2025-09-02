@@ -16,6 +16,7 @@
       <option>Packed</option>
       <option>Shipped</option>
       <option>Delivered</option>
+      <option>Cancelled</option>
     </select>
 
     <!-- 📥 Export Button -->
@@ -33,6 +34,7 @@
         <th>AWB</th>
         <th>Created At</th>
         <th>Update</th>
+        <th>Action</th> <!-- 🆕 Added Action column -->
       </tr>
     </thead>
     <tbody>
@@ -46,20 +48,31 @@
         <td>{{ order.awb || '—' }}</td>
         <td>{{ order.createdAt | date:'yyyy-MM-dd' }}</td>
         <td>
-          <!-- ✅ Admin can update only until Packed -->
+          <!-- ✅ Admin can update until Packed -->
           <select
             [(ngModel)]="order.status"
             (change)="updateStatus(order, order.status)"
-            [disabled]="order.status !== 'Pending Delivery' && order.status !== 'Processing' && order.status !== 'Preparing' && order.status !== 'Packed'"
+            [disabled]="order.status === 'Shipped' || order.status === 'Delivered' || order.status === 'Cancelled'"
           >
             <option>Preparing</option>
             <option>Packed</option>
           </select>
 
-          <!-- 🚚 Show courier status as read-only after Packed -->
+          <!-- 🚚 Show courier status as read-only -->
           <div *ngIf="order.status === 'Shipped' || order.status === 'Delivered'" class="courier-readonly">
             <span>📦 Status via Courier</span>
           </div>
+        </td>
+
+        <!-- 🆕 Cancel Action -->
+        <td>
+          <button
+            class="cancel-btn"
+            (click)="cancelOrder(order.orderId)"
+            [disabled]="order.status === 'Shipped' || order.status === 'Delivered' || order.status === 'Cancelled'"
+          >
+            ❌ Cancel
+          </button>
         </td>
       </tr>
     </tbody>

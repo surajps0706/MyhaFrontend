@@ -114,4 +114,33 @@ export class OrdersComponent implements OnInit {
       alert('❌ Failed to download Excel');
     });
   }
+
+cancelOrder(orderId: string) {
+  if (!confirm(`⚠️ Are you sure you want to cancel order ${orderId}?`)) return;
+
+  this.http.put(
+    `${this.baseUrl}/orders/${orderId}/cancel`,
+    {},
+    { headers: { Authorization: 'Bearer ' + this.token } }
+  ).subscribe({
+    next: (res: any) => {
+      alert(`✅ Order ${res.orderId || orderId} cancelled successfully`);
+      
+      // Update UI directly without reloading all orders
+      const order = this.orders.find(o => o.orderId === orderId);
+      if (order) {
+        order.status = "Cancelled";
+      }
+
+      // Re-apply filters so UI shows latest
+      this.applyFilters();
+    },
+    error: (err) => {
+      console.error('❌ Cancel order failed:', err);
+      alert('Failed to cancel order. Please try again.');
+    }
+  });
+}
+
+
 }
