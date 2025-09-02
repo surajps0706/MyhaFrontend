@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CartService } from '../../services/cart.service';
@@ -68,10 +68,14 @@ export class ProductDetailComponent implements OnInit {
   selectedImageFile: File | null = null;
   previewImage: string | null = null;
 
+  // Toast
+  showToast = false;
+
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService,
     private cartService: CartService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -94,6 +98,23 @@ export class ProductDetailComponent implements OnInit {
         error: (err) => console.error('Error fetching product:', err)
       });
     }
+  }
+
+  // =========================
+  // Back Button Logic
+  // =========================
+  goBack(): void {
+    // store the last viewed product in sessionStorage
+    sessionStorage.setItem('lastViewedProductId', this.productId || '');
+    this.router.navigate(['/products']).then(() => {
+      // give Angular time to render
+      setTimeout(() => {
+        const el = document.getElementById(this.productId || '');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 300);
+    });
   }
 
   // =========================
@@ -180,32 +201,29 @@ Link: ${window.location.href}`;
   // =========================
   // Cart
   // =========================
-showToast = false;
+  addToCart(): void {
+    if (!this.isFormValid()) {
+      alert('Please select a size OR provide the required measurements before adding to cart!');
+      return;
+    }
 
-addToCart(): void {
-  if (!this.isFormValid()) {
-    alert('Please select a size OR provide the required measurements before adding to cart!');
-    return;
+    const cartItem = {
+      ...this.product,
+      selectedSize: this.sizingMode === 'size' ? (this.product?.selectedSize || null) : null,
+      measurements: this.sizingMode === 'measurements' ? this.measurements : {},
+      sleevePrice: this.selectedSleeve?.price || 0,
+      sleeveType: this.selectedSleeve?.name || 'None',
+      customizationNotes: this.customizationNotes || null,
+      preferredHeight: this.preferredHeight,
+      extraHeightPrice: this.heightExtra
+    };
+
+    this.cartService.addToCart(cartItem);
+
+    // ✅ Show toast instead of alert
+    this.showToast = true;
+    setTimeout(() => (this.showToast = false), 3000);
   }
-
-  const cartItem = {
-    ...this.product,
-    selectedSize: this.sizingMode === 'size' ? (this.product?.selectedSize || null) : null,
-    measurements: this.sizingMode === 'measurements' ? this.measurements : {},
-    sleevePrice: this.selectedSleeve?.price || 0,
-    sleeveType: this.selectedSleeve?.name || 'None',
-    customizationNotes: this.customizationNotes || null,
-    preferredHeight: this.preferredHeight,
-    extraHeightPrice: this.heightExtra
-  };
-
-  this.cartService.addToCart(cartItem);
-
-  // ✅ Show toast instead of alert
-  this.showToast = true;
-  setTimeout(() => (this.showToast = false), 3000);
-}
-
 
   // =========================
   // Notes
@@ -229,19 +247,16 @@ addToCart(): void {
     if (!this.productId) return;
     this.productService.getReviews(this.productId).subscribe({
       next: (res) => {
-        this.reviews = [...res]; // overwrite instead of pushing
+        this.reviews = [...res];
       },
       error: (err) => console.error('Error loading reviews:', err)
     });
   }
 
-  // Handle image select + preview
   onImageSelected(event: Event): void {
     const fileInput = event.target as HTMLInputElement;
     if (fileInput.files && fileInput.files[0]) {
       this.selectedImageFile = fileInput.files[0];
-
-      // Preview in UI
       const reader = new FileReader();
       reader.onload = e => {
         this.previewImage = e.target?.result as string;
@@ -250,26 +265,22 @@ addToCart(): void {
     }
   }
 
-submitReview(): void {
-  if (!this.productId) return;
+  submitReview(): void {
+    if (!this.productId) return;
+    if (!this.newReview.name.trim() || !this.newReview.comment.trim()) {
+      alert('Please fill in all fields');
+      return;
+    }
 
-  if (!this.newReview.name.trim() || !this.newReview.comment.trim()) {
-    alert('Please fill in all fields');
-    return;
+    this.productService.addReview(this.productId, this.newReview, this.selectedImageFile ?? undefined).subscribe({
+      next: () => {
+        alert('✅ Review submitted');
+        this.newReview = { name: '', rating: 5, comment: '' };
+        this.selectedImageFile = null;
+        this.previewImage = null;
+        this.loadReviews();
+      },
+      error: (err) => alert('❌ Failed to submit: ' + err.message)
+    });
   }
-
-  // ✅ pass review object + file, NOT FormData
-  this.productService.addReview(this.productId, this.newReview, this.selectedImageFile ?? undefined).subscribe({
-    next: () => {
-      alert('✅ Review submitted');
-      this.newReview = { name: '', rating: 5, comment: '' };
-      this.selectedImageFile = null;
-      this.previewImage = null;
-      this.loadReviews();
-    },
-    error: (err) => alert('❌ Failed to submit: ' + err.message)
-  });
-}
-
-
 }
