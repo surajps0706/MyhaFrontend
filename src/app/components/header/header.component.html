@@ -13,36 +13,40 @@
     <a routerLink="/track" routerLinkActive="active-link">Track Order</a>
   </nav>
 
-<!-- Search Bar (only visible in /products) -->
-<div class="search-bar" *ngIf="showSearchBar">
-  <input 
-    type="text" 
-    placeholder="Search for products..." 
-    (input)="onSearch($event)" 
-    [(ngModel)]="searchQuery" />
-  <button aria-label="Search">🔍</button>
+  <!-- Search Bar (only visible in /products) -->
+  <div class="search-bar" *ngIf="showSearchBar">
+    <input 
+      type="text" 
+      placeholder="Search for products..." 
+      (input)="onSearch($event)" 
+      [(ngModel)]="searchQuery" />
+    <button aria-label="Search">🔍</button>
 
-  <!-- Suggestions -->
-  <div class="suggestions" *ngIf="suggestions.length > 0">
-    <div 
-      class="suggestion-item" 
-      *ngFor="let product of suggestions" 
-      [routerLink]="['/product', product.id]" 
-      (click)="clearSuggestions()">
+    <!-- Suggestions -->
+    <div class="suggestions" *ngIf="suggestions.length > 0">
+      <div 
+        class="suggestion-item" 
+        *ngFor="let product of suggestions" 
+        [routerLink]="['/product', product.id]" 
+        (click)="clearSuggestions()">
 
-      <img [src]="product.images[0]" alt="{{ product.name }}" />
-      <div class="info">
-        <span class="name">{{ product.name }}</span>
-        <span class="price">{{ product.price }}</span>
+        <img [src]="product.images[0]" alt="{{ product.name }}" />
+        <div class="info">
+          <span class="name">{{ product.name }}</span>
+          <span class="price">{{ product.price }}</span>
+        </div>
       </div>
     </div>
   </div>
-</div>
-
-
 
   <!-- Right Icons -->
   <div class="right-section">
+    <!-- Wishlist -->
+    <a class="wishlist-icon" routerLink="/wishlist" aria-label="Wishlist">
+      <span class="icon">❤️</span>
+      <span class="badge" *ngIf="wishlistCount > 0">{{ wishlistCount }}</span>
+    </a>
+
     <!-- Cart -->
     <a class="cart-icon" routerLink="/cart" aria-label="Cart">
       <span class="icon">🛒</span>
@@ -69,13 +73,16 @@
   </div>
 
   <!-- Mobile Search -->
-<div class="mobile-search">
-  <input type="text" placeholder="Search..." (input)="onSearch($event)" />
-</div>
+  <div class="mobile-search">
+    <input type="text" placeholder="Search..." (input)="onSearch($event)" />
+  </div>
 
   <a routerLink="/" (click)="toggleMenu()">Home</a>
   <a routerLink="/products" (click)="toggleMenu()">Shop</a>
   <a routerLink="/track" (click)="toggleMenu()">Track Order</a>
+  <a routerLink="/wishlist" (click)="toggleMenu()">Wishlist ❤️ 
+    <span *ngIf="wishlistCount > 0">({{ wishlistCount }})</span>
+  </a>
   <a routerLink="/cart" (click)="toggleMenu()">Cart 🛒 
     <span *ngIf="cartCount > 0">({{ cartCount }})</span>
   </a>

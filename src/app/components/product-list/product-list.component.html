@@ -31,10 +31,22 @@
     <div class="product-card" *ngFor="let product of paginatedProducts">
       <div class="image-wrapper">
         <img [src]="product.images[0]" [alt]="product.name" />
+
+        <!-- ❤️ Wishlist Button -->
+        <button 
+          class="wishlist-btn" 
+          [class.active]="isInWishlist(product.id)"
+          (click)="toggleWishlist(product)"
+          title="Add to Wishlist">
+          <span class="material-icons">
+            {{ isInWishlist(product.id) ? 'favorite' : 'favorite_border' }}
+          </span>
+        </button>
       </div>
+
       <div class="product-info">
         <h3 class="product-name">{{ product.name }}</h3>
-        <p class="price">{{ product.price }}</p>
+        <p class="price">₹{{ product.price }}</p>
         <a [routerLink]="['/product', product.id]" class="btn">View Details</a>
       </div>
     </div>

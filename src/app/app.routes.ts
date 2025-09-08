@@ -33,11 +33,20 @@ export const routes: Routes = [
       ),
   },
 
-  // 🛒 Lazy load Cart
+  // 🛒 Cart
   {
     path: 'cart',
     loadComponent: () =>
       import('./components/cart/cart.component').then((m) => m.CartComponent),
+  },
+
+  // ❤️ Wishlist
+  {
+    path: 'wishlist',
+    loadComponent: () =>
+      import('./components/wishlist.component').then(
+        (m) => m.WishlistComponent
+      ),
   },
 
   // ✅ Checkout
@@ -56,15 +65,12 @@ export const routes: Routes = [
   // =========================
   // 🔐 ADMIN ROUTES
   // =========================
-
-  // ✅ Admin Login (no guard here)
   {
     path: 'admin/login',
     loadComponent: () =>
       import('./admin/login/login.component').then((m) => m.LoginComponent),
   },
 
-  // ✅ Admin Dashboard Wrapper (guarded)
   {
     path: 'admin',
     loadComponent: () =>

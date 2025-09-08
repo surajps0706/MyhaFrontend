@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { CartService } from '../../services/cart.service';
 import { SearchService } from '../../services/search.service';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment'; // ✅ import env
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -17,11 +17,11 @@ import { environment } from '../../../environments/environment'; // ✅ import e
 export class HeaderComponent {
   isMobileMenuOpen = false;
   cartCount = 0;
+  wishlistCount = 0; // ✅ NEW
   searchQuery = '';
   suggestions: any[] = [];
   showSearchBar = false;
 
-  // ✅ Use API URL from environment
   private apiUrl = environment.apiUrl;
 
   constructor(
@@ -32,14 +32,21 @@ export class HeaderComponent {
   ) {}
 
   ngOnInit() {
+    // ✅ Cart count
     this.cartService.cartCount$.subscribe(count => {
       this.cartCount = count;
     });
 
-    // detect route changes
+    // ✅ Wishlist count (load on init + when route changes)
+    this.loadWishlistCount();
+
     this.router.events.subscribe(() => {
       this.showSearchBar = this.router.url.includes('/products');
+      this.loadWishlistCount(); // refresh count on navigation
     });
+
+    // ✅ Optional: Listen for custom "wishlistUpdated" events
+    window.addEventListener('wishlistUpdated', () => this.loadWishlistCount());
   }
 
   toggleMenu() {
@@ -63,5 +70,13 @@ export class HeaderComponent {
 
   clearSuggestions() {
     this.suggestions = [];
+  }
+
+  // =======================
+  // ✅ Wishlist helpers
+  // =======================
+  loadWishlistCount() {
+    const saved = localStorage.getItem('wishlist');
+    this.wishlistCount = saved ? JSON.parse(saved).length : 0;
   }
 }

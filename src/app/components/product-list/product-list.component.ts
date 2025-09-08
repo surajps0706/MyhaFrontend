@@ -12,36 +12,38 @@ import { environment } from '../../../environments/environment';
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule]
 })
-// ...
 export class ProductListComponent implements OnInit {
   products: any[] = [];
   filteredProducts: any[] = [];
 
   selectedCategory: string = 'all';
-  priceRange: number = 3000;  
+  priceRange: number = 3000;
 
   collapsed = { category: false, price: false };
   mobileFiltersOpen: boolean = false;
 
   // ✅ Pagination
   currentPage: number = 1;
-  pageSize: number = 8; // default (desktop)
+  pageSize: number = 8;
 
   private baseUrl: string = environment.apiUrl;
 
+  // ✅ Wishlist (store product IDs)
+  wishlist: number[] = [];
+
   constructor(private http: HttpClient) {}
 
-ngOnInit(): void {
-  // ✅ Set page size dynamically
-  if (window.innerWidth <= 768) {
-    this.pageSize = 6; // mobile
-  } else {
-    this.pageSize = 12; // desktop/laptop
+  ngOnInit(): void {
+    // ✅ Set page size dynamically
+    if (window.innerWidth <= 768) {
+      this.pageSize = 6; // mobile
+    } else {
+      this.pageSize = 12; // desktop/laptop
+    }
+
+    this.loadWishlist();
+    this.fetchProducts();
   }
-
-  this.fetchProducts();
-}
-
 
   fetchProducts() {
     this.http.get<any[]>(`${this.baseUrl}/products`).subscribe({
@@ -112,5 +114,35 @@ ngOnInit(): void {
 
   prevPage() {
     if (this.currentPage > 1) this.currentPage--;
+  }
+
+  // ==========================
+  // ✅ WISHLIST LOGIC
+  // ==========================
+  loadWishlist() {
+    const saved = localStorage.getItem('wishlist');
+    this.wishlist = saved ? JSON.parse(saved) : [];
+  }
+
+  saveWishlist() {
+    localStorage.setItem('wishlist', JSON.stringify(this.wishlist));
+
+    // ✅ Notify header instantly
+    window.dispatchEvent(new Event('wishlistUpdated'));
+  }
+
+  isInWishlist(productId: number): boolean {
+    return this.wishlist.includes(productId);
+  }
+
+  toggleWishlist(product: any) {
+    if (this.isInWishlist(product.id)) {
+      // remove
+      this.wishlist = this.wishlist.filter((id) => id !== product.id);
+    } else {
+      // add
+      this.wishlist.push(product.id);
+    }
+    this.saveWishlist();
   }
 }
