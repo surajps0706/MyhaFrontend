@@ -1,159 +1,195 @@
-/* ===== Base Layout ===== */
+/* ==============================
+   CHECKOUT PAGE - PREMIUM STYLE
+   ============================== */
+
 .checkout-container {
   max-width: 1200px;
-  margin: 30px auto;
+  margin: 40px auto;
   padding: 20px;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 .checkout-title {
-  font-size: 2rem;
-  margin-bottom: 25px;
+  font-size: 2.2rem;
+  margin-bottom: 30px;
   font-weight: 700;
   text-align: center;
-  color: #222;
+  color: #333;
+  font-family: 'Playfair Display', serif; /* Elegant heading */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
 
+.checkout-title::before {
+  /* content: "🔒"; */
+  font-size: 1.5rem;
+}
+
+/* Wrapper */
 .checkout-wrapper {
   display: flex;
-  gap: 32px;
+  gap: 36px;
   align-items: flex-start;
 }
 
-/* ===== Billing Form ===== */
+/* ==============================
+   BILLING FORM
+   ============================== */
 .billing-form {
   flex: 2;
   background: #fff;
-  padding: 28px;
-  border-radius: 12px;
-  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
-  border: 1px solid #eee;
+  padding: 30px;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+  border: 1px solid #f0f0f0;
 }
 
 .billing-form legend {
   font-size: 1.4rem;
   font-weight: 700;
   color: #222;
-  margin-bottom: 18px;
+  margin-bottom: 20px;
   border-bottom: 2px solid #f5f5f5;
-  padding-bottom: 8px;
+  padding-bottom: 10px;
+  font-family: 'Playfair Display', serif;
 }
 
 .form-group {
-  margin-bottom: 18px;
+  margin-bottom: 20px;
 }
 
 label {
   display: block;
   font-weight: 600;
   margin-bottom: 6px;
-  color: #333;
+  color: #444;
   font-size: 0.95rem;
-}
-
-label i {
-  margin-right: 8px;
-  color: #ff3f6c; /* Myntra pink accent */
 }
 
 input {
   width: 100%;
   padding: 12px 14px;
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 0.95rem;
-  transition: all 0.2s ease;
   background-color: #fafafa;
+  transition: all 0.25s ease;
 }
 
 input:focus {
   outline: none;
-  border-color: #ff3f6c;
-  box-shadow: 0 0 6px rgba(255, 63, 108, 0.25);
+  border-color: #e75480;
+  box-shadow: 0 0 8px rgba(231, 84, 128, 0.25);
   background-color: #fff;
 }
 
+/* Grouped fields row */
 .form-row {
   display: flex;
   gap: 15px;
 }
-
 .form-row .form-group {
   flex: 1;
 }
 
-/* ===== Order Summary ===== */
+/* Divider inside form */
+.billing-form fieldset {
+  border: none;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+/* ==============================
+   ORDER SUMMARY
+   ============================== */
 .order-summary {
   flex: 1;
-  background: #fdfdfd;
-  padding: 22px;
-  border-radius: 12px;
-  /* position: sticky; */
+  background: linear-gradient(180deg, #fff, #fff9f9);
+  padding: 24px;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f5f5f5;
+  position: sticky;
   top: 25px;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
 }
 
 .order-summary h3 {
-  margin-bottom: 18px;
-  font-size: 1.3rem;
+  margin-bottom: 20px;
+  font-size: 1.4rem;
   font-weight: 600;
+  font-family: 'Playfair Display', serif;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 8px;
 }
 
 .summary-item {
   display: flex;
   align-items: center;
   gap: 14px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #f2f2f2;
   padding: 12px 0;
 }
 
 .item-image img {
-  width: 65px;
-  height: 85px;
+  width: 70px;
+  height: 90px;
   object-fit: cover;
-  border-radius: 6px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 .item-details {
   flex: 1;
+  font-size: 0.9rem;
+}
+
+.item-details strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 1rem;
+  color: #222;
 }
 
 .item-meta {
   font-size: 0.85rem;
   color: #555;
+  margin-bottom: 4px;
 }
-
 .item-meta span {
   display: block;
-  margin-bottom: 3px;
 }
 
 .item-total {
   font-weight: 600;
-  margin-top: 4px;
   font-size: 0.95rem;
+  color: #333;
 }
 
+/* Totals */
 .summary-total {
   display: flex;
   justify-content: space-between;
   font-size: 1.1rem;
   font-weight: 700;
-  margin-top: 15px;
+  margin-top: 16px;
 }
 
 .total-amount {
-  color: #ff3f6c;
-  font-size: 1.25rem;
+  color: #e75480;
+  font-size: 1.4rem;
 }
 
-/* ===== Place Order Button ===== */
+/* ==============================
+   CTA BUTTON
+   ============================== */
 .place-order-btn {
   width: 100%;
-  padding: 15px 18px;
-  margin-top: 20px;
-  background: #ff3f6c;
+  padding: 16px 20px;
+  margin-top: 24px;
+  background: linear-gradient(90deg, #ff3f6c, #e75480);
   color: #fff;
   font-weight: 700;
   font-size: 1rem;
@@ -161,35 +197,63 @@ input:focus {
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.25s ease;
-  box-shadow: 0 6px 15px rgba(255, 63, 108, 0.3);
+  box-shadow: 0 6px 15px rgba(231, 84, 128, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.place-order-btn::before {
+  /* content: "🔒"; */
+  font-size: 1.1rem;
 }
 
 .place-order-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(255, 63, 108, 0.4);
+  box-shadow: 0 10px 22px rgba(231, 84, 128, 0.4);
 }
 
 .place-order-btn:active {
   transform: translateY(0);
-  box-shadow: 0 4px 12px rgba(255, 63, 108, 0.25);
+  box-shadow: 0 5px 14px rgba(231, 84, 128, 0.25);
 }
 
-.place-order-btn:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(255, 63, 108, 0.5);
+/* Payment icons + note */
+.payment-logos {
+  margin-top: 15px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
 }
 
-/* ===== Empty Cart ===== */
+.payment-logos img {
+  height: 20px;
+  opacity: 0.85;
+}
+
+.secure-note {
+  font-size: 0.8rem;
+  color: #777;
+  margin-top: 6px;
+  text-align: center;
+}
+
+/* ==============================
+   EMPTY CART
+   ============================== */
 .empty-message {
   text-align: center;
   padding: 60px 20px;
   font-size: 1.1rem;
   background: #fafafa;
-  border-radius: 10px;
+  border-radius: 12px;
   color: #555;
 }
 
-/* ===== Responsive Design ===== */
+/* ==============================
+   RESPONSIVE DESIGN
+   ============================== */
 @media (max-width: 992px) {
   .checkout-wrapper {
     flex-direction: column;
@@ -206,7 +270,7 @@ input:focus {
   }
 
   .checkout-title {
-    font-size: 1.6rem;
+    font-size: 1.7rem;
   }
 
   .form-row {
@@ -227,6 +291,9 @@ input:focus {
 
   .place-order-btn {
     font-size: 1rem;
-    padding: 12px;
+    padding: 14px;
+    position: sticky;
+    bottom: 10px;
+    z-index: 10;
   }
 }
