@@ -1,13 +1,16 @@
 <!-- HERO SECTION -->
-<section class="hero">
-  <div class="hero-overlay"></div>
+<section class="hero luxury-hero">
+  <!-- Subtle texture overlay -->
+  <div class="hero-texture"></div>
+
   <div class="hero-content">
     <h1 class="brand-title">
-      Welcome to <span class="brand-name">Myha</span>
+      Welcome to 
+      <span class="brand-name">Myha</span>
     </h1>
     <p class="tagline">
       Elegance handcrafted for you.<br />
-      Traditional & modern outfits at your fingertips.
+       Modern outfits at your fingertips.
     </p>
 
     <!-- CTA Buttons -->
@@ -18,6 +21,7 @@
   </div>
 </section>
 
+<!-- HIGHLIGHT SECTION -->
 <section class="highlight-section">
   <div class="section-header">
     <h2>New Arrivals</h2>
@@ -28,28 +32,28 @@
   <div class="product-grid">
     <div class="product-tile" *ngFor="let product of newArrivals">
       <div class="img-box">
-        <img [src]="product.images[0]" [alt]="product.name" />
+        <img
+          [src]="product.images[0]"
+          [alt]="product.name"
+          loading="lazy"
+        />
+        <div class="badge" *ngIf="product.discount">-{{ product.discount }}%</div>
         <div class="hover-actions">
           <a [routerLink]="['/product', product.id]" class="btn-overlay">Quick View</a>
-          <a [routerLink]="['/cart']" class="btn-overlay secondary">Add to Bag</a>
+          <a routerLink="/cart" class="btn-overlay secondary">Add to Bag</a>
         </div>
       </div>
       <div class="info">
         <span class="brand">Myha</span>
         <h3 class="name">{{ product.name }}</h3>
         <div class="price">
-          <span class="current">{{ product.price }}</span>
-          <!-- optional -->
-          <!-- <span class="old">₹1200</span> -->
+          <span class="current">₹{{ product.price }}</span>
+          <span class="old" *ngIf="product.oldPrice">₹{{ product.oldPrice }}</span>
+        </div>
+        <div class="rating" *ngIf="product.rating">
+          ⭐ {{ product.rating }} / 5
         </div>
       </div>
     </div>
   </div>
 </section>
-
-
-
-
-
-
-

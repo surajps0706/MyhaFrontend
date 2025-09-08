@@ -1,163 +1,164 @@
 /* =====================
-   FONT IMPORTS
-===================== */
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&family=Playfair+Display:wght@600&family=Great+Vibes&display=swap');
-
-/* =====================
    GLOBAL
 ===================== */
-body {
-  font-family: 'Quicksand', sans-serif; /* default soft-rounded font */
-  margin: 0;
-  padding: 0;
-  background: #fff;
-  color: #222;
-}
-
-/* Headings */
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Playfair Display', serif; /* elegant for titles */
-  margin: 0;
-}
-
-/* Brand / Logo */
-.brand-title, .brand-name {
-  font-family: 'Great Vibes', cursive; /* girly calligraphy */
-  font-weight: 400;
-  font-size: clamp(2rem, 6vw, 3.5rem);
-  color: #fdd835; /* golden highlight */
-}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Cormorant+Garamond:wght@400;600&display=swap');
 
 /* =====================
    HERO SECTION
 ===================== */
-.hero {
+.luxury-hero {
   position: relative;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  background: url('https://res.cloudinary.com/dw35epojg/image/upload/v1754020493/logo_v5px6x.jpg')
-    no-repeat center center;
-  background-size: contain; /* logo fully visible */
-  background-color: #fdfaf7; /* soft beige */
+
+  /* Yellow textured background */
+  background: url("https://res.cloudinary.com/dw35epojg/image/upload/v1757311653/ChatGPT_Image_Sep_8_2025_11_37_14_AM_hehybn.png")
+              no-repeat center center;
+  background-size: cover;
+
+  color: #222;
+  padding: 20px;
   overflow: hidden;
 }
 
-.hero-overlay {
+/* Smooth fade into next section */
+.luxury-hero::after {
+  content: "";
   position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.5),
-    rgba(0, 0, 0, 0.25)
-  );
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff);
   z-index: 1;
 }
 
 .hero-content {
   position: relative;
   z-index: 2;
-  color: #fff;
-  max-width: 700px;
-  padding: 20px;
+  max-width: 720px;
 }
 
-/* Tagline */
+.brand-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 6vw, 3.6rem);
+  font-weight: 600;
+  color: #bfa14a; /* muted gold */
+  letter-spacing: 1px;
+}
+
+.brand-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-style: italic;
+  color: #e75480; /* rose pink */
+  margin-left: 6px;
+  position: relative;
+}
+
+/* Underline animation */
+.brand-name::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  height: 2px;
+  width: 0;
+  background: #e75480;
+  transition: width 0.6s ease;
+}
+
+.brand-name:hover::after {
+  width: 100%;
+}
+
 .tagline {
-  font-family: 'Quicksand', sans-serif;
-  font-size: clamp(1rem, 2vw, 1.25rem);
-  margin-bottom: 28px;
-  color: #f1f1f1;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: clamp(0.95rem, 2vw, 1.15rem);
+  color: #444;
+  margin-top: 15px;
   line-height: 1.6;
+  letter-spacing: 0.3px;
 }
 
-/* CTA Buttons */
 .hero-buttons {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-  align-items: center;
+  gap: 16px;
   justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 28px;
 }
 
 .btn {
-  display: inline-block;
   padding: 14px 32px;
   border-radius: 999px;
   font-weight: 600;
-  font-family: 'Quicksand', sans-serif;
   text-decoration: none;
   transition: all 0.3s ease;
+  border: 2px solid transparent;
+  cursor: pointer;
 }
 
 .btn.primary {
-  background: #fff;
-  color: #111;
-}
-
-.btn.secondary {
-  border: 2px solid #fff;
+  background: #e75480;
   color: #fff;
 }
 
-.btn:hover {
-  transform: translateY(-2px);
+.btn.primary:hover {
+  box-shadow: 0 0 12px rgba(231, 84, 128, 0.6);
 }
 
-@media (min-width: 768px) {
-  .hero-buttons {
-    flex-direction: row;
-    justify-content: center;
-  }
+.btn.secondary {
+  background: transparent;
+  border: 2px solid #222;
+  color: #222;
 }
 
-@media (max-width: 768px) {
-  .hero {
-    min-height: 80vh;
-  }
-  .hero-content {
-    padding: 20px;
-  }
+.btn.secondary:hover {
+  background: #222;
+  color: #fff;
 }
 
 /* =====================
-   HIGHLIGHT SECTION
+   PRODUCT GRID
 ===================== */
 .highlight-section {
-  padding: 60px 20px;
+  padding: 80px 20px; /* more breathing room */
   background: #fff;
+  position: relative;
+  z-index: 2;
 }
 
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 8px;
 }
 
 .section-header h2 {
+  font-size: 2rem;
   font-family: 'Playfair Display', serif;
-  font-size: 1.8rem;
-  font-weight: 600;
+  color: #222;
 }
 
 .section-header .view-all {
   font-size: 0.9rem;
   text-decoration: none;
-  color: #000;
+  color: #e75480;
   font-weight: 500;
 }
 
 .subtext {
   font-size: 1rem;
   color: #777;
-  margin: 10px 0 24px;
+  margin-bottom: 28px;
 }
 
-/* =====================
-   PRODUCT GRID
-===================== */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -165,24 +166,28 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .product-tile {
-  text-align: left;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-tile:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
 }
 
 .img-box {
   position: relative;
-  width: 100%;
   aspect-ratio: 3/4;
-  background: #f7f7f7;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   overflow: hidden;
 }
 
 .img-box img {
-  max-height: 380px;
-  width: auto;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   transition: transform .3s ease;
 }
 
@@ -190,7 +195,17 @@ h1, h2, h3, h4, h5, h6 {
   transform: scale(1.05);
 }
 
-/* Hover Actions */
+.badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #e75480;
+  color: #fff;
+  padding: 4px 8px;
+  font-size: 0.8rem;
+  border-radius: 4px;
+}
+
 .hover-actions {
   position: absolute;
   inset: 0;
@@ -198,9 +213,9 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: center;
   align-items: flex-end;
   gap: 10px;
-  padding-bottom: 12px;
+  padding-bottom: 14px;
   opacity: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.5), transparent 60%);
+  background: linear-gradient(to top, rgba(0,0,0,0.35), transparent 60%);
   transition: opacity .3s ease;
 }
 
@@ -211,23 +226,22 @@ h1, h2, h3, h4, h5, h6 {
 .btn-overlay {
   background: #fff;
   color: #000;
-  padding: 6px 12px;
-  border-radius: 4px;
+  padding: 8px 14px;
+  border-radius: 6px;
   font-size: 0.85rem;
   font-weight: 600;
   text-decoration: none;
+  border: none;
+  cursor: pointer;
 }
 
 .btn-overlay.secondary {
-  background: #000;
+  background: #e75480;
   color: #fff;
 }
 
-/* =====================
-   PRODUCT INFO
-===================== */
 .info {
-  margin-top: 10px;
+  padding: 12px;
 }
 
 .info .brand {
@@ -237,17 +251,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .info .name {
-  font-family: 'Playfair Display', serif; /* stylish product names */
   font-size: 1rem;
   margin: 4px 0;
   font-weight: 600;
   color: #222;
+  font-family: 'Playfair Display', serif;
 }
 
 .info .price {
   font-size: 1rem;
   font-weight: 700;
-  color: #e53935;
+  color: #e75480;
 }
 
 .info .price .old {
@@ -255,4 +269,29 @@ h1, h2, h3, h4, h5, h6 {
   margin-left: 6px;
   font-size: 0.9rem;
   color: #999;
+}
+
+.rating {
+  font-size: 0.85rem;
+  color: #ff9800;
+  margin-top: 6px;
+}
+
+/* =====================
+   RESPONSIVE
+===================== */
+@media (max-width: 768px) {
+  .luxury-hero {
+    height: 80vh;
+    padding: 0 16px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .product-grid {
+    gap: 18px;
+  }
 }
