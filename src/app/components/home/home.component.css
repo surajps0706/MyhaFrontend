@@ -2,6 +2,9 @@
    GLOBAL
 ===================== */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Cormorant+Garamond:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Cormorant+Garamond:wght@400;600&family=Allura&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Cormorant+Garamond:wght@400;600&family=Allura&family=Playfair+Display:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Cormorant+Garamond:wght@400;600&family=Allura&family=Playfair+Display:wght@600;700&family=Cinzel+Decorative:wght@700&display=swap');
 
 /* =====================
    HERO SECTION
@@ -42,22 +45,30 @@
   max-width: 720px;
 }
 
+
 .brand-title {
   font-family: 'Cormorant Garamond', serif;
   font-size: clamp(2rem, 6vw, 3.6rem);
   font-weight: 600;
-  color: #bfa14a; /* muted gold */
-  letter-spacing: 1px;
+  font-style: italic;
+  color: #bfa14a;
+  letter-spacing: 0.5px;
 }
 
+
+
+
 .brand-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 700;
-  font-style: italic;
+  font-family: 'Allura', cursive;
+  font-weight: 400;
+  font-style: normal;
   color: #e75480; /* rose pink */
   margin-left: 6px;
   position: relative;
 }
+
+
+
 
 /* Underline animation */
 .brand-name::after {
