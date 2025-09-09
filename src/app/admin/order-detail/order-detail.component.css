@@ -1,0 +1,130 @@
+.order-detail {
+  max-width: 1100px;
+  margin: 30px auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  padding: 30px;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  color: #333;
+  animation: fadeIn 0.4s ease;
+}
+
+.order-detail h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 25px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 12px;
+  color: #111;
+}
+
+.order-detail h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 25px 0 12px;
+  color: #444;
+  border-left: 4px solid #d63384;
+  padding-left: 10px;
+}
+
+.order-detail p {
+  margin: 6px 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.order-detail b {
+  color: #222;
+}
+
+.order-detail table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  background: #fafafa;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.order-detail table thead {
+  background: #f2f2f2;
+}
+
+.order-detail th,
+.order-detail td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid #eaeaea;
+  font-size: 0.95rem;
+}
+
+.order-detail th {
+  font-weight: 600;
+  color: #555;
+}
+
+.order-detail td img {
+  border-radius: 8px;
+  width: 60px;
+  height: 70px;
+  object-fit: cover;
+  border: 1px solid #ddd;
+}
+
+.order-detail tr:hover {
+  background: #fff8fb; /* light pink highlight */
+  transition: 0.2s ease;
+}
+
+.order-detail .status-card {
+  background: #f8f9ff;
+  border: 1px solid #e2e6f3;
+  padding: 14px 18px;
+  border-radius: 12px;
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.order-detail .status-card p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.order-detail .status-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.status-preparing { background: #ff9800; }
+.status-packed { background: #673ab7; }
+.status-shipped { background: #2196f3; }
+.status-delivered { background: #4caf50; }
+.status-cancelled { background: #f44336; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .order-detail {
+    padding: 20px;
+    margin: 15px;
+  }
+  .order-detail table th, 
+  .order-detail table td {
+    font-size: 0.85rem;
+    padding: 8px;
+  }
+  .order-detail h2 {
+    font-size: 1.4rem;
+  }
+}

@@ -86,6 +86,15 @@ export const routes: Routes = [
             (m) => m.OrdersComponent
           ),
       },
+      // 🆕 Order Details (renders inside AdminDashboard router-outlet)
+     {
+  path: 'orders/:orderId',
+  loadComponent: () =>
+    import('./admin/order-detail/order-detail.component').then(
+      (m) => m.OrderDetailComponent
+    ),
+},
+
       {
         path: 'products',
         loadComponent: () =>

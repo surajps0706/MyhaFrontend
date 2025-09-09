@@ -19,12 +19,19 @@
       <option>Cancelled</option>
     </select>
 
+    <button class="secondary-btn" (click)="clearFilters()">✖ Clear</button>
+
     <!-- 📥 Export Button -->
     <button class="export-btn" (click)="downloadExcel()">⬇️ Export to Excel</button>
   </div>
 
+  <!-- Empty state -->
+  <div *ngIf="filteredOrders.length === 0" class="empty-state">
+    No orders match your filters.
+  </div>
+
   <!-- Orders Table -->
-  <table class="orders-table">
+  <table class="orders-table" *ngIf="filteredOrders.length">
     <thead>
       <tr>
         <th>Order ID</th>
@@ -34,25 +41,55 @@
         <th>AWB</th>
         <th>Created At</th>
         <th>Update</th>
-        <th>Action</th> <!-- 🆕 Added Action column -->
+        <th>Actions</th>
       </tr>
     </thead>
+
     <tbody>
       <tr *ngFor="let order of filteredOrders">
-        <td>{{ order.orderId }}</td>
-        <td>{{ order.checkoutData?.name }}</td>
-        <td>₹{{ order.totalAmount }}</td>
+        <!-- Make Order ID clickable to open details -->
         <td>
-          <span class="status" [ngClass]="order.status.toLowerCase()">{{ order.status }}</span>
+          <button
+            class="link-btn"
+            (click)="viewDetails(order.orderId); $event.stopPropagation()"
+            [disabled]="!order.orderId"
+            title="View order details"
+          >
+            {{ order.orderId }}
+          </button>
         </td>
-        <td>{{ order.awb || '—' }}</td>
-        <td>{{ order.createdAt | date:'yyyy-MM-dd' }}</td>
+
+        <td>{{ order.checkoutData?.name || '—' }}</td>
+        <td>₹{{ order.totalAmount }}</td>
+
+        <td>
+          <span class="status" [ngClass]="(order.status || '').toLowerCase()">
+            {{ order.status || '—' }}
+          </span>
+        </td>
+
+ <td>
+  <span>{{ order.awb || '—' }}</span>
+  <button
+    *ngIf="order.awb"
+    class="tiny-btn"
+    (click)="copyAwb(order.awb, $event)"
+    title="Copy AWB"
+  >
+    Copy
+  </button>
+</td>
+
+
+        <td>{{ order.createdAt | date:'medium' }}</td>
+
         <td>
           <!-- ✅ Admin can update until Packed -->
           <select
             [(ngModel)]="order.status"
-            (change)="updateStatus(order, order.status)"
+            (change)="updateStatus(order, order.status); $event.stopPropagation()"
             [disabled]="order.status === 'Shipped' || order.status === 'Delivered' || order.status === 'Cancelled'"
+            title="Update status"
           >
             <option>Preparing</option>
             <option>Packed</option>
@@ -64,11 +101,20 @@
           </div>
         </td>
 
-        <!-- 🆕 Cancel Action -->
-        <td>
+        <td class="actions">
+          <!-- View button (alternative to clicking Order ID) -->
+          <button
+            class="view-btn"
+            (click)="viewDetails(order.orderId); $event.stopPropagation()"
+            [disabled]="!order.orderId"
+          >
+            👁 View
+          </button>
+
+          <!-- Cancel -->
           <button
             class="cancel-btn"
-            (click)="cancelOrder(order.orderId)"
+            (click)="cancelOrder(order.orderId); $event.stopPropagation()"
             [disabled]="order.status === 'Shipped' || order.status === 'Delivered' || order.status === 'Cancelled'"
           >
             ❌ Cancel

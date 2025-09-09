@@ -1,112 +1,192 @@
 .orders-container {
-  padding: 20px;
-  max-width: 1100px;
-  margin: auto;
+  max-width: 1300px;
+  margin: 40px auto;
+  padding: 28px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+  font-family: 'Segoe UI', Roboto, sans-serif;
 }
 
-h2 {
-  text-align: center;
+.orders-container h2 {
+  font-size: 1.6rem;
+  font-weight: 600;
   margin-bottom: 20px;
-  color: #222;
+  color: #1f2937; /* neutral dark */
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 12px;
 }
 
-/* 🔍 Filters Section */
 .filters {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
-  gap: 10px;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
 }
 
 .filters input,
 .filters select {
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background: #fff;
+  transition: all 0.2s;
+}
+
+.filters input:focus,
+.filters select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+}
+
+.filters button {
+  padding: 9px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s;
 }
 
 .export-btn {
-  background: #d63384;
+  background: #2563eb;
   color: #fff;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s ease;
 }
+.export-btn:hover { background: #1e40af; }
 
-.export-btn:hover {
-  background: #b82c6d;
+.secondary-btn {
+  background: #f3f4f6;
+  color: #374151;
 }
+.secondary-btn:hover { background: #e5e7eb; }
 
-.orders-table {
-  width: 100%;
-  border-collapse: collapse;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.orders-table th,
-.orders-table td {
-  padding: 12px 15px;
-  text-align: left;
-  border-bottom: 1px solid #eee;
-}
-
-.orders-table th {
-  background: #f8f8f8;
-  font-weight: bold;
-  text-transform: uppercase;
-  font-size: 12px;
-  letter-spacing: 0.5px;
-}
-
-.orders-table tr:hover {
+.empty-state {
+  padding: 28px;
+  text-align: center;
+  font-size: 1rem;
+  color: #6b7280;
+  border: 1px dashed #d1d5db;
+  border-radius: 12px;
   background: #fafafa;
 }
 
-/* Status Badge Styling */
+/* Table */
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.orders-table th {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #6b7280;
+  padding: 14px 12px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.orders-table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 0.92rem;
+  color: #374151;
+}
+
+.orders-table tr:hover {
+  background: #f9fafb;
+}
+
+/* Order ID link button */
+.link-btn {
+  background: none;
+  border: none;
+  color: #2563eb;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+.link-btn:hover { text-decoration: underline; }
+
+/* Status badges – soft pastel */
 .status {
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: 500;
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
   text-transform: capitalize;
 }
+.status.preparing { background: #fff7ed; color: #b45309; }
+.status.packed { background: #f3e8ff; color: #6b21a8; }
+.status.shipped { background: #dbeafe; color: #1e40af; }
+.status.delivered { background: #ecfdf5; color: #047857; }
+.status.cancelled { background: #fee2e2; color: #b91c1c; }
 
-.status.pending { background: #ffeeba; color: #856404; }
-.status.processing { background: #bee5eb; color: #0c5460; }
-.status.preparing { background: #e2e3ff; color: #383d7c; }   /* ⭐ NEW */
-.status.packed { background: #ffe0e0; color: #721c24; }      /* ⭐ NEW */
-.status.shipped { background: #c3e6cb; color: #155724; }
-.status.delivered { background: #d4edda; color: #155724; }
-
-/* AWB column styling */
-.orders-table td:nth-child(5) {
-  font-family: monospace;
-  font-size: 13px;
-  color: #444;
-}
-
-.orders-table td:nth-child(5):empty::after {
-  content: "—";
-  color: #aaa;
-}
-
-/* Status dropdown in table */
-.orders-table select {
-  padding: 6px 8px;
-  border: 1px solid #ccc;
+/* AWB copy button */
+.tiny-btn {
+  margin-left: 6px;
+  padding: 3px 8px;
+  font-size: 0.75rem;
   border-radius: 6px;
-  font-size: 13px;
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
   cursor: pointer;
 }
+.tiny-btn:hover { background: #f3f4f6; }
 
-.orders-table select:focus {
-  outline: none;
-  border-color: #d63384;
-  box-shadow: 0 0 3px rgba(214, 51, 132, 0.5);
+/* Actions */
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.view-btn,
+.cancel-btn {
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+/* Primary action */
+.view-btn {
+  background: #2563eb;
+  color: #fff;
+}
+.view-btn:hover { background: #1e40af; }
+
+/* Destructive action */
+.cancel-btn {
+  background: #f3f4f6;
+  color: #b91c1c;
+  border: 1px solid #e5e7eb;
+}
+.cancel-btn:hover { background: #fee2e2; }
+
+.cancel-btn:disabled {
+  background: #f9fafb;
+  color: #9ca3af;
+  border: 1px solid #e5e7eb;
+  cursor: not-allowed;
+}
+
+/* Courier note */
+.courier-readonly {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .filters { flex-direction: column; align-items: stretch; }
+  .orders-table th, .orders-table td { font-size: 0.8rem; padding: 10px; }
+  .view-btn, .cancel-btn { padding: 6px 10px; font-size: 0.75rem; }
 }

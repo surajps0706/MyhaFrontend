@@ -1,0 +1,45 @@
+<div class="order-detail" *ngIf="order">
+  <h2>📋 Order Details – {{ order.orderId }}</h2>
+
+  <h3>Customer Info</h3>
+  <p><b>Name:</b> {{ order.checkoutData?.name }}</p>
+  <p><b>Phone:</b> {{ order.checkoutData?.phone }}</p>
+  <p><b>Email:</b> {{ order.checkoutData?.email }}</p>
+  <p><b>Address:</b>
+    {{ order.checkoutData?.addressLine1 }},
+    {{ order.checkoutData?.addressLine2 }},
+    {{ order.checkoutData?.city }},
+    {{ order.checkoutData?.state }} - {{ order.checkoutData?.pincode }}
+  </p>
+
+  <h3>Items</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Name</th>
+        <th>Size</th>
+        <th>Sleeve</th>
+        <th>Height</th>
+        <th>Qty</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of order.cartItems">
+        <td><img [src]="item.image || item.images?.[0]" width="60" /></td>
+        <td>{{ item.name }}</td>
+        <td>{{ item.selectedSize || '—' }}</td>
+        <td>{{ item.sleeveType || '—' }}</td>
+        <td>{{ item.preferredHeight || '—' }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>₹{{ item.lineTotal || item.price }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Status</h3>
+  <p><b>Current:</b> {{ order.status }}</p>
+  <p><b>AWB:</b> {{ order.awb || '—' }}</p>
+<p><b>Placed On:</b> {{ order.createdAt | date:'mediumDate' }}</p>
+</div>
