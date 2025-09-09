@@ -55,9 +55,6 @@
   letter-spacing: 0.5px;
 }
 
-
-
-
 .brand-name {
   font-family: 'Allura', cursive;
   font-weight: 400;
@@ -66,9 +63,6 @@
   margin-left: 6px;
   position: relative;
 }
-
-
-
 
 /* Underline animation */
 .brand-name::after {

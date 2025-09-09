@@ -63,8 +63,13 @@
             <span *ngIf="item.selectedSize">Size: {{ item.selectedSize }}</span>
             <span *ngIf="item.sleeveType">Sleeve: {{ item.sleeveType }} (+₹{{ item.sleevePrice }})</span>
             <span *ngIf="item.extraHeightPrice">Height: +₹{{ item.extraHeightPrice }}</span>
+            <span *ngIf="item.preferredHeight">Height : {{ item.preferredHeight }} inches (Free of Cost)</span>
+            <span *ngIf="item.customizationNotes">customization Notes: {{item.customizationNotes}}</span>
+
+
           </div>
-          <div class="item-total">₹{{ getItemTotal(item) }}</div>
+          
+          <!-- <div class="item-total">₹{{ getItemTotal(item) }}</div> -->
         </div>
       </div>
 
