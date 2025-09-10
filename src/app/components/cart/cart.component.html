@@ -1,77 +1,102 @@
 <div class="cart-container" *ngIf="cartItems.length > 0">
 
+  <!-- Header -->
   <div class="cart-header">
-    <h2 class="cart-heading">Your Cart</h2>
+    <h2 class="cart-heading">
+      <span class="material-icons cart-icon">shopping_bag</span>
+      Your Cart
+    </h2>
     <button class="clear-cart-btn" (click)="clearCart()">
-      <span class="material-icons">delete_outline</span>
-      Clear Cart
+      <span class="material-icons">delete_forever</span>
+      Clear All
     </button>
   </div>
 
-  <div class="cart-item" *ngFor="let item of cartItems; let i = index">
-    <div class="image-wrapper">
-      <img [src]="item.images[0]" alt="{{ item.name }}" class="product-image" />
-    </div>
+  <!-- Items -->
+  <div class="cart-items">
+    <div class="cart-item" *ngFor="let item of cartItems; let i = index">
 
-    <div class="cart-details">
-      <h3 class="product-title">{{ item.name }}</h3>
-      <p class="price">Price: {{ item.price }}</p>
-
-      <div class="quantity-row">
-        <label>Quantity:</label>
-        <select [(ngModel)]="item.quantity" (change)="updateQuantity(i, item.quantity)">
-          <option *ngFor="let qty of [1,2,3,4,5,6,7,8,9,10]" [value]="qty">{{ qty }}</option>
-        </select>
+      <!-- Product Image -->
+      <div class="image-wrapper">
+        <img [src]="item.images[0]" alt="{{ item.name }}" class="product-image" />
       </div>
 
-      <p class="size">Selected Size: <span>{{ item.selectedSize }}</span></p>
+      <!-- Product Details -->
+      <div class="cart-details">
 
-      <div class="measurement-summary" *ngIf="hasMeasurements(item.measurements)">
-        <h4>Measurements:</h4>
-        <div class="measurement-tags">
-          <ng-container *ngFor="let key of objectKeys(item.measurements)">
-            <span *ngIf="item.measurements[key]?.trim()">
-              {{ key }}: {{ item.measurements[key] }}
-            </span>
-          </ng-container>
+        <!-- Title + Price -->
+        <div class="title-price-row">
+          <h3 class="product-title">{{ item.name }}</h3>
+          <span class="item-total">
+            ₹{{ (item.price + (item.sleevePrice || 0) + (item.extraHeightPrice || 0)) * item.quantity }}
+          </span>
         </div>
+
+        <!-- Quantity -->
+        <div class="quantity-row">
+          <label>Qty:</label>
+          <div class="qty-control">
+            <button (click)="updateQuantity(i, item.quantity - 1)" [disabled]="item.quantity <= 1">−</button>
+            <span>{{ item.quantity }}</span>
+            <button (click)="updateQuantity(i, item.quantity + 1)">+</button>
+          </div>
+        </div>
+
+        <!-- Tags for Customization -->
+        <div class="customization-tags">
+          <span class="tag" *ngIf="item.selectedSize">Size: {{ item.selectedSize }}</span>
+          <span class="tag" *ngIf="item.sleeveType">Sleeve: {{ item.sleeveType }} 
+            <span *ngIf="item.sleevePrice > 0">+₹{{ item.sleevePrice }}</span>
+          </span>
+          <span class="tag" *ngIf="item.preferredHeight">
+            Height: {{ item.preferredHeight }} in
+            <span *ngIf="item.extraHeightPrice > 0">+₹{{ item.extraHeightPrice }}</span>
+          </span>
+        </div>
+
+        <!-- Measurements -->
+        <div class="measurement-summary" *ngIf="hasMeasurements(item.measurements)">
+          <h4>Measurements:</h4>
+          <div class="measurement-tags">
+            <ng-container *ngFor="let key of objectKeys(item.measurements)">
+              <span class="tag" *ngIf="item.measurements[key]?.trim()">
+                {{ key }}: {{ item.measurements[key] }}
+              </span>
+            </ng-container>
+          </div>
+        </div>
+
+        <!-- Notes -->
+        <p class="custom-notes" *ngIf="item.customizationNotes">
+          <strong>Notes:</strong> {{ item.customizationNotes }}
+        </p>
+
+        <!-- Remove -->
+        <button class="remove-btn" (click)="removeItem(i)">
+          <span class="material-icons">delete_outline</span>
+          Remove
+        </button>
       </div>
-
-      <p class="sleeve">Selected Sleeve: <span>{{ item.sleeveType }}</span> (+₹{{ item.sleevePrice }})</p>
-
-      <p *ngIf="item.preferredHeight">Preferred Height: <span>{{ item.preferredHeight }} inches</span>
-  <span *ngIf="item.extraHeightPrice > 0"> (+₹{{ item.extraHeightPrice }})</span>
-</p>
-
-<p class="custom-notes" *ngIf="item.customizationNotes">
-  <strong>Customization Notes:</strong> {{ item.customizationNotes }}
-</p>
-
-
-
-
-
-      <button class="remove-btn" (click)="removeItem(i)" title="Remove this item">
-        <span class="material-icons">delete_outline</span>
-        <span>Remove</span>
-      </button>
     </div>
   </div>
 
+  <!-- Totals -->
   <div class="cart-total">
+    <h3 class="summary-heading">Order Summary</h3>
     <div class="price-breakup">
-      <p><span>Base Price Total:</span> ₹{{ baseTotal }}</p>
-      <p><span>Sleeve Price Total:</span> ₹{{ sleeveTotal }}</p>
-      <p *ngIf="heightTotal > 0" class="height-total-line">Height Customization Total: ₹{{ heightTotal }}</p>
+      <p><span>Base Price:</span> ₹{{ baseTotal }}</p>
+      <p><span>Sleeve Add-ons:</span> ₹{{ sleeveTotal }}</p>
+      <p *ngIf="heightTotal > 0" class="height-total-line">
+        <span>Height Customization:</span> ₹{{ heightTotal }}
+      </p>
       <hr />
       <p class="grand-total"><span>Grand Total:</span> ₹{{ total }}</p>
     </div>
 
-    <button class="pay-btn" 
+    <button class="pay-btn"
             [disabled]="cartItems.length === 0"
             (click)="goToCheckout()">
-      Proceed to Checkout
+      Proceed to Checkout →
     </button>
   </div>
-
 </div>
