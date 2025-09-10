@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../environments/environment';
+
 
 @Component({
   selector: 'app-login',
@@ -74,18 +76,19 @@ export class LoginComponent {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  login() {
-    this.http.post<any>('http://localhost:8000/admin/login', {
-      username: this.username,
-      password: this.password
-    }).subscribe({
-      next: (res) => {
-        localStorage.setItem('admin_token', res.token);
-        this.router.navigate(['/admin/orders']);
-      },
-      error: () => {
-        this.errorMessage = 'Invalid credentials';
-      }
-    });
-  }
+login() {
+  this.http.post<any>(`${environment.apiUrl}/admin/login`, {
+    username: this.username,
+    password: this.password
+  }).subscribe({
+    next: (res) => {
+      localStorage.setItem('admin_token', res.token);
+      this.router.navigate(['/admin/orders']);
+    },
+    error: (err) => {
+      console.error("Login error:", err);
+      this.errorMessage = 'Invalid credentials';
+    }
+  });
+}
 }
