@@ -85,7 +85,15 @@ hasMeasurements(measurements: any): boolean {
     this.total = this.baseTotal + this.sleeveTotal + this.heightTotal;
   }
 
-   goToCheckout() {
- localStorage.setItem('cart', JSON.stringify(this.cartItems));
-  this.router.navigate(['/checkout']);  }
+goToCheckout() {
+  this.cartItems = this.cartItems.map(item => ({
+    ...item,
+    measurements: item.measurements || {},   // ✅ ensure measurements field exists
+    customizationNotes: item.customizationNotes || "" // ✅ ensure notes field exists
+  }));
+
+  localStorage.setItem('cart', JSON.stringify(this.cartItems));
+  this.router.navigate(['/checkout']);
+}
+
 }

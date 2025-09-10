@@ -16,6 +16,8 @@ export class OrderDetailComponent implements OnInit {
   order: any = null;
   token: string | null = null;
   baseUrl: string = environment.apiUrl;
+objectKeys = Object.keys;
+
 
   constructor(private route: ActivatedRoute, private http: HttpClient) {}
 
@@ -40,4 +42,6 @@ export class OrderDetailComponent implements OnInit {
       error: (err) => console.error('❌ Failed to load order details', err)
     });
   }
+
+
 }
