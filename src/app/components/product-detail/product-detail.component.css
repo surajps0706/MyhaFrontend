@@ -831,7 +831,7 @@
   display: block;
   width: 60px;
   height: 3px;
-  background: #e75480;
+  background:  linear-gradient(135deg, #c1a57b, #a48860);
   margin: 8px auto 0;
   border-radius: 2px;
 }
@@ -909,8 +909,17 @@
 .recommend-price {
   font-size: 1rem;
   font-weight: 700;
-  color: #e75480;
+
+  /* Gradient text */
+  background: linear-gradient(135deg, #c1a57b, #a48860);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* For Firefox */
+  background-clip: text;
+  color: transparent;
 }
+
 
 /* =========================
    CTA (Optional)

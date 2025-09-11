@@ -28,8 +28,17 @@
 
 .cart-heading .cart-icon {
   font-size: 2.1rem;
-  color: #e75480;
+
+  /* Gradient text */
+  background: linear-gradient(135deg, #c1a57b, #a48860);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* For Firefox */
+  background-clip: text;
+  color: transparent;
 }
+
 
 /* =========================
    CART ITEMS
@@ -111,7 +120,7 @@
 }
 
 .addon {
-  color: #e75480;
+  color: linear-gradient(135deg, #c1a57b, #a48860);;
   font-size: 0.9rem;
   margin-left: 4px;
   font-weight: 500;
@@ -184,7 +193,7 @@
 
 .measurement-tags .tag {
   background-color: #fdf2f8;
-  color: #e75480;
+  color: linear-gradient(135deg, #c1a57b, #a48860);;
   padding: 4px 10px;
   border-radius: 20px;
   font-size: 0.8rem;
@@ -257,7 +266,7 @@
 }
 
 .price-breakup .grand-total span {
-  color: #e75480;
+  color: linear-gradient(135deg, #c1a57b, #a48860);;
 }
 
 /* =========================
@@ -271,7 +280,7 @@
   font-weight: 600;
   border: none;
   border-radius: 999px;
-  background: linear-gradient(135deg, #e75480, #ff8da1);
+  background:linear-gradient(135deg, #c1a57b, #a48860);;
   color: #fff;
   cursor: pointer;
   box-shadow: 0 6px 18px rgba(231, 84, 128, 0.25);

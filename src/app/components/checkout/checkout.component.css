@@ -80,7 +80,7 @@ input {
 
 input:focus {
   outline: none;
-  border-color: #e75480;
+  border-color: linear-gradient(135deg, #c1a57b, #a48860);;
   box-shadow: 0 0 8px rgba(231, 84, 128, 0.25);
   background-color: #fff;
 }
@@ -178,7 +178,7 @@ input:focus {
 }
 
 .total-amount {
-  color: #e75480;
+  color: linear-gradient(135deg, #c1a57b, #a48860);;
   font-size: 1.4rem;
 }
 
@@ -189,7 +189,7 @@ input:focus {
   width: 100%;
   padding: 16px 20px;
   margin-top: 24px;
-  background: linear-gradient(90deg, #ff3f6c, #e75480);
+  background: linear-gradient(135deg, #c1a57b, #a48860);
   color: #fff;
   font-weight: 700;
   font-size: 1rem;

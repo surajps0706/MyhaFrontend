@@ -136,7 +136,10 @@
 }
 
 .btn.primary {
-  background: #e75480;
+  background: linear-gradient(
+      135deg,
+      #c1a57b,
+      #a48860);
   color: #fff;
 }
 

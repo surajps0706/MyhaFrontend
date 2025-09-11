@@ -31,7 +31,8 @@
   font-size: 1.25rem;
   font-weight: 700;
   color: #111;
-  border-left: 4px solid #d63384;
+  border-left: 4px solid;
+  border-image: linear-gradient(135deg, #c1a57b, #a48860) 1;
   padding-left: 8px;
 }
 
@@ -107,9 +108,15 @@
 }
 
 .category-options button.active {
-  background: #d63384;
+  background: linear-gradient(
+      135deg,
+      #c1a57b,
+      #a48860);
   color: #fff;
-  border-color: #d63384;
+  border-color:linear-gradient(
+      135deg,
+      #c1a57b,
+      #a48860);
   font-weight: 600;
 }
 
@@ -129,7 +136,7 @@
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: #d63384;
+  background: linear-gradient(135deg, #c1a57b, #a48860);
   cursor: pointer;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.25);
 }
@@ -198,13 +205,13 @@
 
 .wishlist-btn:hover {
   background: #fef2f8;
-  border-color: #d63384;
+  border-color:  linear-gradient(135deg, #c1a57b, #a48860);
   color: #d63384;
 }
 
 .wishlist-btn.active {
-  background: #d63384;
-  border-color: #d63384;
+  background:  linear-gradient(135deg, #c1a57b, #a48860);
+  border-color:  linear-gradient(135deg, #c1a57b, #a48860);
   color: #fff;
 }
 
@@ -223,10 +230,19 @@
 
 .price {
   font-weight: 700;
-  color: #d63384;
   margin-bottom: 12px;
   font-size: 0.95rem;
+
+  /* Gradient text */
+  background: linear-gradient(135deg, #c1a57b, #a48860);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* For Firefox */
+  background-clip: text;
+  color: transparent;
 }
+
 
 /* Buttons */
 .btn {
@@ -244,7 +260,7 @@
 }
 
 .btn:hover {
-  background: #d63384;
+  background:  linear-gradient(135deg, #c1a57b, #a48860);
 }
 
 /* === Mobile Drawer === */
@@ -253,7 +269,7 @@
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background: #d63384;
+  background:  linear-gradient(135deg, #c1a57b, #a48860);
   color: #fff;
   border: none;
   padding: 10px 18px;
@@ -287,9 +303,9 @@
 }
 
 .pagination button:hover:not(:disabled) {
-  background: #d63384;
+  background:  linear-gradient(135deg, #c1a57b, #a48860);
   color: #fff;
-  border-color: #d63384;
+  border-color:  linear-gradient(135deg, #c1a57b, #a48860);
 }
 
 .pagination button:disabled {

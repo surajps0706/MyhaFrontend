@@ -35,16 +35,23 @@ input {
 }
 
 input:focus {
-  border-color: #d63384;
   outline: none;
-  box-shadow: 0 0 0 3px rgba(214, 51, 132, 0.15);
+
+  /* Gradient border */
+  border: 2px solid transparent;
+  border-image: linear-gradient(135deg, #c1a57b, #a48860) 1;
+
+  /* Gradient glow */
+  box-shadow: 0 0 6px rgba(193, 165, 123, 0.6), 
+              0 0 10px rgba(164, 136, 96, 0.4);
 }
+
 
 button {
   padding: 12px;
   border: none;
   border-radius: 8px;
-  background: #d63384;
+  background: linear-gradient(135deg, #c1a57b, #a48860);
   color: white;
   font-size: 16px;
   font-weight: 600;
@@ -53,7 +60,7 @@ button {
 }
 
 button:hover {
-  background: #b82c6d;
+  background: linear-gradient(135deg, #c1a57b, #a48860);
 }
 
 button:disabled {
@@ -142,8 +149,8 @@ button:disabled {
 
 .progress-step.active .circle,
 .progress-step.completed .circle {
-  background: #d63384;
-  border-color: #d63384;
+ background: linear-gradient(135deg, #c1a57b, #a48860);
+   /* border-color: #d63384; */
   color: #fff;
 }
 
@@ -154,8 +161,13 @@ button:disabled {
 }
 
 .progress-step.completed span {
-  color: #d63384;
-  font-weight: 600;
+ background: linear-gradient(135deg, #c1a57b, #a48860);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* For Firefox */
+  background-clip: text;
+  color: transparent;  font-weight: 600;
 }
 
 /* ========================= */

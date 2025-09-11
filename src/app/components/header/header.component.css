@@ -36,7 +36,7 @@
 }
 .nav-links a:hover,
 .nav-links .active-link {
-  color: #d63384; /* couture accent */
+  color:  linear-gradient(135deg, #c1a57b, #a48860); /* couture accent */
 }
 .nav-links a::after {
   content: "";
@@ -45,7 +45,7 @@
   left: 0;
   width: 0;
   height: 2px;
-  background: #d63384;
+  background:  linear-gradient(135deg, #c1a57b, #a48860);
   transition: width 0.3s ease;
 }
 .nav-links a:hover::after,
@@ -204,7 +204,7 @@
   transition: color 0.2s ease;
 }
 .close-btn:hover {
-  color: #d63384;
+  color:  linear-gradient(135deg, #c1a57b, #a48860);
 }
 
 /* === MOBILE SEARCH === */
@@ -220,7 +220,7 @@
 }
 .mobile-search input:focus {
   background: #fff;
-  border-color: #d63384;
+  border-color:  linear-gradient(135deg, #c1a57b, #a48860);
   box-shadow: 0 0 6px rgba(214, 51, 132, 0.2);
 }
 
@@ -237,7 +237,7 @@
   border-bottom: none;
 }
 .mobile-menu a:hover {
-  color: #d63384;
+  color:  linear-gradient(135deg, #c1a57b, #a48860);
 }
 
 /* === DESKTOP SEARCH === */
@@ -255,7 +255,7 @@
 }
 .search-bar:focus-within {
   background: #fff;
-  border-color: #d63384;
+  border-color:  linear-gradient(135deg, #c1a57b, #a48860);
   box-shadow: 0 0 6px rgba(214, 51, 132, 0.2);
 }
 .search-bar input {
@@ -275,7 +275,7 @@
   transition: color 0.2s ease;
 }
 .search-bar button:hover {
-  color: #d63384;
+  color:  linear-gradient(135deg, #c1a57b, #a48860);
 }
 
 /* === Suggestions Dropdown === */
