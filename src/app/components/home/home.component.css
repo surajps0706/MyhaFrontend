@@ -17,10 +17,19 @@
   justify-content: center;
   text-align: center;
 
-  /* Yellow textured background */
-  background: url("https://res.cloudinary.com/dw35epojg/image/upload/v1757311653/ChatGPT_Image_Sep_8_2025_11_37_14_AM_hehybn.png")
-              no-repeat center center;
-  background-size: cover;
+ background: linear-gradient(
+    135deg,
+    #f5e6c8 0%,   /* warm ivory */
+    #e6c985 40%, /* soft golden tan */
+    #c2a14a 100% /* deeper gold */
+  );
+
+  /* Add a subtle texture overlay */
+  background-image: 
+    url("https://www.transparenttextures.com/patterns/paper-fibers.png"),
+    linear-gradient(135deg, #f8f4e6 0%, #f2dfb0 40%, #d4af37 100%);
+  background-repeat: repeat, no-repeat;
+  background-size: auto, cover;
 
   color: #222;
   padding: 20px;
@@ -45,14 +54,32 @@
   max-width: 720px;
 }
 
+/* Inline logo with text */
+.logo-inline {
+  height: 1.2em; /* scales with the font size */
+  vertical-align: middle; /* align with the baseline of the text */
+  margin-left: 6px; /* small gap after "Welcome to" */
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15));
+
+}
 
 .brand-title {
   font-family: 'Cormorant Garamond', serif;
   font-size: clamp(2rem, 6vw, 3.6rem);
   font-weight: 600;
-  font-style: italic;
-  color: #bfa14a;
-  letter-spacing: 0.5px;
+  color: #996515;
+            /* make it a flex row */
+  align-items: center;         /* vertically center text + logo */
+  justify-content: center;     /* keep centered */
+  gap: 12px;                   /* space between text and logo */
+}
+
+.brand-title .logo-inline {
+  height: 4.4rem;              /* scale logo closer to headline size */
+  width: auto;
+  display: inline-block;
+  object-fit: contain;
+  vertical-align: middle;
 }
 
 .brand-name {

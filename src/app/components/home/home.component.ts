@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit {
         // ✅ Sort by createdAt → latest 3
         this.newArrivals = [...this.products]
           .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-          .slice(0, 3);
+          .slice(0, 5);
 
         console.log("✅ New Arrivals:", this.newArrivals);
 
