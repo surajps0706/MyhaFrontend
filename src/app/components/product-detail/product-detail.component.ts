@@ -4,13 +4,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CartService } from '../../services/cart.service';
 import { ProductService } from '../../services/product.service';
+import { RouterModule } from '@angular/router';
 
 type SizingMode = 'size' | 'measurements';
 
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.css']
 })
@@ -68,6 +69,11 @@ export class ProductDetailComponent implements OnInit {
   selectedImageFile: File | null = null;
   previewImage: string | null = null;
 
+  // =========================
+  // Recommendations
+  // =========================
+  recommendedProducts: any[] = [];
+
   // Toast
   showToast = false;
 
@@ -78,36 +84,75 @@ export class ProductDetailComponent implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit(): void {
-    this.productId = this.route.snapshot.paramMap.get('id');
-
-    if (this.productId) {
-      this.productService.getProductById(this.productId).subscribe({
-        next: (data) => {
-          this.product = data;
-          this.selectedImage = this.product.images?.[0] || '';
-          this.selectedSleeve = this.sleeveOptions[0];
-          this.isKurti = this.product.category?.toLowerCase() === 'kurti';
-
-          // init
-          this.product.selectedSize = '';
-
-          // load reviews once product is ready
-          this.loadReviews();
-        },
-        error: (err) => console.error('Error fetching product:', err)
-      });
+ngOnInit(): void {
+  this.route.paramMap.subscribe(params => {
+    const id = params.get('id');
+    if (id) {
+      this.loadProduct(id);
     }
+  });
+}
+
+
+
+  private loadProduct(id: string): void {
+    this.productService.getProductById(id).subscribe({
+      next: (data) => {
+        this.product = data;
+        this.selectedImage = this.product.images?.[0] || '';
+        this.selectedSleeve = this.sleeveOptions[0];
+        this.isKurti = this.product.category?.toLowerCase() === 'kurti';
+
+        // init
+        this.product.selectedSize = '';
+
+        // load extras
+        this.loadReviews();
+        this.loadRecommendedProducts();
+
+        // scroll to top for new product
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      },
+      error: (err) => console.error('Error fetching product:', err)
+    });
   }
+
+  // =========================
+  // Recommendations
+  // =========================
+loadRecommendedProducts(): void {
+  this.productService.getProducts().subscribe({
+    next: (all: any[]) => {
+      // Normalize id for all products (fallback to _id if id is missing)
+      const normalized = all.map(p => ({
+        ...p,
+        id: p.id || p._id
+      }));
+
+      // filter by category, exclude current product
+      const filtered = normalized.filter(
+        (p) => p.id !== this.productId && p.category === this.product?.category
+      );
+
+      // fallback: if not enough, show from all
+      const pool = filtered.length >= 6
+        ? filtered
+        : normalized.filter(p => p.id !== this.productId);
+
+      // pick max 6–7 products
+      this.recommendedProducts = pool.slice(0, 7);
+    },
+    error: (err) => console.error('Error loading recommended products:', err)
+  });
+}
+
 
   // =========================
   // Back Button Logic
   // =========================
   goBack(): void {
-    // store the last viewed product in sessionStorage
     sessionStorage.setItem('lastViewedProductId', this.productId || '');
     this.router.navigate(['/products']).then(() => {
-      // give Angular time to render
       setTimeout(() => {
         const el = document.getElementById(this.productId || '');
         if (el) {
@@ -188,7 +233,7 @@ export class ProductDetailComponent implements OnInit {
   }
 
   getWhatsappLink(): string {
-    const phoneNumber = '9344539530'; // add +91 if needed
+    const phoneNumber = '9344539530';
     const message = `Hello, I'm interested in the following product:
 
 Product: ${this.product?.name}
@@ -220,7 +265,6 @@ Link: ${window.location.href}`;
 
     this.cartService.addToCart(cartItem);
 
-    // ✅ Show toast instead of alert
     this.showToast = true;
     setTimeout(() => (this.showToast = false), 3000);
   }
@@ -236,9 +280,7 @@ Link: ${window.location.href}`;
     return this.measurementsDisabled ? 'Disabled because Size mode is active.' : null;
   }
 
-  onHeightChange(_height: string | number) {
-    // trigger Angular change detection
-  }
+  onHeightChange(_height: string | number) {}
 
   // =========================
   // Reviews Logic

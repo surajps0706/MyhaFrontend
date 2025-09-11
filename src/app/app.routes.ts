@@ -31,6 +31,9 @@ export const routes: Routes = [
       import('./components/product-detail/product-detail.component').then(
         (m) => m.ProductDetailComponent
       ),
+      runGuardsAndResolvers: 'paramsOrQueryParamsChange'
+        
+      
   },
 
   // 🛒 Cart

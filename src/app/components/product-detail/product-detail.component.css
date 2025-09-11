@@ -619,35 +619,32 @@
   left: 0;
   width: 100%;
   background: #ffffff;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.07);
+  border-top: 1px solid #eee;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
   padding: 12px 20px;
   display: flex;
   justify-content: center;
   z-index: 999;
-  border-top: 1px solid #eee;
 }
 
+/* Footer content container */
 .footer-content {
-  width: 89%;
-  max-width: 1024px;
+  width: 100%;
+  max-width: 1200px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
 }
 
-.footer-price {
-  font-size: 1.1rem;
-  color: #333;
-  font-weight: 600;
-}
-
+/* Price breakdown */
 .price-breakdown {
   display: flex;
-  gap: 12px;
-  font-size: 0.95rem;
+  gap: 14px;
+  font-size: 1rem;
   color: #333;
   font-weight: 500;
+  flex-wrap: wrap;
 }
 
 .price-breakdown strong {
@@ -655,22 +652,46 @@
   font-weight: 700;
 }
 
+/* Add to Cart Button */
 .footer-add-btn {
   background-color: #c1a57b;
-  color: white;
+  color: #fff;
   border: none;
-  border-radius: 25px;
-  padding: 10px 22px;
-  font-size: 0.95rem;
+  border-radius: 30px;
+  padding: 12px 26px;
+  font-size: 1rem;
   font-weight: 600;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  transition: 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: all 0.25s ease;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .footer-add-btn:hover {
   background-color: #a48860;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .price-breakdown {
+    justify-content: space-between;
+    width: 100%;
+    font-size: 0.95rem;
+  }
+
+  .footer-add-btn {
+    width: 100%;
+    text-align: center;
+    padding: 14px;
+    font-size: 1rem;
+  }
 }
 
 /* ---------- WHATSAPP FLOAT ---------- */
@@ -785,6 +806,134 @@
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
+
+/* =========================
+   "You May Also Like" Section
+========================= */
+.recommend-section {
+  margin: 40px auto;
+  max-width: 1400px;
+  padding: 0 20px;
+}
+
+.recommend-title {
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #222;
+  position: relative;
+}
+
+.recommend-title::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: #e75480;
+  margin: 8px auto 0;
+  border-radius: 2px;
+}
+
+/* =========================
+   Horizontal Scroll Grid
+========================= */
+.recommend-grid {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 10px;
+  -webkit-overflow-scrolling: touch;
+}
+.recommend-grid::-webkit-scrollbar {
+  display: none;
+}
+
+/* =========================
+   Product Card
+========================= */
+.recommend-card {
+  flex: 0 0 220px;
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  scroll-snap-align: start;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+}
+@media screen and (max-width: 768px) {
+  .recommend-section {
+    width: 100%;
+  }
+}
+
+.recommend-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+/* =========================
+   Product Image
+========================= */
+.recommend-card img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.recommend-card:hover img {
+  transform: scale(1.05);
+}
+
+/* =========================
+   Product Info
+========================= */
+.recommend-info {
+  padding: 12px 14px;
+}
+
+.recommend-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.recommend-price {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #e75480;
+}
+
+/* =========================
+   CTA (Optional)
+========================= */
+.recommend-btn {
+  margin-top: 10px;
+  display: inline-block;
+  padding: 8px 14px;
+  background: linear-gradient(135deg, #e75480, #ff8da1);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 30px;
+  text-align: center;
+  transition: all 0.25s ease;
+}
+
+.recommend-btn:hover {
+  background: linear-gradient(135deg, #d63c6a, #ff738d);
+  box-shadow: 0 4px 12px rgba(231,84,128,0.25);
+}
+
+
 
 /* .back-btn {
   width: 40px;
