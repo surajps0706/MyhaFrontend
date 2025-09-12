@@ -1,40 +1,29 @@
 /* =====================
    GLOBAL
 ===================== */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Cormorant+Garamond:wght@400;600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Cormorant+Garamond:wght@400;600&family=Allura&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Cormorant+Garamond:wght@400;600&family=Allura&family=Playfair+Display:wght@600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Cormorant+Garamond:wght@400;600&family=Allura&family=Playfair+Display:wght@600;700&family=Cinzel+Decorative:wght@700&display=swap');
 
 /* =====================
    HERO SECTION
 ===================== */
 .luxury-hero {
-  position: relative;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+position: relative;
+    height: 100vh;
+    display: flex
+;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: linear-gradient(135deg, #e6d9b5 84%, #b08d57 37%, #2f2a1e 90%);
+    background-image: url(https://www.transparenttextures.com/patterns/paper-fibers.png), linear-gradient(135deg, #e6d9b5 64%, #b08d57 95%, #2f2a1e 96%);
+    background-repeat: repeat, no-repeat;
+    background-size: auto, cover;
+    color: #222;
+    padding: 20px;
+    overflow: hidden;
 
- background: linear-gradient(
-    135deg,
-    #f5e6c8 0%,   /* warm ivory */
-    #e6c985 40%, /* soft golden tan */
-    #c2a14a 100% /* deeper gold */
-  );
-
-  /* Add a subtle texture overlay */
-  background-image: 
-    url("https://www.transparenttextures.com/patterns/paper-fibers.png"),
-    linear-gradient(135deg, #f8f4e6 0%, #f2dfb0 40%, #d4af37 100%);
-  background-repeat: repeat, no-repeat;
-  background-size: auto, cover;
-
-  color: #222;
-  padding: 20px;
-  overflow: hidden;
 }
+
 
 /* Smooth fade into next section */
 .luxury-hero::after {
@@ -54,69 +43,53 @@
   max-width: 720px;
 }
 
-/* Inline logo with text */
-.logo-inline {
-  height: 1.2em; /* scales with the font size */
-  vertical-align: middle; /* align with the baseline of the text */
-  margin-left: 6px; /* small gap after "Welcome to" */
-    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15));
-
-}
-
+/* Brand Title Container */
 .brand-title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(2rem, 6vw, 3.6rem);
-  font-weight: 600;
-  color: #996515;
-            /* make it a flex row */
-  align-items: center;         /* vertically center text + logo */
-  justify-content: center;     /* keep centered */
-  gap: 12px;                   /* space between text and logo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* gap: 12px; */
+  flex-wrap: wrap;
 }
 
-.brand-title .logo-inline {
-  height: 4.4rem;              /* scale logo closer to headline size */
+.welcome-text {
+  font-size: clamp(1.4rem, 4vw, 2.4rem);
+  font-weight: 500;
+
+  /* Gradient text */
+  background: linear-gradient(135deg, #b38e5d, #8f6b3e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text; /* for Firefox */
+  color: transparent;
+
+  /* Optional shadow for readability */
+  text-shadow: 1px 1px 2px rgba(40, 25, 10, 0.4);
+}
+
+
+/* Myha Logo Image */
+.logo-inline {
+  height: clamp(4.2rem, 7vw, 5.6rem);
   width: auto;
-  display: inline-block;
   object-fit: contain;
   vertical-align: middle;
+  /* filter: drop-shadow(0 4px 6px rgba(0,0,0,0.45)); deeper shadow */
 }
 
-.brand-name {
-  font-family: 'Allura', cursive;
-  font-weight: 400;
-  font-style: normal;
-  color: #e75480; /* rose pink */
-  margin-left: 6px;
-  position: relative;
-}
-
-/* Underline animation */
-.brand-name::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -6px;
-  height: 2px;
-  width: 0;
-  background: #e75480;
-  transition: width 0.6s ease;
-}
-
-.brand-name:hover::after {
-  width: 100%;
-}
-
+/* Tagline */
 .tagline {
   font-family: 'Poppins', sans-serif;
   font-weight: 400;
-  font-size: clamp(0.95rem, 2vw, 1.15rem);
-  color: #444;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: #2c2c2c;
   margin-top: 15px;
   line-height: 1.6;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.4px;
 }
 
+/* Buttons */
 .hero-buttons {
   display: flex;
   gap: 16px;
@@ -135,34 +108,35 @@
   cursor: pointer;
 }
 
+/* Primary CTA */
 .btn.primary {
-  background: linear-gradient(
-      135deg,
-      #c1a57b,
-      #a48860);
+  background: linear-gradient(135deg, #b38e5d, #8f6b3e);
   color: #fff;
 }
 
 .btn.primary:hover {
-  box-shadow: 0 0 12px rgba(231, 84, 128, 0.6);
+  box-shadow: 0 0 15px rgba(179, 142, 93, 0.6);
+  transform: translateY(-2px);
 }
 
+/* Secondary CTA */
 .btn.secondary {
   background: transparent;
-  border: 2px solid #222;
-  color: #222;
+  border: 2px solid #5c4630;
+  color: #5c4630;
 }
 
 .btn.secondary:hover {
-  background: #222;
+  background: #5c4630;
   color: #fff;
+  transform: translateY(-2px);
 }
 
 /* =====================
    PRODUCT GRID
 ===================== */
 .highlight-section {
-  padding: 80px 20px; /* more breathing room */
+  padding: 80px 20px;
   background: #fff;
   position: relative;
   z-index: 2;
@@ -173,6 +147,8 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .section-header h2 {
@@ -315,9 +291,16 @@
 /* =====================
    RESPONSIVE
 ===================== */
+@media (max-width: 992px) {
+  .brand-title {
+    /* flex-direction: column; */
+    gap: 6px;
+  }
+}
+
 @media (max-width: 768px) {
   .luxury-hero {
-    height: 80vh;
+    /* height: 80vh; */
     padding: 0 16px;
   }
 
@@ -328,5 +311,20 @@
 
   .product-grid {
     gap: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .welcome-text {
+    font-size: 2.2rem;
+  }
+
+  .logo-inline {
+    height: 3.6rem;
+  }
+
+  .btn {
+    padding: 12px 24px;
+    font-size: 0.9rem;
   }
 }
