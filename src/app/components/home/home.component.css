@@ -160,10 +160,17 @@ position: relative;
 .section-header .view-all {
   font-size: 0.9rem;
   text-decoration: none;
-  color: #e75480;
   font-weight: 500;
-}
 
+  /* Gradient text */
+  background: linear-gradient(135deg, #b38e5d, #8f6b3e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+
+  transition: opacity 0.3s ease;
+}
 .subtext {
   font-size: 1rem;
   color: #777;
@@ -175,6 +182,38 @@ position: relative;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 28px;
 }
+
+@media (max-width: 768px) {
+  .product-grid {
+    display: flex;
+    overflow-x: auto;
+    gap: 16px;
+    padding-bottom: 12px;
+
+    /* hide scrollbar for clean look */
+    scrollbar-width: none; /* Firefox */
+  }
+  .product-grid::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
+
+  .product-tile {
+    flex: 0 0 auto;
+    min-width: 160px;   /* smaller card width */
+    max-width: 180px;   /* keep size balanced */
+  }
+
+  .img-box {
+    aspect-ratio: 3/4;     /* consistent aspect ratio */
+    max-height: 240px;     /* avoid giant images */
+  }
+
+  .img-box img {
+    object-fit: cover;
+    border-radius: 8px;
+  }
+}
+
 
 .product-tile {
   border-radius: 12px;
@@ -272,8 +311,15 @@ position: relative;
 .info .price {
   font-size: 1rem;
   font-weight: 700;
-  color: #e75480;
+
+  /* Gradient text */
+  background: linear-gradient(135deg, #b38e5d, #8f6b3e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
 }
+
 
 .info .price .old {
   text-decoration: line-through;

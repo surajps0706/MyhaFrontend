@@ -41,7 +41,7 @@
         <div class="badge" *ngIf="product.discount">-{{ product.discount }}%</div>
         <div class="hover-actions">
           <a [routerLink]="['/product', product.id]" class="btn-overlay">Quick View</a>
-          <a routerLink="/cart" class="btn-overlay secondary">Add to Bag</a>
+          <!-- <a routerLink="/cart" class="btn-overlay secondary">Add to Bag</a> -->
         </div>
       </div>
       <div class="info">
@@ -49,7 +49,7 @@
         <h3 class="name">{{ product.name }}</h3>
         <div class="price">
           <span class="current">₹{{ product.price }}</span>
-          <span class="old" *ngIf="product.oldPrice">₹{{ product.oldPrice }}</span>
+          <!-- <span class="old" *ngIf="product.oldPrice">₹{{ product.oldPrice }}</span> -->
         </div>
         <div class="rating" *ngIf="product.rating">
           ⭐ {{ product.rating }} / 5
