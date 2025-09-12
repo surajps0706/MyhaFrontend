@@ -224,8 +224,8 @@
           <p class="review-comment">“{{ r.comment }}”</p>
 
           <!-- ✅ Show uploaded image if available -->
-          <div *ngIf="r.imageUrl" class="review-image">
-            <img [src]="r.imageUrl" alt="Review image by {{ r.name }}" />
+          <div *ngIf="r.image" class="review-image">
+            <img [src]="r.image" alt="Review image by {{ r.name }}" />
           </div>
         </div>
       </div>
