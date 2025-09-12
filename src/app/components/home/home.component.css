@@ -15,7 +15,7 @@ position: relative;
     justify-content: center;
     text-align: center;
     background: linear-gradient(135deg, #e6d9b5 84%, #b08d57 37%, #2f2a1e 90%);
-    background-image: url(https://www.transparenttextures.com/patterns/paper-fibers.png), linear-gradient(135deg, #e6d9b5 64%, #b08d57 95%, #2f2a1e 96%);
+    background-image: url(https://www.transparenttextures.com/patterns/paper-fibers.png), linear-gradient(135deg, #e6d9b5 64%, #b08d57 95%, #2f2a1e 101%);
     background-repeat: repeat, no-repeat;
     background-size: auto, cover;
     color: #222;
