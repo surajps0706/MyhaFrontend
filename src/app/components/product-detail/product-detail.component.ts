@@ -296,17 +296,20 @@ Link: ${window.location.href}`;
     });
   }
 
-  onImageSelected(event: Event): void {
-    const fileInput = event.target as HTMLInputElement;
-    if (fileInput.files && fileInput.files[0]) {
-      this.selectedImageFile = fileInput.files[0];
-      const reader = new FileReader();
-      reader.onload = e => {
-        this.previewImage = e.target?.result as string;
-      };
-      reader.readAsDataURL(this.selectedImageFile);
-    }
+onImageSelected(event: Event): void {
+  const fileInput = event.target as HTMLInputElement;
+  if (fileInput.files && fileInput.files[0]) {
+    this.selectedImageFile = fileInput.files[0];
+
+    // ✅ For preview in UI
+    const reader = new FileReader();
+    reader.onload = e => {
+      this.previewImage = e.target?.result as string;
+    };
+    reader.readAsDataURL(this.selectedImageFile);
   }
+}
+
 
   submitReview(): void {
     if (!this.productId) return;
