@@ -37,11 +37,13 @@ addReview(productId: string, review: any, imageFile?: File): Observable<any> {
 
   // append file only if user selected one
   if (imageFile) {
-    formData.append('image', imageFile);
+    formData.append('image', imageFile, imageFile.name);
   }
 
-  return this.http.post(`${this.baseurl}/products/${productId}/reviews`, formData);
+  // send as multipart/form-data
+  return this.http.post<any>(`${this.baseurl}/products/${productId}/reviews`, formData);
 }
+
 
 
 
