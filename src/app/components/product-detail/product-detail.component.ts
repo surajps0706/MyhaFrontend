@@ -89,6 +89,7 @@ ngOnInit(): void {
     const id = params.get('id');
     if (id) {
       this.loadProduct(id);
+      this.productId=id;
     }
   });
 }
