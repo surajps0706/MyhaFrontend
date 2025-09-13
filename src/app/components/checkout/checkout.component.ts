@@ -67,13 +67,13 @@ grandTotal: number = 0;
       });
   }
 
-  onPincodeChange() {
+onPincodeChange() {
   if (this.checkoutData.pincode && this.checkoutData.pincode.length === 6) {
-    this.http.get<any>(`${this.baseUrl}/shipping-charge?d_pin=${this.checkoutData.pincode}`)
+    this.http.get<any[]>(`${this.baseUrl}/shipping-charge?d_pin=${this.checkoutData.pincode}`)
       .subscribe({
         next: (res) => {
-          // backend should return { total_amount: X } or { shippingCost: X }
-          this.shippingCost = res?.total_amount || res?.shippingCost || 0;
+          // ✅ API returns an array → pick first element
+          this.shippingCost = res?.[0]?.total_amount || 0;
           this.grandTotal = this.totalAmount + this.shippingCost;
         },
         error: (err) => {
