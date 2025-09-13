@@ -79,17 +79,17 @@
         <strong class="total-amount">₹{{ totalAmount }}</strong>
       </div>
 
+      <div class="summary-total">
+  <span>Delivery:</span>
+  <strong *ngIf="shippingCost">₹{{ shippingCost }}</strong>
+  <strong *ngIf="!shippingCost">—</strong>
+</div>
+
       <button type="submit" (click)="placeOrder()" class="place-order-btn">
          Proceed to Pay
       </button>
 
-      <!-- Trust Badges -->
-      <!-- <div class="trust-badges">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="Visa" />
-        <img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Mastercard-logo.png" alt="Mastercard" />
-        <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/UPI-Logo-vector.svg" alt="UPI" />
-        <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Razorpay_logo.svg" alt="Razorpay" />
-      </div> -->
+    
       <p class="secure-note">All payments are 100% secure & encrypted via Razorpay.</p>
     </aside>
   </div>

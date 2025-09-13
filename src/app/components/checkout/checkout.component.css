@@ -297,3 +297,14 @@ input:focus {
     z-index: 10;
   }
 }
+
+
+
+.grand-total {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 10px;
+  border-top: 2px solid #ccc;
+  padding-top: 10px;
+}
+

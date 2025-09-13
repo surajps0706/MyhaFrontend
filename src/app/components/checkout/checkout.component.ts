@@ -16,6 +16,9 @@ declare var Razorpay: any;
 })
 export class CheckoutComponent implements OnInit {
   cartItems: any[] = [];
+  shippingCost: number = 0;
+grandTotal: number = 0;
+
 
   checkoutData = {
     name: '',
@@ -64,58 +67,65 @@ export class CheckoutComponent implements OnInit {
       });
   }
 
-  openRazorpay(order: any) {
-    const options = {
-      key: environment.razorpayKey, // Razorpay Test Key
-      amount: order.amount,
-      currency: order.currency,
-      name: 'Myha Couture',
-      description: 'Order Payment',
-      order_id: order.id,
-      handler: (response: any) => {
-        console.log('✅ Payment successful:', response);
+openRazorpay(order: any) {
+  const options = {
+    key: environment.razorpayKey,
+    amount: order.amount,
+    currency: order.currency,
+    name: 'Myha Couture',
+    description: 'Order Payment',
+    order_id: order.id,
+    handler: (response: any) => {
+      console.log('✅ Payment successful:', response);
 
-        // Merge address lines into one full address for backend
-        const fullAddress = `${this.checkoutData.addressLine1}, ${this.checkoutData.addressLine2 || ''}`.trim();
+      const fullAddress = `${this.checkoutData.addressLine1}, ${this.checkoutData.addressLine2 || ''}`.trim();
 
-        const orderData = {
-          razorpayPaymentId: response.razorpay_payment_id,
-          razorpayOrderId: response.razorpay_order_id,
-          checkoutData: {
-            ...this.checkoutData,
-            address: fullAddress // ✅ unified address field for backend
-          },
-          cartItems: this.cartItems,
-          totalAmount: this.totalAmount,
-          paymentType: 'Prepaid'
-        };
+      const orderData = {
+        razorpayPaymentId: response.razorpay_payment_id,
+        razorpayOrderId: response.razorpay_order_id,
+        checkoutData: {
+          ...this.checkoutData,
+          address: fullAddress
+        },
+        cartItems: this.cartItems,
+        totalAmount: this.totalAmount, // base products only
+        paymentType: 'Prepaid'
+      };
 
-        this.http.post<any>(`${this.baseUrl}/save-order`, orderData)
-          .subscribe({
-            next: (res) => {
-              if (res.orderId) {
-                localStorage.removeItem('cart');
-                this.cartItems = [];
-                this.router.navigate(['/order-success'], { queryParams: { orderId: res.orderId } });
-              }
-            },
-            error: (err) => {
-              console.error("❌ Order save failed:", err);
-              alert("❌ Could not save order.");
+      this.http.post<any>(`${this.baseUrl}/save-order`, orderData)
+        .subscribe({
+          next: (res) => {
+            if (res.orderId) {
+              this.shippingCost = res.shippingCost;
+              this.grandTotal = res.grandTotal;
+
+              localStorage.removeItem('cart');
+              this.cartItems = [];
+              this.router.navigate(['/order-success'], { 
+                queryParams: { 
+                  orderId: res.orderId,
+                  total: res.grandTotal 
+                }
+              });
             }
-          });
-      },
-      prefill: {
-        name: this.checkoutData.name,
-        email: this.checkoutData.email,
-        contact: this.checkoutData.phone
-      },
-      theme: {
-        color: '#3399cc'
-      }
-    };
+          },
+          error: (err) => {
+            console.error("❌ Order save failed:", err);
+            alert("❌ Could not save order.");
+          }
+        });
+    },
+    prefill: {
+      name: this.checkoutData.name,
+      email: this.checkoutData.email,
+      contact: this.checkoutData.phone
+    },
+    theme: {
+      color: '#3399cc'
+    }
+  };
 
-    const rzp = new Razorpay(options);
-    rzp.open();
-  }
+  const rzp = new Razorpay(options);
+  rzp.open();
+}
 }
