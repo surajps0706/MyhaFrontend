@@ -67,6 +67,28 @@ grandTotal: number = 0;
       });
   }
 
+  onPincodeChange() {
+  if (this.checkoutData.pincode && this.checkoutData.pincode.length === 6) {
+    this.http.get<any>(`${this.baseUrl}/shipping-charge?d_pin=${this.checkoutData.pincode}`)
+      .subscribe({
+        next: (res) => {
+          // backend should return { total_amount: X } or { shippingCost: X }
+          this.shippingCost = res?.total_amount || res?.shippingCost || 0;
+          this.grandTotal = this.totalAmount + this.shippingCost;
+        },
+        error: (err) => {
+          console.error("❌ Failed to fetch shipping cost:", err);
+          this.shippingCost = 0;
+          this.grandTotal = this.totalAmount;
+        }
+      });
+  } else {
+    this.shippingCost = 0;
+    this.grandTotal = this.totalAmount;
+  }
+}
+
+
 openRazorpay(order: any) {
   const options = {
     key: environment.razorpayKey,
