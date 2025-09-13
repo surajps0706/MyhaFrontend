@@ -57,7 +57,7 @@ grandTotal: number = 0;
       return;
     }
 
-    this.http.post(`${this.baseUrl}/create-order`, { amount: this.totalAmount })
+    this.http.post(`${this.baseUrl}/create-order`, { amount: this.grandTotal })
       .subscribe({
         next: (order: any) => this.openRazorpay(order),
         error: err => {
@@ -110,6 +110,8 @@ openRazorpay(order: any) {
           address: fullAddress
         },
         cartItems: this.cartItems,
+        grandTotal: this.grandTotal,
+        shippingCost: this.shippingCost,
         totalAmount: this.totalAmount, // base products only
         paymentType: 'Prepaid'
       };
