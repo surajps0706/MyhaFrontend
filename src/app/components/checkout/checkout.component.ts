@@ -73,8 +73,10 @@ onPincodeChange() {
       .subscribe({
         next: (res) => {
           // ✅ API returns an array → pick first element
-          this.shippingCost = res?.[0]?.total_amount || 0;
-          this.grandTotal = this.totalAmount + this.shippingCost;
+          const packing = res?.[0]?.total_amount || 0;
+          this.shippingCost = packing + 20
+          // this.shippingCost = res?.[0]?.total_amount || 0;
+          this.grandTotal = this.totalAmount + this.shippingCost ;
         },
         error: (err) => {
           console.error("❌ Failed to fetch shipping cost:", err);
