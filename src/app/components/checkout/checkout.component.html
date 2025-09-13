@@ -92,9 +92,7 @@
         <strong class="total-amount">₹{{ grandTotal || totalAmount }}</strong>
       </div>
 
-       <button type="submit" class="place-order-btn">
-        Proceed to Pay
-      </button>
+  <button type="submit" (click)="placeOrder()" class="place-order-btn"> Proceed to Pay </button>
 
       <p class="secure-note">All payments are 100% secure & encrypted via Razorpay.</p>
     </aside>
