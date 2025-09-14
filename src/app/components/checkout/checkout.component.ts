@@ -74,9 +74,12 @@ onPincodeChange() {
         next: (res) => {
           // ✅ API returns an array → pick first element
           const packing = res?.[0]?.total_amount || 0;
-          this.shippingCost = packing + 20
-          // this.shippingCost = res?.[0]?.total_amount || 0;
-          this.grandTotal = this.totalAmount + this.shippingCost ;
+          
+          // ✅ Add ₹20 and round to nearest whole number
+          this.shippingCost = Math.round(packing + 20);
+
+          // ✅ Always round grand total too
+          this.grandTotal = Math.round(this.totalAmount + this.shippingCost);
         },
         error: (err) => {
           console.error("❌ Failed to fetch shipping cost:", err);
@@ -89,6 +92,7 @@ onPincodeChange() {
     this.grandTotal = this.totalAmount;
   }
 }
+
 
 
 openRazorpay(order: any) {
