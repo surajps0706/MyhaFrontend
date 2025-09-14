@@ -81,15 +81,16 @@
         <strong>₹{{ totalAmount }}</strong>
       </div>
 
-      <div class="summary-total">
-        <span>Delivery:</span>
-        <strong *ngIf="shippingCost">₹{{ shippingCost }}</strong>
-        <strong *ngIf="!shippingCost">—</strong>
-      </div>
+ <div class="summary-total">
+  <span>Delivery Charge:</span>
+  <strong *ngIf="shippingCost">₹{{ shippingCost | number:'1.0-0' }}</strong>
+  <strong *ngIf="!shippingCost">—</strong>
+</div>
+
 
       <div class="summary-total grand-total">
         <span>Total Payable:</span>
-        <strong class="total-amount">₹{{ grandTotal || totalAmount }}</strong>
+        <strong class="total-amount">₹{{ grandTotal || totalAmount | number:'1.0-0' }}</strong>
       </div>
 
   <button type="submit" (click)="placeOrder()" class="place-order-btn"> Proceed to Pay </button>
