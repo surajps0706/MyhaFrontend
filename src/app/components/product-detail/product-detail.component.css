@@ -863,6 +863,11 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  text-decoration: none;   /* remove underline */
+  color: inherit;          /* inherit text color */
+  display: block;          /* makes the card behave like a block */
+
+
 }
 @media screen and (max-width: 768px) {
   .recommend-section {
