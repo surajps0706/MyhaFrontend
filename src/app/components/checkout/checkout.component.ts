@@ -94,7 +94,7 @@ onPincodeChange() {
 openRazorpay(order: any) {
   const options = {
     key: environment.razorpayKey,
-    amount: order.amount,
+    amount: Math.round(this.grandTotal) * 100, // ✅ Always whole number in paise
     currency: order.currency,
     name: 'Myha Couture',
     description: 'Order Payment',
@@ -112,8 +112,8 @@ openRazorpay(order: any) {
           address: fullAddress
         },
         cartItems: this.cartItems,
-        grandTotal: this.grandTotal,
-        shippingCost: this.shippingCost,
+        grandTotal: Math.round(this.grandTotal), // ✅ saved as rounded
+        shippingCost: Math.round(this.shippingCost),
         totalAmount: this.totalAmount, // base products only
         paymentType: 'Prepaid'
       };
@@ -154,4 +154,5 @@ openRazorpay(order: any) {
   const rzp = new Razorpay(options);
   rzp.open();
 }
+
 }
