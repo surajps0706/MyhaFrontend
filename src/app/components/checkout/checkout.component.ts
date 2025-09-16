@@ -66,40 +66,29 @@ grandTotal: number = 0;
         }
       });
   }
-
 onPincodeChange() {
   if (this.checkoutData.pincode && this.checkoutData.pincode.length === 6) {
-    this.http.get<{ total_amount?: number }>(`${this.baseUrl}/shipping-charge?d_pin=${this.checkoutData.pincode}`)
+    this.http.get<{ total_amount: number }>(`${this.baseUrl}/shipping-charge?d_pin=${this.checkoutData.pincode}`)
       .subscribe({
         next: (res) => {
-          // Safely read total_amount from API response
           const packing = res?.total_amount ?? 0;
 
-          // Add ₹20 handling charge and round
           this.shippingCost = Math.round(packing + 20);
-
-          // Update grand total (products + shipping)
           this.grandTotal = Math.round(this.totalAmount + this.shippingCost);
 
           console.log("✅ Shipping cost applied:", this.shippingCost, "Grand total:", this.grandTotal);
         },
         error: (err) => {
           console.error("❌ Failed to fetch shipping cost:", err);
-
-          // Fallback → allow order with no shipping
           this.shippingCost = 0;
           this.grandTotal = this.totalAmount;
         }
       });
   } else {
-    // Reset if invalid or empty pincode
     this.shippingCost = 0;
     this.grandTotal = this.totalAmount;
   }
 }
-
-
-
 
 openRazorpay(order: any) {
   const options = {
