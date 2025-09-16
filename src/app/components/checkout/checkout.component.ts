@@ -52,7 +52,7 @@ grandTotal: number = 0;
   }
 
   placeOrder(): void {
-    if (!this.checkoutData.name || !this.checkoutData.phone || !this.checkoutData.addressLine1 || !this.checkoutData.email) {
+    if (!this.checkoutData.name || !this.checkoutData.phone || !this.checkoutData.addressLine1 || !this.checkoutData.email || !this.checkoutData.pincode || !this.checkoutData.city || !this.checkoutData.state) {
       alert('⚠️ Please fill all required fields before placing your order.');
       return;
     }
