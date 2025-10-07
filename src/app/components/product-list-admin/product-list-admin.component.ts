@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { environment } from '../../../environments/environment'; // ✅ import environment
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-product-list-admin',
@@ -15,7 +15,7 @@ export class ProductListAdminComponent implements OnInit {
   products: any[] = [];
   editingProduct: any = null;
 
-  private baseUrl = environment.apiUrl; // ✅ backend url from env
+  private baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
@@ -23,53 +23,87 @@ export class ProductListAdminComponent implements OnInit {
     this.loadProducts();
   }
 
-  // Load all products
+  // 🟩 Load all products from backend
   loadProducts() {
-    this.http.get<any[]>(`${this.baseUrl}/products`).subscribe(res => {
-      this.products = res;
+    this.http.get<any[]>(`${this.baseUrl}/products`).subscribe({
+      next: (res) => {
+        this.products = res;
+      },
+      error: (err) => {
+        console.error('❌ Failed to load products:', err);
+        alert('Failed to load products');
+      }
     });
   }
 
-  // Start editing a product
+  // ✏️ Start editing a product
   editProduct(product: any) {
-    this.editingProduct = { ...product };
+    // Convert image array -> comma separated string for textarea
+    this.editingProduct = {
+      ...product,
+      images: Array.isArray(product.images) ? product.images.join(', ') : product.images || ''
+    };
   }
 
-  // Save product changes
+  // 💾 Save product changes
   saveProduct() {
-    const token = localStorage.getItem('admin_token'); // ✅ dynamic token
+    const token = localStorage.getItem('admin_token');
+    if (!token) {
+      alert('⚠️ Unauthorized: Please login again.');
+      return;
+    }
+
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    // Convert comma-separated string -> array before saving
+    if (typeof this.editingProduct.images === 'string') {
+      this.editingProduct.images = this.editingProduct.images
+        .split(',')
+        .map((url: string) => url.trim())
+        .filter((url: string) => url.length > 0);
+    }
 
     this.http.put(`${this.baseUrl}/products/${this.editingProduct.id}`, this.editingProduct, { headers })
       .subscribe({
         next: () => {
-          alert('✅ Product updated');
+          alert('✅ Product updated successfully');
           this.editingProduct = null;
           this.loadProducts();
         },
-        error: (err) => alert('❌ Update failed: ' + err.message)
+        error: (err) => {
+          console.error('❌ Update failed:', err);
+          alert('Update failed: ' + err.message);
+        }
       });
   }
 
-  // Cancel edit
+  // ❌ Cancel edit mode
   cancelEdit() {
     this.editingProduct = null;
   }
 
-  // Delete product
+  // 🗑️ Delete a product
   deleteProduct(id: string) {
     if (!confirm('Are you sure you want to delete this product?')) return;
 
-    const token = localStorage.getItem('admin_token'); // ✅ dynamic token
+    const token = localStorage.getItem('admin_token');
+    if (!token) {
+      alert('⚠️ Unauthorized: Please login again.');
+      return;
+    }
+
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
     this.http.delete(`${this.baseUrl}/products/${id}`, { headers })
       .subscribe({
         next: () => {
-          alert('🗑️ Product deleted');
+          alert('🗑️ Product deleted successfully');
           this.loadProducts();
         },
-        error: (err) => alert('❌ Delete failed: ' + err.message)
+        error: (err) => {
+          console.error('❌ Delete failed:', err);
+          alert('Delete failed: ' + err.message);
+        }
       });
   }
 }
