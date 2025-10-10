@@ -30,7 +30,7 @@
   <div class="product-grid">
     <div class="product-card" *ngFor="let product of paginatedProducts">
       <div class="image-wrapper">
-        <img [src]="product.images[0]" [alt]="product.name" />
+        <img [routerLink]="['/product', product.id]" [src]="product.images[0]" [alt]="product.name" />
 
         <!-- ❤️ Wishlist Button -->
         <button 

@@ -28,10 +28,20 @@
     <h2 class="product-name">{{ product.name }}</h2>
 
     <!-- Price -->
-    <div class="price-container">
-      <span class="price-label">Price:</span>
-      <span class="price-value">{{ product.price }}</span>
-    </div>
+ <div class="price-container">
+  <span  class="price-label">Price:</span>
+
+  <!-- ✅ Show price if available -->
+  <span *ngIf="!product.isSoldOut; else soldOut" class="price-value">
+    ₹{{ product.price }}
+  </span>
+
+  <!-- ✅ Show Sold Out text otherwise -->
+  <ng-template #soldOut>
+    <span class="sold-out-text">Sold Out</span>
+  </ng-template>
+</div>
+
 
     <!-- Collapsible Description -->
     <div class="collapsible-description">
@@ -300,14 +310,15 @@
           >
         </div>
 
-        <button
-          class="footer-add-btn"
-          type="button"
-          [disabled]="!isFormValid()"
-          (click)="addToCart()"
-        >
-          Add to Cart
-        </button>
+       <button
+  class="footer-add-btn"
+  type="button"
+  [disabled]="product.isSoldOut || !isFormValid()"
+  (click)="addToCart()"
+>
+  {{ product.isSoldOut ? 'Sold Out' : 'Add to Cart' }}
+</button>
+
 
         <!-- WhatsApp Floating Button -->
         <a

@@ -949,6 +949,15 @@
 
 
 
+.sold-out-text {
+  color: #c62828;
+  font-weight: 600;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+}
+
+
+
 /* .back-btn {
   width: 40px;
   height: 40px;

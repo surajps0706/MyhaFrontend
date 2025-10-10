@@ -46,36 +46,60 @@ export class ProductListAdminComponent implements OnInit {
   }
 
   // 💾 Save product changes
-  saveProduct() {
-    const token = localStorage.getItem('admin_token');
-    if (!token) {
-      alert('⚠️ Unauthorized: Please login again.');
-      return;
-    }
-
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    // Convert comma-separated string -> array before saving
-    if (typeof this.editingProduct.images === 'string') {
-      this.editingProduct.images = this.editingProduct.images
-        .split(',')
-        .map((url: string) => url.trim())
-        .filter((url: string) => url.length > 0);
-    }
-
-    this.http.put(`${this.baseUrl}/products/${this.editingProduct.id}`, this.editingProduct, { headers })
-      .subscribe({
-        next: () => {
-          alert('✅ Product updated successfully');
-          this.editingProduct = null;
-          this.loadProducts();
-        },
-        error: (err) => {
-          console.error('❌ Update failed:', err);
-          alert('Update failed: ' + err.message);
-        }
-      });
+ saveProduct() {
+  const token = localStorage.getItem('admin_token');
+  if (!token) {
+    alert('⚠️ Unauthorized: Please login again.');
+    return;
   }
+
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+  // Convert comma-separated strings → arrays
+  if (typeof this.editingProduct.images === 'string') {
+    this.editingProduct.images = this.editingProduct.images
+      .split(',')
+      .map((url: string) => url.trim())
+      .filter((url: string) => url.length > 0);
+  }
+
+  if (typeof this.editingProduct.colors === 'string') {
+    this.editingProduct.colors = this.editingProduct.colors
+      .split(',')
+      .map((color: string) => color.trim())
+      .filter((color: string) => color.length > 0);
+  }
+
+  // ✅ Ensure boolean for Sold Out flag
+  this.editingProduct.isSoldOut = !!this.editingProduct.isSoldOut;
+
+  // Create payload explicitly (cleaner, avoids any unwanted keys)
+  const updatedProduct = {
+    name: this.editingProduct.name,
+    price: this.editingProduct.price,
+    description: this.editingProduct.description,
+    sizes: this.editingProduct.sizes,
+    colors: this.editingProduct.colors,
+    selectedSize: this.editingProduct.selectedSize,
+    selectedColor: this.editingProduct.selectedColor,
+    images: this.editingProduct.images,
+    category: this.editingProduct.category,
+    isSoldOut: this.editingProduct.isSoldOut  // ✅ Include here
+  };
+
+  this.http.put(`${this.baseUrl}/products/${this.editingProduct.id}`, updatedProduct, { headers })
+    .subscribe({
+      next: () => {
+        alert('✅ Product updated successfully');
+        this.editingProduct = null;
+        this.loadProducts();
+      },
+      error: (err) => {
+        console.error('❌ Update failed:', err);
+        alert('Update failed: ' + err.message);
+      }
+    });
+}
 
   // ❌ Cancel edit mode
   cancelEdit() {
