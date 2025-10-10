@@ -159,22 +159,34 @@
       </p>
     </div>
 
-    <!-- Sleeve Selection -->
-    <div class="sleeve-options">
-      <h4>Sleeve Type:</h4>
-      <div class="sleeve-list">
-        <label *ngFor="let option of sleeveOptions">
-          <input
-            type="radio"
-            name="sleeve"
-            [value]="option"
-            [(ngModel)]="selectedSleeve"
-          />
-          {{ option.name }}
-          ({{ option.price > 0 ? '+₹' + option.price : 'Free' }})
-        </label>
-      </div>
-    </div>
+<!-- Sleeve Customization Toggle -->
+<div class="sleeve-toggle-section">
+  <label class="toggle-label">
+    <input
+      type="checkbox"
+      [(ngModel)]="enableSleeveCustomization"
+      (change)="onSleeveToggle()"
+    />
+    Add Sleeve Customization
+  </label>
+</div>
+
+<!-- Sleeve Options (visible only if toggle is ON) -->
+<div class="sleeve-options" *ngIf="enableSleeveCustomization">
+  <h4>Sleeve Type:</h4>
+  <div class="sleeve-list">
+    <label *ngFor="let option of sleeveOptions">
+      <input
+        type="radio"
+        name="sleeve"
+        [value]="option"
+        [(ngModel)]="selectedSleeve"
+      />
+      {{ option.name }}
+      ({{ option.price > 0 ? '+₹' + option.price : 'Free' }})
+    </label>
+  </div>
+</div>
 
     <!-- Extra Height -->
     <div *ngIf="isKurti" class="extra-height-section">

@@ -26,6 +26,8 @@ export class ProductDetailComponent implements OnInit {
   isKurti = false;
   preferredHeight: string = '';
   extraHeightPrice = 150;
+  enableSleeveCustomization = false; // toggle state
+
 
   // sizing mode
   sizingMode: SizingMode = 'size';
@@ -209,9 +211,9 @@ loadRecommendedProducts(): void {
   get basePrice(): number {
     return parseFloat(this.product?.price?.toString().replace(/[^0-9.]/g, '')) || 0;
   }
-  get sleeveExtra(): number {
-    return this.selectedSleeve?.price || 0;
-  }
+  // get sleeveExtra(): number {
+  //   return this.selectedSleeve?.price || 0;
+  // }
   get heightExtra(): number {
     const h = Number(this.preferredHeight);
     return this.isKurti && !isNaN(h) && h > 35 ? this.extraHeightPrice : 0;
@@ -220,6 +222,11 @@ get totalPrice(): number {
   return this.basePrice + this.sleeveExtra + this.heightExtra + this.bustExtra;
 }
 
+get sleeveExtra(): number {
+  // ✅ Only add sleeve price if customization toggle is ON
+  if (!this.enableSleeveCustomization) return 0;
+  return this.selectedSleeve?.price || 0;
+}
 
 
   get bustExtra(): number {
@@ -318,6 +325,20 @@ onImageSelected(event: Event): void {
     reader.readAsDataURL(this.selectedImageFile);
   }
 }
+
+
+// enableSleeveCustomization = false; // default OFF
+
+onSleeveToggle(): void {
+  if (!this.enableSleeveCustomization) {
+    // Reset sleeve selection when turned off
+    this.selectedSleeve = { name: 'No Sleeve Customization', price: 0 };
+  } else {
+    // Default to first sleeve option
+    this.selectedSleeve = this.sleeveOptions[0];
+  }
+}
+
 
 
   submitReview(): void {
