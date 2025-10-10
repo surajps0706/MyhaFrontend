@@ -301,14 +301,16 @@
     <!-- Sticky Footer -->
     <div class="sticky-footer" *ngIf="product">
       <div class="footer-content">
-        <div class="price-breakdown">
-          <span>Base: ₹{{ basePrice }}</span>
-          <span *ngIf="sleeveExtra">Sleeve: +₹{{ sleeveExtra }}</span>
-          <span *ngIf="heightExtra">Height: +₹{{ heightExtra }}</span>
-          <strong *ngIf="sleeveExtra || heightExtra"
-            >Total: ₹{{ totalPrice }}</strong
-          >
-        </div>
+   <div class="price-breakdown">
+  <span>Base: ₹{{ basePrice }}</span>
+  <span *ngIf="bustExtra">Bust Size: +₹{{ bustExtra }}</span>
+  <span *ngIf="sleeveExtra">Sleeve: +₹{{ sleeveExtra }}</span>
+  <span *ngIf="heightExtra">Height: +₹{{ heightExtra }}</span>
+  <strong *ngIf="bustExtra || sleeveExtra || heightExtra">
+    Total: ₹{{ totalPrice }}
+  </strong>
+</div>
+
 
        <button
   class="footer-add-btn"

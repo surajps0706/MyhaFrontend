@@ -216,9 +216,16 @@ loadRecommendedProducts(): void {
     const h = Number(this.preferredHeight);
     return this.isKurti && !isNaN(h) && h > 35 ? this.extraHeightPrice : 0;
   }
-  get totalPrice(): number {
-    return this.basePrice + this.sleeveExtra + this.heightExtra;
-  }
+get totalPrice(): number {
+  return this.basePrice + this.sleeveExtra + this.heightExtra + this.bustExtra;
+}
+
+
+
+  get bustExtra(): number {
+  const bust = Number(this.measurements?.bust);
+  return !isNaN(bust) && bust >= 45 ? 150 : 0;
+}
 
   // =========================
   // Description + WhatsApp
@@ -261,7 +268,9 @@ Link: ${window.location.href}`;
       sleeveType: this.selectedSleeve?.name || 'None',
       customizationNotes: this.customizationNotes || null,
       preferredHeight: this.preferredHeight,
-      extraHeightPrice: this.heightExtra
+      extraHeightPrice: this.heightExtra,
+        bustExtra: this.bustExtra // ✅ Added
+
     };
 
     this.cartService.addToCart(cartItem);
