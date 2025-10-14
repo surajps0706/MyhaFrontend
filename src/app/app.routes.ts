@@ -36,6 +36,14 @@ export const routes: Routes = [
       
   },
 
+   {
+    path: 'terms-and-conditions',
+    loadComponent: () =>
+      import('./pages/terms-and-conditions/terms-and-conditions.component').then(
+        (m) => m.TermsAndConditionsComponent
+      ),
+  },
+
   // 🛒 Cart
   {
     path: 'cart',

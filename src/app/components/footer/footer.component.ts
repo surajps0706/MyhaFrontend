@@ -15,7 +15,8 @@ export class FooterComponent {
   footerLinks = [
     { label: 'Home', route: '/' },
     { label: 'Shop', route: '/products' },
-    { label: 'Track Order', route: '/track' }
+    { label: 'Track Order', route: '/track' },
+    { label: 'Terms & Conditions', route: '/terms-and-conditions' }
   ];
 
   contactInfo = {
