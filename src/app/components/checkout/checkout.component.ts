@@ -18,6 +18,10 @@ export class CheckoutComponent implements OnInit {
   cartItems: any[] = [];
   shippingCost: number = 0;
 grandTotal: number = 0;
+couponCode: string = '';
+discountAmount: number = 0;
+couponSuccess: boolean = false;
+couponError: boolean = false;
 
 
   checkoutData = {
@@ -93,11 +97,11 @@ onPincodeChange() {
 openRazorpay(order: any) {
   const options = {
     key: environment.razorpayKey,
-    amount: Math.round(this.grandTotal) * 100, // ✅ Always whole number in paise
-    currency: order.currency,
+    amount: Math.round(this.grandTotal) * 100, // ✅ amount in paise
+    currency: order.currency || 'INR',
     name: 'Myha Couture',
     description: 'Order Payment',
-    order_id: order.id,
+    order_id: order.razorpay_order.id, // ✅ FIXED: use nested ID from backend
     handler: (response: any) => {
       console.log('✅ Payment successful:', response);
 
@@ -105,15 +109,15 @@ openRazorpay(order: any) {
 
       const orderData = {
         razorpayPaymentId: response.razorpay_payment_id,
-        razorpayOrderId: order.id,
+        razorpayOrderId: order.razorpay_order.id, // ✅ FIXED here too
         checkoutData: {
           ...this.checkoutData,
           address: fullAddress
         },
         cartItems: this.cartItems,
-        grandTotal: Math.round(this.grandTotal), // ✅ saved as rounded
+        grandTotal: Math.round(this.grandTotal),
         shippingCost: Math.round(this.shippingCost),
-        totalAmount: this.totalAmount, // base products only
+        totalAmount: this.totalAmount,
         paymentType: 'Prepaid'
       };
 
@@ -126,17 +130,17 @@ openRazorpay(order: any) {
 
               localStorage.removeItem('cart');
               this.cartItems = [];
-              this.router.navigate(['/order-success'], { 
-                queryParams: { 
+              this.router.navigate(['/order-success'], {
+                queryParams: {
                   orderId: res.orderId,
-                  total: res.grandTotal 
+                  total: res.grandTotal
                 }
               });
             }
           },
           error: (err) => {
-            console.error("❌ Order save failed:", err);
-            alert("❌ Could not save order.");
+            console.error('❌ Order save failed:', err);
+            alert('❌ Could not save order.');
           }
         });
     },
@@ -152,6 +156,44 @@ openRazorpay(order: any) {
 
   const rzp = new Razorpay(options);
   rzp.open();
+}
+
+
+
+validCoupons = [
+  { code: 'MYHA10', discountType: 'percentage', value: 10 },  // 10% off
+  { code: 'WELCOME100', discountType: 'flat', value: 100 }    // ₹100 off
+];
+
+applyCoupon() {
+  const enteredCode = this.couponCode.trim().toUpperCase();
+  const coupon = this.validCoupons.find(c => c.code === enteredCode);
+
+  if (!coupon) {
+    this.couponSuccess = false;
+    this.couponError = true;
+    this.discountAmount = 0;
+    this.updateGrandTotal();
+    return;
+  }
+
+  // Calculate discount
+  if (coupon.discountType === 'percentage') {
+    this.discountAmount = (this.totalAmount * coupon.value) / 100;
+  } else if (coupon.discountType === 'flat') {
+    this.discountAmount = coupon.value;
+  }
+
+  // Apply discount
+  this.couponSuccess = true;
+  this.couponError = false;
+  this.updateGrandTotal();
+}
+
+updateGrandTotal() {
+  const delivery = this.shippingCost || 0;
+  const discount = this.discountAmount || 0;
+  this.grandTotal = this.totalAmount + delivery - discount;
 }
 
 }
