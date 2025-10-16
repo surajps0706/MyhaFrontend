@@ -70,29 +70,51 @@ couponError: boolean = false;
         }
       });
   }
+
+  
 onPincodeChange() {
   if (this.checkoutData.pincode && this.checkoutData.pincode.length === 6) {
-    this.http.get<{ total_amount: number }>(`${this.baseUrl}/shipping-charge?d_pin=${this.checkoutData.pincode}`)
+    this.http
+      .get<{ total_amount: number }>(
+        `${this.baseUrl}/shipping-charge?d_pin=${this.checkoutData.pincode}`
+      )
       .subscribe({
         next: (res) => {
           const packing = res?.total_amount ?? 0;
 
           this.shippingCost = Math.round(packing + 20);
-          this.grandTotal = Math.round(this.totalAmount + this.shippingCost);
 
-          console.log("✅ Shipping cost applied:", this.shippingCost, "Grand total:", this.grandTotal);
+          // ✅ Keep coupon discount in final total
+          const discount = this.discountAmount || 0;
+          this.grandTotal = Math.round(this.totalAmount + this.shippingCost - discount);
+
+          console.log(
+            "✅ Shipping cost applied:",
+            this.shippingCost,
+            "Discount:",
+            discount,
+            "Grand total:",
+            this.grandTotal
+          );
         },
         error: (err) => {
           console.error("❌ Failed to fetch shipping cost:", err);
           this.shippingCost = 0;
-          this.grandTotal = this.totalAmount;
-        }
+
+          // ✅ Even in case of error, retain discount
+          const discount = this.discountAmount || 0;
+          this.grandTotal = Math.round(this.totalAmount - discount);
+        },
       });
   } else {
     this.shippingCost = 0;
-    this.grandTotal = this.totalAmount;
+
+    // ✅ Still retain discount when pincode is cleared
+    const discount = this.discountAmount || 0;
+    this.grandTotal = Math.round(this.totalAmount - discount);
   }
 }
+
 
 openRazorpay(order: any) {
   const options = {
