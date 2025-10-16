@@ -331,13 +331,23 @@ onImageSelected(event: Event): void {
 
 onSleeveToggle(): void {
   if (!this.enableSleeveCustomization) {
-    // Reset sleeve selection when turned off
-    this.selectedSleeve = { name: 'No Sleeve Customization', price: 0 };
+    // 🔹 When toggle OFF → clear sleeve selection
+    this.selectedSleeve = null;
   } else {
-    // Default to first sleeve option
-    this.selectedSleeve = this.sleeveOptions[0];
+    // 🔹 When toggle ON → show options but don’t preselect any
+    this.selectedSleeve = null;
   }
+
+  // 🔹 Recalculate total price (base + bust + height + sleeve)
+  this.updateTotalPrice();
 }
+
+
+updateTotalPrice(): void {
+  // This forces Angular to recalc total using getters (reactive display)
+  const _ = this.totalPrice;
+}
+
 
 
 
