@@ -168,7 +168,7 @@ openRazorpay(order: any) {
 
 
 validCoupons = [
-  { code: 'MYHADIWALI15', discountType: 'percentage', value: 15 },  // 10% off
+  { code: 'MYHADIWALI10', discountType: 'percentage', value: 10 },  // 10% off
   // { code: 'WELCOME100', discountType: 'flat', value: 100 }    // ₹100 off
 ];
 
