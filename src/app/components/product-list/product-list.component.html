@@ -1,3 +1,6 @@
+
+
+
 <div class="product-list-container">
   <!-- Sidebar Filters -->
   <aside class="filters" [class.open]="mobileFiltersOpen">
@@ -25,6 +28,8 @@
       </div>
     </div>
   </aside>
+
+
 
   <!-- Products Grid -->
   <div class="product-grid">
@@ -59,6 +64,7 @@
   <span>Page {{ currentPage }} of {{ totalPages }}</span>
   <button (click)="nextPage()" [disabled]="currentPage === totalPages">Next ➡</button>
 </div>
+
 
 <!-- Mobile Filter Toggle -->
 <button class="filter-toggle-btn" (click)="toggleMobileFilters()">Filters</button>

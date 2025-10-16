@@ -55,48 +55,82 @@
   
     </form>
 
-    <!-- Order Summary -->
-    <aside class="order-summary section">
-      <h3>🛍️ Order Summary</h3>
 
-      <div *ngFor="let item of cartItems" class="summary-item">
-        <div class="item-image">
-          <img [src]="item.images[0]" [alt]="item.name" />
-        </div>
-        <div class="item-details">
-          <strong>{{ item.name }}</strong>
-          <div class="item-meta">
-            <span *ngIf="item.selectedSize">Size: {{ item.selectedSize }}</span>
-            <span *ngIf="item.sleeveType">Sleeve: {{ item.sleeveType }} (+₹{{ item.sleevePrice }})</span>
-            <span *ngIf="item.extraHeightPrice">Height: +₹{{ item.extraHeightPrice }}</span>
-            <span *ngIf="item.preferredHeight">Height : {{ item.preferredHeight }} inches (Free of Cost)</span>
-            <span *ngIf="item.customizationNotes">Customization Notes: {{item.customizationNotes}}</span>
-          </div>
-        </div>
+<!-- Order Summary -->
+<aside class="order-summary section">
+  <h3>🛍️ Order Summary</h3>
+
+  <div *ngFor="let item of cartItems" class="summary-item">
+    <div class="item-image">
+      <img [src]="item.images[0]" [alt]="item.name" />
+    </div>
+    <div class="item-details">
+      <strong>{{ item.name }}</strong>
+      <div class="item-meta">
+        <span *ngIf="item.selectedSize">Size: {{ item.selectedSize }}</span>
+        <span *ngIf="item.sleeveType">Sleeve: {{ item.sleeveType }} (+₹{{ item.sleevePrice }})</span>
+        <span *ngIf="item.extraHeightPrice">Height: +₹{{ item.extraHeightPrice }}</span>
+        <span *ngIf="item.preferredHeight">Height : {{ item.preferredHeight }} inches (Free of Cost)</span>
+        <span *ngIf="item.customizationNotes">Customization Notes: {{ item.customizationNotes }}</span>
       </div>
+    </div>
+  </div>
 
-      <hr />
-      <div class="summary-total">
-        <span>Subtotal:</span>
-        <strong>₹{{ totalAmount }}</strong>
-      </div>
+  <hr />
 
- <div class="summary-total">
-  <span>Delivery Charge:</span>
-  <strong *ngIf="shippingCost">₹{{ shippingCost | number:'1.0-0' }}</strong>
-  <strong *ngIf="!shippingCost">—</strong>
-</div>
+  <!-- Subtotal -->
+  <div class="summary-total">
+    <span>Subtotal:</span>
+    <strong>₹{{ totalAmount }}</strong>
+  </div>
 
+  <!-- 🏷️ Coupon Section (Perfect Spot) -->
+  <div class="coupon-section">
+    <label for="coupon">Have a Coupon Code?</label>
+    <div class="coupon-input">
+      <input
+        type="text"
+        id="coupon"
+        [(ngModel)]="couponCode"
+        name="coupon"
+        placeholder="Enter coupon code"
+      />
+      <button type="button" (click)="applyCoupon()">Apply</button>
+    </div>
 
-      <div class="summary-total grand-total">
-        <span>Total Payable:</span>
-        <strong class="total-amount">₹{{ grandTotal || totalAmount | number:'1.0-0' }}</strong>
-      </div>
+    <!-- Feedback Messages -->
+    <p *ngIf="couponSuccess" class="coupon-success">
+      ✅ Coupon applied! You saved ₹{{ discountAmount }}.
+    </p>
+    <p *ngIf="couponError" class="coupon-error">
+      ❌ Invalid or expired coupon code.
+    </p>
+  </div>
 
-  <button type="submit" (click)="placeOrder()" class="place-order-btn"> Proceed to Pay </button>
+  <!-- Delivery + Discount + Grand Total -->
+  <div class="summary-total">
+    <span>Delivery Charge:</span>
+    <strong *ngIf="shippingCost">₹{{ shippingCost | number:'1.0-0' }}</strong>
+    <strong *ngIf="!shippingCost">—</strong>
+  </div>
 
-      <p class="secure-note">All payments are 100% secure & encrypted via Razorpay.</p>
-    </aside>
+  <div class="summary-total" *ngIf="discountAmount > 0">
+    <span>Discount:</span>
+    <strong class="discount">- ₹{{ discountAmount | number:'1.0-0' }}</strong>
+  </div>
+
+  <div class="summary-total grand-total">
+    <span>Total Payable:</span>
+    <strong class="total-amount">₹{{ grandTotal || totalAmount | number:'1.0-0' }}</strong>
+  </div>
+
+  <button type="submit" (click)="placeOrder()" class="place-order-btn">
+    Proceed to Pay
+  </button>
+
+  <p class="secure-note">All payments are 100% secure & encrypted via Razorpay.</p>
+</aside>
+
   </div>
 </div>
 

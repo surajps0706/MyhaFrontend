@@ -4,23 +4,26 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { environment } from '../../../environments/environment';
+import { LoaderComponent } from '../../loader/loader/loader.component';
 
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css'],
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule]
+  imports: [CommonModule, RouterModule, FormsModule, LoaderComponent]
 })
 export class ProductListComponent implements OnInit {
   products: any[] = [];
   filteredProducts: any[] = [];
-
   selectedCategory: string = 'all';
   priceRange: number = 3000;
 
   collapsed = { category: false, price: false };
   mobileFiltersOpen: boolean = false;
+
+    isLoading: boolean = false;
+
 
   // ✅ Pagination
   currentPage: number = 1;
@@ -40,12 +43,12 @@ export class ProductListComponent implements OnInit {
     } else {
       this.pageSize = 12; // desktop/laptop
     }
-
     this.loadWishlist();
     this.fetchProducts();
   }
 
   fetchProducts() {
+    this.isLoading = true;
     this.http.get<any[]>(`${this.baseUrl}/products`).subscribe({
       next: (data) => {
         this.products = data;
@@ -53,6 +56,7 @@ export class ProductListComponent implements OnInit {
       },
       error: (err) => {
         console.error('❌ Error fetching products:', err);
+        this.isLoading= false;
       }
     });
   }
