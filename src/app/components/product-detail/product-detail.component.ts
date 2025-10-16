@@ -27,6 +27,10 @@ export class ProductDetailComponent implements OnInit {
   preferredHeight: string = '';
   extraHeightPrice = 150;
   enableSleeveCustomization = false; // toggle state
+  enableHeightCustomization = false; // default OFF
+  enableNeckCustomization = false;
+neckCustomizationText: string = '';
+
 
 
   // sizing mode
@@ -211,13 +215,17 @@ loadRecommendedProducts(): void {
   get basePrice(): number {
     return parseFloat(this.product?.price?.toString().replace(/[^0-9.]/g, '')) || 0;
   }
-  // get sleeveExtra(): number {
-  //   return this.selectedSleeve?.price || 0;
-  // }
-  get heightExtra(): number {
-    const h = Number(this.preferredHeight);
-    return this.isKurti && !isNaN(h) && h > 35 ? this.extraHeightPrice : 0;
-  }
+
+
+
+get heightExtra(): number {
+  if (!this.enableHeightCustomization) return 0; // ✅ no charge if toggle off
+
+  const h = Number(this.preferredHeight);
+  return this.isKurti && !isNaN(h) && h > 35 ? this.extraHeightPrice : 0;
+}
+
+
 get totalPrice(): number {
   return this.basePrice + this.sleeveExtra + this.heightExtra + this.bustExtra;
 }
@@ -272,11 +280,12 @@ Link: ${window.location.href}`;
       selectedSize: this.sizingMode === 'size' ? (this.product?.selectedSize || null) : null,
       measurements: this.sizingMode === 'measurements' ? this.measurements : {},
       sleevePrice: this.selectedSleeve?.price || 0,
-      sleeveType: this.selectedSleeve?.name || 'None',
+      sleeveType: this.selectedSleeve?.name || 'No Customizations',
       customizationNotes: this.customizationNotes || null,
       preferredHeight: this.preferredHeight,
       extraHeightPrice: this.heightExtra,
-        bustExtra: this.bustExtra // ✅ Added
+        bustExtra: this.bustExtra,
+        neckCustomization: this.neckCustomizationText || null, // ✅ Added
 
     };
 
@@ -340,6 +349,28 @@ onSleeveToggle(): void {
 
   // 🔹 Recalculate total price (base + bust + height + sleeve)
   this.updateTotalPrice();
+}
+
+
+
+
+onNeckToggle(): void {
+  if (!this.enableNeckCustomization) {
+    this.neckCustomizationText = ''; // reset when turned off
+  }
+}
+
+// setHeightCustomization(enable: boolean): void {
+//   this.enableHeightCustomization = enable;
+//   if (!enable) {
+//     this.preferredHeight = '';
+//   }
+// }
+
+onHeightToggle(): void {
+  if (!this.enableHeightCustomization) {
+    this.preferredHeight = ''; // reset when toggled off
+  }
 }
 
 

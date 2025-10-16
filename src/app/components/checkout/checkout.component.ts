@@ -22,6 +22,8 @@ couponCode: string = '';
 discountAmount: number = 0;
 couponSuccess: boolean = false;
 couponError: boolean = false;
+handlingCharge: number = 0;
+
 
 
   checkoutData = {
@@ -71,7 +73,6 @@ couponError: boolean = false;
       });
   }
 
-  
 onPincodeChange() {
   if (this.checkoutData.pincode && this.checkoutData.pincode.length === 6) {
     this.http
@@ -81,39 +82,23 @@ onPincodeChange() {
       .subscribe({
         next: (res) => {
           const packing = res?.total_amount ?? 0;
+          this.shippingCost = Math.round(packing + 20); // base + packing
 
-          this.shippingCost = Math.round(packing + 20);
-
-          // ✅ Keep coupon discount in final total
-          const discount = this.discountAmount || 0;
-          this.grandTotal = Math.round(this.totalAmount + this.shippingCost - discount);
-
-          console.log(
-            "✅ Shipping cost applied:",
-            this.shippingCost,
-            "Discount:",
-            discount,
-            "Grand total:",
-            this.grandTotal
-          );
+          // ✅ Now merge handling logic into delivery
+          this.updateGrandTotal();
         },
         error: (err) => {
           console.error("❌ Failed to fetch shipping cost:", err);
           this.shippingCost = 0;
-
-          // ✅ Even in case of error, retain discount
-          const discount = this.discountAmount || 0;
-          this.grandTotal = Math.round(this.totalAmount - discount);
+          this.updateGrandTotal();
         },
       });
   } else {
     this.shippingCost = 0;
-
-    // ✅ Still retain discount when pincode is cleared
-    const discount = this.discountAmount || 0;
-    this.grandTotal = Math.round(this.totalAmount - discount);
+    this.updateGrandTotal();
   }
 }
+
 
 
 openRazorpay(order: any) {
@@ -213,9 +198,40 @@ applyCoupon() {
 }
 
 updateGrandTotal() {
-  const delivery = this.shippingCost || 0;
   const discount = this.discountAmount || 0;
-  this.grandTotal = this.totalAmount + delivery - discount;
+
+  // ✅ Calculate total quantity of all items
+  const totalQty = this.cartItems.reduce(
+    (sum, item) => sum + (item.quantity || 1),
+    0
+  );
+
+  // ✅ Base delivery (fetched or default)
+  let delivery = this.shippingCost || 0;
+
+  // ✅ Add ₹20 extra to delivery if 3 or more items
+  if (totalQty >= 3) {
+    delivery += 20;
+  }
+
+  // ✅ Save updated delivery cost
+  this.shippingCost = delivery;
+
+  // ✅ Final grand total
+  this.grandTotal = this.totalAmount + this.shippingCost - discount;
+
+  console.log(
+    `🚚 Delivery: ₹${this.shippingCost} (Qty ${totalQty}), Grand Total: ₹${this.grandTotal}`
+  );
 }
+
+
+
+
+getTotalQuantity(): number {
+  return this.cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+}
+
+
 
 }

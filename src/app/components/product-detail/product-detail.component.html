@@ -160,18 +160,19 @@
     </div>
 
 <!-- Sleeve Customization Toggle -->
-<div class="sleeve-toggle-section">
-  <label class="toggle-label">
+<div class="sleeve-toggle-wrapper">
+  <label class="switch">
     <input
       type="checkbox"
       [(ngModel)]="enableSleeveCustomization"
       (change)="onSleeveToggle()"
     />
-    Add Sleeve Customization
+    <span class="slider round"></span>
   </label>
+  <span class="toggle-label">Sleeve Customization</span>
 </div>
 
-<!-- Sleeve Options (only if toggle is ON) -->
+<!-- Sleeve Options (visible only if toggle is ON) -->
 <div class="sleeve-options" *ngIf="enableSleeveCustomization">
   <h4>Sleeve Type:</h4>
   <div class="sleeve-list">
@@ -189,32 +190,66 @@
 </div>
 
 
-    <!-- Extra Height -->
-    <div *ngIf="isKurti" class="extra-height-section">
-      <h4>Extra Height (₹{{ extraHeightPrice }})</h4>
-      <input
-        class="extra-height"
-        type="text"
-        [(ngModel)]="preferredHeight"
-        (ngModelChange)="onHeightChange($event)"
-        placeholder="Enter desired height in inches"
-      />
-      <p class="extra-height-note">
-        *Extra ₹150 will be charged if height exceeds 35 inches.
-      </p>
-    </div>
+<!-- Height Customization Toggle -->
+<div class="height-toggle-wrapper">
+  <label class="switch">
+    <input type="checkbox" [(ngModel)]="enableHeightCustomization" (change)="onHeightToggle()" />
+    <span class="slider round"></span>
+  </label>
+  <span class="toggle-label">Height Customization</span>
+</div>
 
-    <div *ngIf="!isKurti" class="extra-height-section">
-      <h4>Extra Height (Optional)</h4>
-      <input
-        class="extra-height"
-        type="text"
-        [(ngModel)]="preferredHeight"
-        (ngModelChange)="onHeightChange($event)"
-        placeholder="Enter desired height in inches"
-      />
-      <p class="extra-height-note">Free Of Cost</p>
-    </div>
+<!-- Show only when enabled -->
+<div *ngIf="enableHeightCustomization" class="extra-height-section">
+  <h4>
+    Height 
+    <span *ngIf="isKurti">(₹{{ extraHeightPrice }})</span>
+    <span *ngIf="!isKurti">(Optional)</span>
+  </h4>
+
+  <input
+    class="extra-height"
+    type="text"
+    [(ngModel)]="preferredHeight"
+    (ngModelChange)="onHeightChange($event)"
+    placeholder="Enter desired height in inches"
+  />
+
+  <p class="extra-height-note" *ngIf="isKurti">
+    *Extra ₹150 will be charged if height exceeds 35 inches.
+  </p>
+  <p class="extra-height-note" *ngIf="!isKurti">
+    Free Of Cost
+  </p>
+</div>
+
+
+<!-- Neck Customization Toggle -->
+<div class="neck-toggle-wrapper">
+  <label class="switch">
+    <input
+      type="checkbox"
+      [(ngModel)]="enableNeckCustomization"
+      (change)="onNeckToggle()"
+    />
+    <span class="slider round"></span>
+  </label>
+  <span class="toggle-label">Neck Customization</span>
+</div>
+
+<!-- Neck Customization Input -->
+<div *ngIf="enableNeckCustomization" class="neck-section">
+  <h4>Front/Back Neck Details</h4>
+  <input
+    type="text"
+    class="neck-input"
+    [(ngModel)]="neckCustomizationText"
+    placeholder="Describe your neck customization (e.g., V-Neck, U-Neck)"
+  />
+</div>
+
+
+
 
     <!-- Customization Notes -->
     <div class="customization-section">

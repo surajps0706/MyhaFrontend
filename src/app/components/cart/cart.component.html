@@ -45,7 +45,7 @@
         <!-- Tags for Customization -->
         <div class="customization-tags">
           <span class="tag" *ngIf="item.selectedSize">Size: {{ item.selectedSize }}</span>
-          <span class="tag" *ngIf="item.sleeveType">Sleeve: {{ item.sleeveType }} 
+          <span style="display: flex;" class="tag" *ngIf="item.sleeveType">Sleeve: {{ item.sleeveType }} 
             <span *ngIf="item.sleevePrice > 0">+₹{{ item.sleevePrice }}</span>
           </span>
           <span class="tag" *ngIf="item.preferredHeight">
@@ -83,15 +83,21 @@
   <!-- Totals -->
   <div class="cart-total">
     <h3 class="summary-heading">Order Summary</h3>
-    <div class="price-breakup">
-      <p><span>Base Price:</span> ₹{{ baseTotal }}</p>
-      <p><span>Sleeve Add-ons:</span> ₹{{ sleeveTotal }}</p>
-      <p *ngIf="heightTotal > 0" class="height-total-line">
-        <span>Height Customization:</span> ₹{{ heightTotal }}
-      </p>
-      <hr />
-      <p class="grand-total"><span>Grand Total:</span> ₹{{ total }}</p>
-    </div>
+<div class="price-breakup">
+  <p><span>Base Price:</span> ₹{{ baseTotal }}</p>
+  <p><span>Sleeve Add-ons:</span> ₹{{ sleeveTotal }}</p>
+  <p *ngIf="heightTotal > 0" class="height-total-line">
+    <span>Height Customization:</span> ₹{{ heightTotal }}</p>
+
+  <!-- ✅ Handling charge display -->
+  <!-- <p *ngIf="handlingCharge > 0" class="handling-charge-line">
+    <span>Handling Charge:</span> ₹{{ handlingCharge }}
+  </p> -->
+
+  <hr />
+  <p class="grand-total"><span>Grand Total:</span> ₹{{ total }}</p>
+</div>
+
 
     <button class="pay-btn"
             [disabled]="cartItems.length === 0"

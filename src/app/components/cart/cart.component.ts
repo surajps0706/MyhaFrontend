@@ -18,25 +18,30 @@ export class CartComponent implements OnInit {
   baseTotal: number = 0;
   sleeveTotal: number = 0;
   heightTotal: number = 0;
+  handlingCharge: number = 0;
   total: number = 0;
+  totalQty: number = 0;
 
   constructor(private cartService: CartService, private router: Router) {}
 
   ngOnInit(): void {
-    this.cartItems = this.cartService.getCart();
+    this.cartItems = this.cartService.getCart() || [];
 
-    // Ensure all items have quantity
+    // ✅ Ensure quantity defaults
     this.cartItems.forEach(item => {
-      if (!item.quantity) item.quantity = 1;
+      if (!item.quantity || item.quantity < 1) item.quantity = 1;
     });
 
     this.updateTotal();
   }
 
   updateQuantity(index: number, quantity: number): void {
+    if (quantity < 1) return; // prevent 0 or negative qty
+
     this.cartItems[index].quantity = quantity;
     this.cartService.updateCart(this.cartItems);
-    this.updateTotal();
+
+    this.updateTotal(); // refresh totals immediately
   }
 
   removeItem(index: number): void {
@@ -48,28 +53,21 @@ export class CartComponent implements OnInit {
   clearCart(): void {
     this.cartItems = [];
     this.cartService.updateCart(this.cartItems);
-    this.updateTotal();  // Fixed from `calculateTotals()` to `updateTotal()`
+    this.updateTotal();
   }
 
-
-hasMeasurements(measurements: any): boolean {
-  if (!measurements) return false;
-  return Object.values(measurements).some((value) => {
-    if (typeof value === 'string') {
-      return value.trim() !== '';
-    }
-    return false;
-  });
-}
-
-
-
+  hasMeasurements(measurements: any): boolean {
+    if (!measurements) return false;
+    return Object.values(measurements).some(
+      (value: any) => typeof value === 'string' && value.trim() !== ''
+    );
+  }
 
   updateTotal(): void {
     this.baseTotal = 0;
     this.sleeveTotal = 0;
     this.heightTotal = 0;
-    this.total = 0;
+    this.totalQty = 0;
 
     this.cartItems.forEach(item => {
       const basePrice = Number(item.price?.toString().replace(/[^0-9]/g, '') || 0);
@@ -80,20 +78,24 @@ hasMeasurements(measurements: any): boolean {
       this.baseTotal += basePrice * qty;
       this.sleeveTotal += sleevePrice * qty;
       this.heightTotal += heightPrice * qty;
+      this.totalQty += qty;
     });
 
-    this.total = this.baseTotal + this.sleeveTotal + this.heightTotal;
+    // ✅ Apply handling charge for 3 or more total items
+    this.handlingCharge = this.totalQty >= 3 ? 20 : 0;
+
+    // ✅ Compute grand total
+    this.total = this.baseTotal + this.sleeveTotal + this.heightTotal + this.handlingCharge;
   }
 
-goToCheckout() {
-  this.cartItems = this.cartItems.map(item => ({
-    ...item,
-    measurements: item.measurements || {},   // ✅ ensure measurements field exists
-    customizationNotes: item.customizationNotes || "" // ✅ ensure notes field exists
-  }));
+  goToCheckout(): void {
+    this.cartItems = this.cartItems.map(item => ({
+      ...item,
+      measurements: item.measurements || {},
+      customizationNotes: item.customizationNotes || ''
+    }));
 
-  localStorage.setItem('cart', JSON.stringify(this.cartItems));
-  this.router.navigate(['/checkout']);
-}
-
+    localStorage.setItem('cart', JSON.stringify(this.cartItems));
+    this.router.navigate(['/checkout']);
+  }
 }
