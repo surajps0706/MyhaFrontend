@@ -43,16 +43,21 @@
         </div>
 
         <!-- Tags for Customization -->
-        <div class="customization-tags">
-          <span class="tag" *ngIf="item.selectedSize">Size: {{ item.selectedSize }}</span>
-          <span style="display: flex;" class="tag" *ngIf="item.sleeveType">Sleeve: {{ item.sleeveType }} 
-            <span *ngIf="item.sleevePrice > 0">+₹{{ item.sleevePrice }}</span>
-          </span>
-          <span class="tag" *ngIf="item.preferredHeight">
-            Height: {{ item.preferredHeight }} in
-            <span *ngIf="item.extraHeightPrice > 0">+₹{{ item.extraHeightPrice }}</span>
-          </span>
-        </div>
+      <div class="customization-tags">
+  <span class="tag" *ngIf="item.selectedSize">Size: {{ item.selectedSize }}</span>
+    <span class="tag" *ngIf="item.selectedSleeve">Sleeve: {{ item.selectedSleeve ? 'Yes' : 'No'}}</span>
+  <span style="display: flex;" class="tag">Height: {{ item.hasHeightCustomization ? 'Yes' : 'No' }}</span>
+  <span class="tag">Neck: {{ item.hasNeckCustomization ? 'Yes' : 'No' }}</span>
+  <span
+    style="display: flex;"
+    class="tag"
+    *ngIf="item.sleeveType"
+  >
+    Sleeve: {{ item.sleeveType }}
+    <span *ngIf="item.sleevePrice > 0">+₹{{ item.sleevePrice }}</span>
+  </span>
+</div>
+
 
         <!-- Measurements -->
         <div class="measurement-summary" *ngIf="hasMeasurements(item.measurements)">

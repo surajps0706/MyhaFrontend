@@ -269,31 +269,55 @@ Link: ${window.location.href}`;
   // =========================
   // Cart
   // =========================
-  addToCart(): void {
-    if (!this.isFormValid()) {
-      alert('Please select a size OR provide the required measurements before adding to cart!');
-      return;
-    }
-
-    const cartItem = {
-      ...this.product,
-      selectedSize: this.sizingMode === 'size' ? (this.product?.selectedSize || null) : null,
-      measurements: this.sizingMode === 'measurements' ? this.measurements : {},
-      sleevePrice: this.selectedSleeve?.price || 0,
-      sleeveType: this.selectedSleeve?.name || 'No Customizations',
-      customizationNotes: this.customizationNotes || null,
-      preferredHeight: this.preferredHeight,
-      extraHeightPrice: this.heightExtra,
-        bustExtra: this.bustExtra,
-        neckCustomization: this.neckCustomizationText || null, // ✅ Added
-
-    };
-
-    this.cartService.addToCart(cartItem);
-
-    this.showToast = true;
-    setTimeout(() => (this.showToast = false), 3000);
+ addToCart(): void {
+  if (!this.isFormValid()) {
+    alert('Please select a size OR provide the required measurements before adding to cart!');
+    return;
   }
+
+  const cartItem: any = {
+    ...this.product,
+    selectedSize: this.sizingMode === 'size' ? (this.product?.selectedSize || null) : null,
+    measurements: this.sizingMode === 'measurements' ? this.measurements : {},
+    customizationNotes: this.customizationNotes || null,
+    bustExtra: this.bustExtra || 0,
+  };
+
+  // ✅ Sleeve
+  if (this.enableSleeveCustomization && this.selectedSleeve) {
+    cartItem.sleeveType = this.selectedSleeve.name;
+    cartItem.sleevePrice = this.selectedSleeve.price;
+  } else {
+    cartItem.sleeveType = null;
+    cartItem.sleevePrice = 0;
+  }
+
+  // ✅ Height
+  if (this.enableHeightCustomization && this.preferredHeight) {
+    cartItem.preferredHeight = this.preferredHeight;
+    cartItem.extraHeightPrice = this.heightExtra || 0;
+    cartItem.hasHeightCustomization = true;
+  } else {
+    cartItem.preferredHeight = null;
+    cartItem.extraHeightPrice = 0;
+    cartItem.hasHeightCustomization = false;
+  }
+
+  // ✅ Neck
+  if (this.enableNeckCustomization && this.neckCustomizationText?.trim()) {
+    cartItem.neckCustomization = this.neckCustomizationText.trim();
+    cartItem.hasNeckCustomization = true;
+  } else {
+    cartItem.neckCustomization = null;
+    cartItem.hasNeckCustomization = false;
+  }
+
+  this.cartService.addToCart(cartItem);
+
+  this.showToast = true;
+  setTimeout(() => (this.showToast = false), 3000);
+}
+
 
   // =========================
   // Notes
