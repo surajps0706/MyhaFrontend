@@ -23,6 +23,8 @@ discountAmount: number = 0;
 couponSuccess: boolean = false;
 couponError: boolean = false;
 handlingCharge: number = 0;
+agreedToTerms: boolean = false;
+
 
 
 
@@ -224,6 +226,10 @@ updateGrandTotal() {
   console.log(
     `🚚 Delivery: ₹${this.shippingCost} (Qty ${totalQty}), Grand Total: ₹${this.grandTotal}`
   );
+}
+
+tac(){
+  this.router.navigate(['/terms-and-conditions'])
 }
 
 

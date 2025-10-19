@@ -141,7 +141,30 @@
         <strong class="total-amount">₹{{ grandTotal || totalAmount | number: '1.0-0' }}</strong>
       </div>
 
-      <button type="submit" (click)="placeOrder()" class="place-order-btn">
+<!-- Terms & Conditions Agreement (Checkout-specific) -->
+<div class="checkout-terms-container">
+  <label class="checkout-terms-label">
+    <input
+      type="checkbox"
+      [(ngModel)]="agreedToTerms"
+      name="checkoutTerms"
+      required
+      class="checkout-terms-checkbox"
+    />
+    <span>I agree to</span>
+ <a
+      (click)="tac()"
+      target="_blank"
+      class="checkout-terms-link"
+    >      Terms & Conditions
+    </a>
+  </label>
+</div>
+
+
+
+
+      <button type="submit" (click)="placeOrder()"  [disabled]="!agreedToTerms" class="place-order-btn">
         Proceed to Pay
       </button>
 

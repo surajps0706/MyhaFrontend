@@ -359,3 +359,47 @@ input:focus {
   padding-top: 10px;
 }
 
+
+.checkout-terms-container {
+  margin: 15px 0;
+}
+
+.checkout-terms-label {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #444;
+  white-space: nowrap;       /* ⛔ keeps everything on one line */
+  width: auto !important;
+}
+
+.checkout-terms-container {
+  text-align: left;
+  margin-top: 10px;
+}
+
+.checkout-terms-checkbox {
+  margin: 0 5px 0 0;
+  accent-color: #000;
+  cursor: pointer;
+}
+
+
+.checkout-terms-checkbox {
+  margin: 0;
+  accent-color: #000;
+  cursor: pointer;
+}
+
+.checkout-terms-link {
+  color: #0077cc;
+  text-decoration: underline;
+  /* cursor: pointer; */
+}
+
+.checkout-terms-link:hover {
+  color: #005fa3;
+}
+
+
