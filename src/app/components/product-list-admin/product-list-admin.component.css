@@ -25,7 +25,8 @@ h2 {
   min-width: 700px;
 }
 
-.admin-table th, .admin-table td {
+.admin-table th,
+.admin-table td {
   padding: 12px;
   text-align: center;
   border-bottom: 1px solid #eee;
@@ -102,12 +103,22 @@ h2 {
 }
 
 .edit-form input,
-.edit-form textarea {
+.edit-form textarea,
+.edit-form select {
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 6px;
   font-size: 14px;
   width: 100%;
+  background: #fff;
+  transition: border-color 0.2s;
+}
+
+.edit-form input:focus,
+.edit-form textarea:focus,
+.edit-form select:focus {
+  border-color: #007bff;
+  outline: none;
 }
 
 .edit-form textarea {
@@ -122,13 +133,7 @@ h2 {
   margin-top: 10px;
 }
 
-label input[type="checkbox"] {
-  transform: scale(1.2);
-  margin-right: 8px;
-  cursor: pointer;
-}
-
-/* 🔸 Sold Out Checkbox Styling */
+/* 🔸 Sold Out Toggle */
 .soldout-toggle {
   display: flex;
   align-items: center;
@@ -178,3 +183,68 @@ label input[type="checkbox"] {
   letter-spacing: 0.3px;
 }
 
+/* 🧵 Fabric Price Section */
+.fabric-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f7fff8;
+  border: 1px solid #b7e4c7;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-top: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.fabric-toggle:hover {
+  background: #e8ffed;
+}
+
+.fabric-toggle input[type='checkbox'] {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #198754;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease-in-out;
+}
+
+.fabric-toggle input[type='checkbox']:checked {
+  background-color: #198754;
+  border-color: #198754;
+}
+
+.fabric-toggle input[type='checkbox']:checked::after {
+  content: '✔';
+  color: white;
+  font-size: 13px;
+  position: absolute;
+  top: 0;
+  left: 4px;
+}
+
+.fabric-toggle span {
+  font-weight: 600;
+  color: #198754;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+}
+
+select[name='fabricBasePrice'] {
+  width: 120px;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  background: #fff;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+select[name='fabricBasePrice']:hover {
+  border-color: #28a745;
+  background: #f8fff9;
+}

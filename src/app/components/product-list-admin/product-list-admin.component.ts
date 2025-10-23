@@ -15,6 +15,9 @@ export class ProductListAdminComponent implements OnInit {
   products: any[] = [];
   editingProduct: any = null;
 
+
+  
+
   private baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
@@ -74,18 +77,21 @@ export class ProductListAdminComponent implements OnInit {
   this.editingProduct.isSoldOut = !!this.editingProduct.isSoldOut;
 
   // Create payload explicitly (cleaner, avoids any unwanted keys)
-  const updatedProduct = {
-    name: this.editingProduct.name,
-    price: this.editingProduct.price,
-    description: this.editingProduct.description,
-    sizes: this.editingProduct.sizes,
-    colors: this.editingProduct.colors,
-    selectedSize: this.editingProduct.selectedSize,
-    selectedColor: this.editingProduct.selectedColor,
-    images: this.editingProduct.images,
-    category: this.editingProduct.category,
-    isSoldOut: this.editingProduct.isSoldOut  // ✅ Include here
-  };
+ const updatedProduct = {
+  name: this.editingProduct.name,
+  price: this.editingProduct.price,
+  description: this.editingProduct.description,
+  sizes: this.editingProduct.sizes,
+  colors: this.editingProduct.colors,
+  selectedSize: this.editingProduct.selectedSize,
+  selectedColor: this.editingProduct.selectedColor,
+  images: this.editingProduct.images,
+  category: this.editingProduct.category,
+  isSoldOut: this.editingProduct.isSoldOut,
+  enableFabricPrice: !!this.editingProduct.enableFabricPrice,
+  fabricBasePrice: this.editingProduct.fabricBasePrice || null
+};
+
 
   this.http.put(`${this.baseUrl}/products/${this.editingProduct.id}`, updatedProduct, { headers })
     .subscribe({

@@ -61,6 +61,24 @@
       <label>Category</label>
       <input [(ngModel)]="editingProduct.category" name="category" required>
 
+
+      <!-- ✅ Fabric Pricing Toggle -->
+<label class="fabric-toggle">
+  <input type="checkbox" [(ngModel)]="editingProduct.enableFabricPrice" name="enableFabricPrice" />
+  <span>Enable Fabric-Based Sleeve Pricing</span>
+</label>
+
+<!-- ✅ Fabric Base Price (shown only when enabled) -->
+<div *ngIf="editingProduct.enableFabricPrice">
+  <label>Fabric Base Price</label>
+  <select [(ngModel)]="editingProduct.fabricBasePrice" name="fabricBasePrice">
+    <option [value]="100">100</option>
+    <option [value]="200">200</option>
+    <option [value]="300">300</option>
+  </select>
+</div>
+
+
       <label>Description</label>
       <textarea [(ngModel)]="editingProduct.description" name="description"></textarea>
 
