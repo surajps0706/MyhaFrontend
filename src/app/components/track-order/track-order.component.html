@@ -31,6 +31,7 @@
         <div class="circle">
           <!-- Icons by step -->
           <span *ngIf="step.includes('Pending')">🕒</span>
+           <span *ngIf="step.includes('Ordered')">⚙️</span>
           <span *ngIf="step.includes('Processing')">⚙️</span>
           <span *ngIf="step.includes('Preparing')">🛠️</span>
           <span *ngIf="step.includes('Packed')">📦</span>

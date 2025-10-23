@@ -23,6 +23,7 @@ export class TrackOrderComponent implements OnInit {
 
   // ⭐ Horizontal Progress Steps
   progressSteps: string[] = [
+    "Ordered",
     "Preparing",
     "Packed",
     "Shipped",

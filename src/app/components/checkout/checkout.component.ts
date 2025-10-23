@@ -233,8 +233,6 @@ tac(){
 }
 
 
-
-
 getTotalQuantity(): number {
   return this.cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
 }
