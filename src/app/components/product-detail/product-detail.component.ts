@@ -102,27 +102,41 @@ ngOnInit(): void {
 
 
 
-  private loadProduct(id: string): void {
-    this.productService.getProductById(id).subscribe({
-      next: (data) => {
-        this.product = data;
-        this.selectedImage = this.product.images?.[0] || '';
-        this.selectedSleeve = this.sleeveOptions[0];
-        this.isKurti = this.product.category?.toLowerCase() === 'kurti';
+private loadProduct(id: string): void {
+  this.productService.getProductById(id).subscribe({
+    next: (data) => {
+      this.product = data;
+      this.selectedImage = this.product.images?.[0] || '';
+      this.selectedSleeve = this.sleeveOptions[0];
+      this.isKurti = this.product.category?.toLowerCase() === 'kurti';
+      this.product.selectedSize = '';
 
-        // init
-        this.product.selectedSize = '';
+      // 👇 Add this part: apply fabric-based sleeve logic
+      if (this.product.enableFabricPrice && this.product.fabricBasePrice) {
+        const base = Number(this.product.fabricBasePrice);
+        this.sleeveOptions = [
+          { name: 'Half Sleeve', price: Math.round(base / 2) },
+          { name: '3/4 Sleeve', price: Math.round((base * 3) / 4) },
+          { name: 'Full Sleeve', price: base }
+        ];
+      } else {
+        this.sleeveOptions = [
+          { name: 'Small Sleeves', price: 0 },
+          { name: 'Elbow Sleeves', price: 50 },
+          { name: '3/4 Sleeves', price: 70 },
+          { name: 'Full Sleeve', price: 100 }
+        ];
+      }
 
-        // load extras
-        this.loadReviews();
-        this.loadRecommendedProducts();
+      // continue existing logic
+      this.loadReviews();
+      this.loadRecommendedProducts();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+    error: (err) => console.error('Error fetching product:', err)
+  });
+}
 
-        // scroll to top for new product
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      },
-      error: (err) => console.error('Error fetching product:', err)
-    });
-  }
 
   // =========================
   // Recommendations

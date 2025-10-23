@@ -16,6 +16,25 @@
     <label>Category</label>
     <input type="text" [(ngModel)]="product.category" name="category" required />
 
+
+    <!-- Enable Fabric Price Toggle -->
+<label class="fabric-toggle">
+  <input type="checkbox" [(ngModel)]="product.enableFabricPrice" name="enableFabricPrice" />
+  Enable Fabric Price
+</label>
+
+<!-- Fabric Price Dropdown (only visible if enabled) -->
+<div *ngIf="product.enableFabricPrice" class="fabric-price-box">
+  <label>Fabric Base Price</label>
+  <select [(ngModel)]="product.fabricBasePrice" name="fabricBasePrice" required>
+    <option value="">-- Select Price --</option>
+    <option *ngFor="let price of fabricPriceOptions" [value]="price">
+      ₹{{ price }}
+    </option>
+  </select>
+</div>
+
+
     <label>Colors (comma separated)</label>
     <input type="text" [(ngModel)]="product.colors" name="colors" placeholder="Lavender, Blue" />
 

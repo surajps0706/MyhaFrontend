@@ -50,3 +50,59 @@ textarea {
 .btn:hover {
   background: #d63384;
 }
+
+
+/* ===============================
+   FABRIC PRICE SECTION STYLING
+   =============================== */
+
+.fabric-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  margin-top: 15px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.fabric-toggle input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #333;
+  cursor: pointer;
+}
+
+.fabric-price-box {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.fabric-price-box label {
+  font-weight: 500;
+  color: #444;
+  margin-bottom: 6px;
+}
+
+.fabric-price-box select {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease;
+}
+
+.fabric-price-box select:focus {
+  border-color: #222;
+}
+
+option {
+  font-size: 0.95rem;
+}
+
+/* Subtle hover on the select for a polished touch */
+.fabric-price-box select:hover {
+  border-color: #888;
+}

@@ -18,14 +18,18 @@ export class ProductUploadComponent {
     description: '',
     category: '',
     colors: '',
-    images: ''
+    images: '',
+    enableFabricPrice: false,
+    fabricBasePrice: ''
   };
 
   uploading = false;
+    fabricPriceOptions = [100, 200, 300]; // dropdown options
+
 
   constructor(private http: HttpClient) {}
 
-  uploadProduct() {
+ uploadProduct() {
     if (this.uploading) return;
     this.uploading = true;
 
@@ -42,19 +46,25 @@ export class ProductUploadComponent {
       selectedColor: this.product.colors.split(',')[0]?.trim() || "",
       images: this.product.images
         ? this.product.images.split(',').map(i => i.trim())
-        : []
+        : [],
+      enableFabricPrice: this.product.enableFabricPrice,
+      fabricBasePrice: this.product.enableFabricPrice
+        ? Number(this.product.fabricBasePrice)
+        : null
     };
 
-    // ✅ token from localStorage instead of hardcoded
     const token = localStorage.getItem('admin_token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-this.http.post(`${environment.apiUrl}/add-product-url`, payload, { headers })
+    this.http.post(`${environment.apiUrl}/add-product-url`, payload, { headers })
       .subscribe({
         next: (res) => {
           console.log('✅ Uploaded:', res);
           alert('✅ Product Uploaded Successfully!');
-          this.product = { name: '', price: '', description: '', category: '', colors: '', images: '' };
+          this.product = { 
+            name: '', price: '', description: '', category: '', 
+            colors: '', images: '', enableFabricPrice: false, fabricBasePrice: '' 
+          };
           this.uploading = false;
         },
         error: (err) => {
