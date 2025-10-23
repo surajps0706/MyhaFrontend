@@ -115,6 +115,7 @@ private loadProduct(id: string): void {
       if (this.product.enableFabricPrice && this.product.fabricBasePrice) {
         const base = Number(this.product.fabricBasePrice);
         this.sleeveOptions = [
+          { name: 'Small Sleeve', price:0 },
           { name: 'Half Sleeve', price: Math.round(base / 2) },
           { name: '3/4 Sleeve', price: Math.round((base * 3) / 4) },
           { name: 'Full Sleeve', price: base }
