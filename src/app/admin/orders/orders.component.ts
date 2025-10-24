@@ -175,4 +175,26 @@ export class OrdersComponent implements OnInit {
       }
     });
   }
+
+
+  // 🗑️ Delete order completely from MongoDB
+deleteOrder(orderId: string) {
+  if (!confirm(`⚠️ Permanently delete order ${orderId}? This cannot be undone.`)) return;
+
+  this.http.delete(`${this.baseUrl}/delete-order/${orderId}`, {
+    headers: this.authHeaders()
+  }).subscribe({
+    next: (res: any) => {
+      alert(`✅ ${res.message || 'Order deleted successfully.'}`);
+      // Remove from UI immediately
+      this.orders = this.orders.filter(o => o.orderId !== orderId);
+      this.filteredOrders = this.filteredOrders.filter(o => o.orderId !== orderId);
+    },
+    error: (err) => {
+      console.error('❌ Delete order failed:', err);
+      alert('Failed to delete order. Please try again.');
+    }
+  });
+}
+
 }
