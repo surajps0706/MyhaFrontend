@@ -3,9 +3,11 @@
 
   <!-- Product List -->
   <div *ngIf="!editingProduct" class="table-container">
-    <table class="admin-table">
+    <!-- ✅ Added cdkDropList -->
+    <table class="admin-table" cdkDropList (cdkDropListDropped)="drop($event)">
       <thead>
         <tr>
+          <th style="width: 40px;"></th> <!-- Drag handle column -->
           <th>Image</th>
           <th>Name</th>
           <th>Price</th>
@@ -14,19 +16,21 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let p of products">
+        <!-- ✅ Added cdkDrag on row -->
+        <tr *ngFor="let p of products" cdkDrag>
+          <td class="drag-cell" cdkDragHandle title="Drag to reorder">☰</td>
           <td>
-            <img [src]="p.images[0]" alt="{{p.name}}" class="thumb">
+            <img [src]="p.images[0]" alt="{{p.name}}" class="thumb" />
           </td>
           <td>{{ p.name }}</td>
-<td>
-  <ng-container *ngIf="!p.isSoldOut; else soldOut">
-    ₹{{ p.price }}
-  </ng-container>
-  <ng-template #soldOut>
-    <span class="sold-out-badge">Sold Out</span>
-  </ng-template>
-</td>
+          <td>
+            <ng-container *ngIf="!p.isSoldOut; else soldOut">
+              ₹{{ p.price }}
+            </ng-container>
+            <ng-template #soldOut>
+              <span class="sold-out-badge">Sold Out</span>
+            </ng-template>
+          </td>
           <td>{{ p.category }}</td>
           <td>
             <button class="btn edit" (click)="editProduct(p)">✏️ Edit</button>
@@ -42,48 +46,48 @@
     <h3>✏️ Edit Product</h3>
     <form (ngSubmit)="saveProduct()">
       <label>Name</label>
-      <input [(ngModel)]="editingProduct.name" name="name" required>
+      <input [(ngModel)]="editingProduct.name" name="name" required />
 
- <label class="soldout-toggle">
-  <input
-    type="checkbox"
-    [(ngModel)]="editingProduct.isSoldOut"
-    name="isSoldOut"
-  />
-  <span>Mark as Sold Out</span>
-</label>
-
-
+      <label class="soldout-toggle">
+        <input
+          type="checkbox"
+          [(ngModel)]="editingProduct.isSoldOut"
+          name="isSoldOut"
+        />
+        <span>Mark as Sold Out</span>
+      </label>
 
       <label>Price</label>
-      <input type="number" [(ngModel)]="editingProduct.price" name="price" required>
+      <input type="number" [(ngModel)]="editingProduct.price" name="price" required />
 
       <label>Category</label>
-      <input [(ngModel)]="editingProduct.category" name="category" required>
-
+      <input [(ngModel)]="editingProduct.category" name="category" required />
 
       <!-- ✅ Fabric Pricing Toggle -->
-<label class="fabric-toggle">
-  <input type="checkbox" [(ngModel)]="editingProduct.enableFabricPrice" name="enableFabricPrice" />
-  <span>Enable Fabric-Based Sleeve Pricing</span>
-</label>
+      <label class="fabric-toggle">
+        <input
+          type="checkbox"
+          [(ngModel)]="editingProduct.enableFabricPrice"
+          name="enableFabricPrice"
+        />
+        <span>Enable Fabric-Based Sleeve Pricing</span>
+      </label>
 
-<!-- ✅ Fabric Base Price (shown only when enabled) -->
-<div *ngIf="editingProduct.enableFabricPrice">
-  <label>Fabric Base Price</label>
-  <select [(ngModel)]="editingProduct.fabricBasePrice" name="fabricBasePrice">
-    <option [value]="100">100</option>
-    <option [value]="200">200</option>
-    <option [value]="300">300</option>
-  </select>
-</div>
-
+      <!-- ✅ Fabric Base Price (shown only when enabled) -->
+      <div *ngIf="editingProduct.enableFabricPrice">
+        <label>Fabric Base Price</label>
+        <select [(ngModel)]="editingProduct.fabricBasePrice" name="fabricBasePrice">
+          <option [value]="100">100</option>
+          <option [value]="200">200</option>
+          <option [value]="300">300</option>
+        </select>
+      </div>
 
       <label>Description</label>
       <textarea [(ngModel)]="editingProduct.description" name="description"></textarea>
 
       <label>Colors (comma separated)</label>
-      <input [(ngModel)]="editingProduct.colors" name="colors">
+      <input [(ngModel)]="editingProduct.colors" name="colors" />
 
       <label>Image URLs (comma separated)</label>
       <textarea [(ngModel)]="editingProduct.images" name="images"></textarea>
