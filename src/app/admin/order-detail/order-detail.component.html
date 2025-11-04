@@ -77,8 +77,21 @@
   </table>
 
   <!-- Status -->
-  <h3>Status</h3>
-  <p><b>Current:</b> {{ order.status }}</p>
-  <p><b>AWB:</b> {{ order.awb || '—' }}</p>
-  <p><b>Placed On:</b> {{ order.createdAt | date:'mediumDate' }}</p>
+ <!-- Status -->
+<h3>Status</h3>
+<p><b>Current:</b> {{ order.status }}</p>
+
+<!-- Dropdown to update -->
+<label for="status">Update Status:</label>
+<select style="display: flex
+;
+    margin: 5px;" id="status" [(ngModel)]="selectedStatus">
+  <option *ngFor="let s of statusOptions" [value]="s">{{ s }}</option>
+</select>
+
+<button (click)="updateStatus()" class="update-btn">Update</button>
+
+<p><b>AWB:</b> {{ order.awb || '—' }}</p>
+<p><b>Placed On:</b> {{ order.createdAt | date:'mediumDate' }}</p>
+
 </div>

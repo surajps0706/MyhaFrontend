@@ -102,6 +102,57 @@
   color: #fff;
 }
 
+
+/* Status section */
+.status-update {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.status-update label {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.status-update select {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  background: #fff;
+  min-width: 160px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.status-update select:focus {
+  border-color: #000;
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+  outline: none;
+}
+
+/* Update button */
+.update-btn {
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.update-btn:hover {
+  background: #333;
+}
+
+
+
 .status-preparing { background: #ff9800; }
 .status-packed { background: #673ab7; }
 .status-shipped { background: #2196f3; }
