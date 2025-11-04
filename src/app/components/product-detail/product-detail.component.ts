@@ -111,6 +111,10 @@ private loadProduct(id: string): void {
       this.isKurti = this.product.category?.toLowerCase() === 'kurti';
       this.product.selectedSize = '';
 
+      const stockValue = Number(this.product.stock);
+  this.product.stock = !isNaN(stockValue) && stockValue > 0 ? stockValue : 10; // default to 10 if missing/invalid
+  this.product.isSoldOut = this.product.stock <= 0;
+
       // 👇 Add this part: apply fabric-based sleeve logic
       if (this.product.enableFabricPrice && this.product.fabricBasePrice) {
         const base = Number(this.product.fabricBasePrice);

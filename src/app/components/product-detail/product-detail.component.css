@@ -358,6 +358,25 @@ input:checked + .slider:before {
   transform: translateX(22px);
 }
 
+/* stocks*/
+
+.stock-info {
+  margin-top: 4px;
+  font-size: 18px;
+  color: #c1a57b;
+}
+
+.stock-info.low-stock {
+  color: #e63946; /* red tone when ≤ 5 */
+  font-weight: 600;
+}
+
+.sold-out-text {
+  color: #b71c1c;
+  font-weight: 700;
+}
+
+
 
 /* neck */
 

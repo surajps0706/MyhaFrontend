@@ -1,7 +1,6 @@
 <div class="upload-container">
   <h2>Add New Product</h2>
 
-  <!-- novalidate prevents browser auto-submit refresh -->
   <form (ngSubmit)="uploadProduct()" #uploadForm="ngForm" novalidate>
 
     <label>Product Name</label>
@@ -16,24 +15,34 @@
     <label>Category</label>
     <input type="text" [(ngModel)]="product.category" name="category" required />
 
+    <!-- 🔹 Stock Control -->
+    <label>Stock Left</label>
+    <div class="stock-control">
+      <button type="button" (click)="decreaseStock()">−</button>
+      <input
+        type="number"
+        [(ngModel)]="product.stock"
+        name="stock"
+        min="0"
+        required
+      />
+      <button type="button" (click)="increaseStock()">+</button>
+    </div>
 
-    <!-- Enable Fabric Price Toggle -->
-<label class="fabric-toggle">
-  <input type="checkbox" [(ngModel)]="product.enableFabricPrice" name="enableFabricPrice" />
-  Enable Fabric Price
-</label>
+    <!-- Fabric Price Toggle -->
+    <label class="fabric-toggle">
+      <input type="checkbox" [(ngModel)]="product.enableFabricPrice" name="enableFabricPrice" />
+      Enable Fabric Price
+    </label>
 
-<!-- Fabric Price Dropdown (only visible if enabled) -->
-<div *ngIf="product.enableFabricPrice" class="fabric-price-box">
-  <label>Fabric Base Price</label>
-  <select [(ngModel)]="product.fabricBasePrice" name="fabricBasePrice" required>
-    <option value="">-- Select Price --</option>
-    <option *ngFor="let price of fabricPriceOptions" [value]="price">
-      ₹{{ price }}
-    </option>
-  </select>
-</div>
-
+    <!-- Fabric Price Dropdown -->
+    <div *ngIf="product.enableFabricPrice" class="fabric-price-box">
+      <label>Fabric Base Price</label>
+      <select [(ngModel)]="product.fabricBasePrice" name="fabricBasePrice" required>
+        <option value="">-- Select Price --</option>
+        <option *ngFor="let price of fabricPriceOptions" [value]="price">₹{{ price }}</option>
+      </select>
+    </div>
 
     <label>Colors (comma separated)</label>
     <input type="text" [(ngModel)]="product.colors" name="colors" placeholder="Lavender, Blue" />
@@ -41,7 +50,6 @@
     <label>Cloudinary Image URLs (comma separated)</label>
     <textarea [(ngModel)]="product.images" name="images" placeholder="Paste URLs here separated by commas"></textarea>
 
-    <!-- ✅ only submit type button -->
     <button type="submit" class="btn" [disabled]="uploading">
       {{ uploading ? 'Uploading...' : 'Save Product' }}
     </button>

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { environment } from '../../../environments/environment';  // ✅ import env
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-product-upload',
@@ -20,16 +20,24 @@ export class ProductUploadComponent {
     colors: '',
     images: '',
     enableFabricPrice: false,
-    fabricBasePrice: ''
+    fabricBasePrice: '',
+    stock: 10  // ✅ added stock
   };
 
   uploading = false;
-    fabricPriceOptions = [100, 200, 300]; // dropdown options
-
+  fabricPriceOptions = [100, 200, 300];
 
   constructor(private http: HttpClient) {}
 
- uploadProduct() {
+  increaseStock() {
+    this.product.stock++;
+  }
+
+  decreaseStock() {
+    if (this.product.stock > 0) this.product.stock--;
+  }
+
+  uploadProduct() {
     if (this.uploading) return;
     this.uploading = true;
 
@@ -50,7 +58,8 @@ export class ProductUploadComponent {
       enableFabricPrice: this.product.enableFabricPrice,
       fabricBasePrice: this.product.enableFabricPrice
         ? Number(this.product.fabricBasePrice)
-        : null
+        : null,
+      stock: this.product.stock  // ✅ include stock in payload
     };
 
     const token = localStorage.getItem('admin_token');
@@ -61,9 +70,10 @@ export class ProductUploadComponent {
         next: (res) => {
           console.log('✅ Uploaded:', res);
           alert('✅ Product Uploaded Successfully!');
-          this.product = { 
-            name: '', price: '', description: '', category: '', 
-            colors: '', images: '', enableFabricPrice: false, fabricBasePrice: '' 
+          this.product = {
+            name: '', price: '', description: '', category: '',
+            colors: '', images: '', enableFabricPrice: false,
+            fabricBasePrice: '', stock: 10
           };
           this.uploading = false;
         },

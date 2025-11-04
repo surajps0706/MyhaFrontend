@@ -25,18 +25,24 @@ export class ProductListAdminComponent implements OnInit {
   }
 
   // 🟩 Load all products from backend
-  loadProducts() {
-    this.http.get<any[]>(`${this.baseUrl}/products`).subscribe({
-      next: (res) => {
-        // ✅ Sort by displayOrder if it exists
-        this.products = res.sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
-      },
-      error: (err) => {
-        console.error('❌ Failed to load products:', err);
-        alert('Failed to load products');
-      }
-    });
-  }
+loadProducts() {
+  this.http.get<any[]>(`${this.baseUrl}/products`).subscribe({
+    next: (res) => {
+      // ✅ Ensure every product has at least a default stock of 10
+      this.products = res
+        .map(p => ({
+          ...p,
+          stock: p.stock ?? 10   // if undefined or null, set 10
+        }))
+        .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+    },
+    error: (err) => {
+      console.error('❌ Failed to load products:', err);
+      alert('Failed to load products');
+    }
+  });
+}
+
 
   // 🖱️ Handle drag-and-drop reorder
   drop(event: CdkDragDrop<any[]>) {
@@ -108,7 +114,8 @@ export class ProductListAdminComponent implements OnInit {
       isSoldOut: this.editingProduct.isSoldOut,
       enableFabricPrice: !!this.editingProduct.enableFabricPrice,
       fabricBasePrice: this.editingProduct.fabricBasePrice || null,
-      displayOrder: this.editingProduct.displayOrder || 0
+      displayOrder: this.editingProduct.displayOrder || 0,
+      stock: Number(this.editingProduct.stock) || 0 
     };
 
     this.http
@@ -154,4 +161,17 @@ export class ProductListAdminComponent implements OnInit {
       }
     });
   }
+
+
+  increaseStock() {
+  if (!this.editingProduct) return;
+  this.editingProduct.stock = (this.editingProduct.stock || 0) + 1;
+}
+
+decreaseStock() {
+  if (!this.editingProduct) return;
+  const current = this.editingProduct.stock || 0;
+  this.editingProduct.stock = current > 0 ? current - 1 : 0;
+}
+
 }

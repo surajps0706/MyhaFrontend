@@ -36,11 +36,24 @@
     ₹{{ product.price }}
   </span>
 
+<!-- Stock info -->
+
+
+
   <!-- ✅ Show Sold Out text otherwise -->
   <ng-template #soldOut>
     <span class="sold-out-text">Sold Out</span>
   </ng-template>
 </div>
+
+<p 
+  *ngIf="!product.isSoldOut && product.stock !== undefined"
+  class="stock-info"
+  [class.low-stock]="product.stock <= 5"
+>
+  {{ product.stock }} left in stock
+</p>
+
 
 
     <!-- Collapsible Description -->
