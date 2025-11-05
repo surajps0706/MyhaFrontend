@@ -20,6 +20,14 @@
         <strong>Your Order ID:</strong>
         <span class="order-id">{{ orderId }}</span>
       </p>
+
+      <!-- 📅 Estimated Delivery -->
+      <p *ngIf="estimatedStart && estimatedEnd">
+        <strong>Estimated Delivery:</strong>
+        <span>{{ estimatedStart | date:'MMM d' }} – {{ estimatedEnd | date:'MMM d, y' }}</span>
+        <br />
+        <small>(Excluding Sundays)</small>
+      </p>
     </div>
 
     <!-- Buttons -->

@@ -13,6 +13,8 @@ import { RouterModule } from '@angular/router';
 })
 export class OrderSuccessComponent implements OnInit {
   orderId: string | null = null;
+  estimatedStart: Date | null = null;
+  estimatedEnd: Date | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -22,10 +24,31 @@ export class OrderSuccessComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       const id = params['orderId'];
-      this.orderId = id ? String(id) : null; // ✅ ensures numeric IDs display properly
+      this.orderId = id ? String(id) : null;
     });
 
-    // ✅ Clear cart once order success page is reached
+    // ✅ Clear cart
     this.cartService.clearCart();
+
+    // ✅ Calculate estimated delivery window
+    const today = new Date();
+    const startDate = this.addDaysSkippingSundays(today, 12); // skip 12 days
+    const endDate = this.addDaysSkippingSundays(startDate, 12); // next 12 (excluding Sundays)
+
+    this.estimatedStart = startDate;
+    this.estimatedEnd = endDate;
+  }
+
+  private addDaysSkippingSundays(start: Date, daysToAdd: number): Date {
+    const date = new Date(start);
+    let added = 0;
+
+    while (added < daysToAdd) {
+      date.setDate(date.getDate() + 1);
+      if (date.getDay() !== 0) { // 0 = Sunday
+        added++;
+      }
+    }
+    return date;
   }
 }
