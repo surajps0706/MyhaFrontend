@@ -344,3 +344,11 @@
     display: block;
   }
 }
+
+
+.out-of-stock {
+  color: #c0392b;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
