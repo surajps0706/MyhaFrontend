@@ -111,15 +111,20 @@ private loadProduct(id: string): void {
       this.isKurti = this.product.category?.toLowerCase() === 'kurti';
       this.product.selectedSize = '';
 
+      // ✅ stock handling + sold out logic
       const stockValue = Number(this.product.stock);
-  this.product.stock = !isNaN(stockValue) && stockValue > 0 ? stockValue : 10; // default to 10 if missing/invalid
-  this.product.isSoldOut = this.product.stock <= 0;
+      this.product.stock = !isNaN(stockValue) && stockValue >= 0 ? stockValue : 10;
 
-      // 👇 Add this part: apply fabric-based sleeve logic
+      // only auto-mark sold out if admin hasn’t already done it
+      if (this.product.isSoldOut !== true) {
+        this.product.isSoldOut = this.product.stock <= 0;
+      }
+
+      // 👇 fabric-based sleeve logic
       if (this.product.enableFabricPrice && this.product.fabricBasePrice) {
         const base = Number(this.product.fabricBasePrice);
         this.sleeveOptions = [
-          { name: 'Small Sleeve', price:0 },
+          { name: 'Small Sleeve', price: 0 },
           { name: 'Half Sleeve', price: Math.round(base / 2) },
           { name: '3/4 Sleeve', price: Math.round((base * 3) / 4) },
           { name: 'Full Sleeve', price: base }
@@ -133,7 +138,6 @@ private loadProduct(id: string): void {
         ];
       }
 
-      // continue existing logic
       this.loadReviews();
       this.loadRecommendedProducts();
       window.scrollTo({ top: 0, behavior: 'smooth' });
