@@ -53,20 +53,22 @@ export class HeaderComponent {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }
 
-  onSearch(event: any) {
-    const query = event.target.value;
-    this.searchService.updateSearch(query);
+onSearch(event: any) {
+  const query = event.target.value.trim();
+  this.searchQuery = query;
+  this.searchService.updateSearch(query);
 
-    if (query.length > 1) {
-      this.http.get<any[]>(`${this.apiUrl}/products`).subscribe(data => {
-        this.suggestions = data
-          .filter(p => p.name.toLowerCase().includes(query.toLowerCase()))
-          .slice(0, 5);
-      });
-    } else {
-      this.suggestions = [];
-    }
+  if (query.length > 1) {
+    this.http.get<any[]>(`${this.apiUrl}/products`).subscribe(data => {
+      this.suggestions = data
+        .filter(p => p.name.toLowerCase().includes(query.toLowerCase()))
+        .slice(0, 5);
+    });
+  } else {
+    this.suggestions = [];
   }
+}
+
 
   clearSuggestions() {
     this.suggestions = [];

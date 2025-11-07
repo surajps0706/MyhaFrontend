@@ -36,7 +36,7 @@
 }
 .nav-links a:hover,
 .nav-links .active-link {
-  color:  linear-gradient(135deg, #c1a57b, #a48860); /* couture accent */
+  color: linear-gradient(135deg, #c1a57b, #a48860);
 }
 .nav-links a::after {
   content: "";
@@ -45,7 +45,7 @@
   left: 0;
   width: 0;
   height: 2px;
-  background:  linear-gradient(135deg, #c1a57b, #a48860);
+  background: linear-gradient(135deg, #c1a57b, #a48860);
   transition: width 0.3s ease;
 }
 .nav-links a:hover::after,
@@ -97,7 +97,7 @@
   display: flex;
   align-items: center;
   font-size: 1.2rem;
-  color: #d63384; /* brand accent */
+  color: #d63384;
   transition: all 0.3s ease;
 }
 .wishlist-icon .icon {
@@ -105,7 +105,7 @@
   line-height: 1;
 }
 .wishlist-icon:hover {
-  color: #b52c6d; /* darker pink */
+  color: #b52c6d;
   transform: scale(1.1);
 }
 .wishlist-icon .badge {
@@ -159,8 +159,10 @@
 /* === MOBILE BACKDROP === */
 .mobile-menu-backdrop {
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  top: 0; 
+  left: 0;
+  width: 100%; 
+  height: 100%;
   background: rgba(0,0,0,0.4);
   backdrop-filter: blur(3px);
   z-index: 998;
@@ -169,7 +171,6 @@
 /* === MOBILE DRAWER === */
 .mobile-menu {
   position: fixed;
-  top: 0;
   right: -100%;
   width: 80%;
   max-width: 320px;
@@ -204,24 +205,108 @@
   transition: color 0.2s ease;
 }
 .close-btn:hover {
-  color:  linear-gradient(135deg, #c1a57b, #a48860);
+  color: linear-gradient(135deg, #c1a57b, #a48860);
 }
 
 /* === MOBILE SEARCH === */
-.mobile-search input {
-  width: 89%;
-  padding: 12px 14px;
+.mobile-search {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  z-index: 1001;
+}
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input-wrapper input {
+  width: 85%;
+  padding: 12px 40px 12px 14px;
   border-radius: 25px;
   border: 1px solid #eee;
-  margin-bottom: 16px;
   font-size: 0.95rem;
   background: #f8f8f8;
   transition: all 0.3s ease;
 }
-.mobile-search input:focus {
+
+.input-wrapper input:focus {
   background: #fff;
-  border-color:  linear-gradient(135deg, #c1a57b, #a48860);
+  border-color: linear-gradient(135deg, #c1a57b, #a48860);
   box-shadow: 0 0 6px rgba(214, 51, 132, 0.2);
+}
+
+.input-wrapper button {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #555;
+  transition: transform 0.2s ease;
+}
+.input-wrapper button:hover {
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* === MOBILE SUGGESTIONS (VISIBLE DROPDOWN) === */
+.mobile-search .suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  max-height: 260px;
+  overflow-y: auto;
+  z-index: 2000;
+  margin-top: 5px;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.mobile-search .suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.mobile-search .suggestion-item:hover {
+  background: #f9f9f9;
+}
+
+.mobile-search .suggestion-item img {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid #eee;
+}
+
+.mobile-search .suggestion-item .info {
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-search .suggestion-item .name {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.mobile-search .suggestion-item .price {
+  font-size: 0.85rem;
+  color: #d63384;
+  font-weight: 600;
 }
 
 /* === MOBILE LINKS === */
@@ -237,7 +322,7 @@
   border-bottom: none;
 }
 .mobile-menu a:hover {
-  color:  linear-gradient(135deg, #c1a57b, #a48860);
+  color: linear-gradient(135deg, #c1a57b, #a48860);
 }
 
 /* === DESKTOP SEARCH === */
@@ -252,11 +337,12 @@
   padding: 6px 14px;
   border: 1px solid #eee;
   transition: all 0.3s ease;
+  position: relative;
 }
 .search-bar:focus-within {
   background: #fff;
-  border-color:  linear-gradient(135deg, #c1a57b, #a48860);
-  box-shadow: 0 0 6px rgba(214, 51, 132, 0.2);
+  /* border-color: linear-gradient(135deg, #c1a57b, #a48860); */
+  /* box-shadow: 0 0 6px rgba(214, 51, 132, 0.2); */
 }
 .search-bar input {
   flex: 1;
@@ -275,10 +361,10 @@
   transition: color 0.2s ease;
 }
 .search-bar button:hover {
-  color:  linear-gradient(135deg, #c1a57b, #a48860);
+  color: linear-gradient(135deg, #c1a57b, #a48860);
 }
 
-/* === Suggestions Dropdown === */
+/* === DESKTOP SUGGESTIONS === */
 .suggestions {
   position: absolute;
   top: 100%;
