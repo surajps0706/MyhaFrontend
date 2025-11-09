@@ -43,9 +43,29 @@ agreedToTerms: boolean = false;
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  ngOnInit(): void {
-    this.cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
+ngOnInit(): void {
+  // ✅ Load cart from localStorage
+  this.cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
+
+  // ✅ If cart is empty, prevent proceeding
+  if (!this.cartItems.length) {
+    alert('🛒 Your cart is empty. Please add items before checkout.');
+    this.router.navigate(['/products']);
+    return;
   }
+
+  // ✅ Initialize totals immediately
+  this.updateGrandTotal();
+
+  // ✅ Auto-fetch shipping cost if pincode already entered (e.g. returning user)
+  if (this.checkoutData.pincode && this.checkoutData.pincode.length === 6) {
+    this.onPincodeChange();
+  }
+
+  console.log('🛍️ Cart loaded:', this.cartItems);
+  console.log('💰 Initial grand total:', this.grandTotal);
+}
+
 
   getItemTotal(item: any): number {
     const basePrice = Number(item.price?.toString().replace(/[^0-9]/g, '') || 0);
@@ -59,21 +79,58 @@ agreedToTerms: boolean = false;
     return this.cartItems.reduce((total, item) => total + this.getItemTotal(item), 0);
   }
 
-  placeOrder(): void {
-    if (!this.checkoutData.name || !this.checkoutData.phone || !this.checkoutData.addressLine1 || !this.checkoutData.email || !this.checkoutData.pincode || !this.checkoutData.city || !this.checkoutData.state) {
-      alert('⚠️ Please fill all required fields before placing your order.');
-      return;
-    }
-
-    this.http.post(`${this.baseUrl}/create-order`, { amount: this.grandTotal })
-      .subscribe({
-        next: (order: any) => this.openRazorpay(order),
-        error: err => {
-          console.error('Error creating order:', err);
-          alert('❌ Could not initiate payment.');
-        }
-      });
+placeOrder(): void {
+  // ✅ Step 1: Basic validation
+  if (
+    !this.checkoutData.name ||
+    !this.checkoutData.phone ||
+    !this.checkoutData.email ||
+    !this.checkoutData.addressLine1 ||
+    !this.checkoutData.city ||
+    !this.checkoutData.state ||
+    !this.checkoutData.pincode
+  ) {
+    alert('⚠️ Please fill all required fields before placing your order.');
+    return;
   }
+
+  // ✅ Step 2: Clean & validate amount
+  const cleanAmount = Number(this.grandTotal) || 0;
+  if (cleanAmount <= 0) {
+    alert('⚠️ Invalid amount. Please refresh or recheck your cart.');
+    return;
+  }
+
+  // ✅ Step 3: Build proper payload
+  const payload = {
+    amount: cleanAmount,
+    currency: 'INR',
+    destination_pincode: this.checkoutData.pincode,
+    notes: {
+      name: this.checkoutData.name,
+      phone: this.checkoutData.phone,
+    },
+  };
+
+  console.log('📦 Payload sent to backend:', payload);
+
+  // ✅ Step 4: Create Razorpay order
+  this.http.post(`${this.baseUrl}/create-order`, payload).subscribe({
+    next: (order: any) => {
+      console.log('✅ Order created successfully:', order);
+      this.openRazorpay(order);
+    },
+    error: (err) => {
+      console.error('❌ Error creating order:', err);
+      if (err?.error?.error) {
+        alert(`❌ ${err.error.error}`);
+      } else {
+        alert('❌ Could not initiate payment. Please try again.');
+      }
+    },
+  });
+}
+
 
 onPincodeChange() {
   if (this.checkoutData.pincode && this.checkoutData.pincode.length === 6) {
