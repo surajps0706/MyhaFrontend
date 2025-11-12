@@ -175,7 +175,8 @@ openRazorpay(order: any) {
 
       const orderData = {
         razorpayPaymentId: response.razorpay_payment_id,
-        razorpayOrderId: order.razorpay_order.id, // ✅ FIXED here too
+        razorpayOrderId: order.razorpay_order.id,
+         orderId: order.orderId, // ✅ FIXED here too
         checkoutData: {
           ...this.checkoutData,
           address: fullAddress
