@@ -178,8 +178,15 @@ openRazorpay(order: any) {
         razorpayOrderId: order.razorpay_order.id,
          orderId: order.orderId, // ✅ FIXED here too
         checkoutData: {
-          ...this.checkoutData,
-          address: fullAddress
+         name: this.checkoutData.name,
+  phone: this.checkoutData.phone,
+  email: this.checkoutData.email,
+  addressLine1: this.checkoutData.addressLine1,
+  addressLine2: this.checkoutData.addressLine2 || "",
+  address: fullAddress,
+  city: this.checkoutData.city,
+  state: this.checkoutData.state,
+  pincode: this.checkoutData.pincode
         },
         cartItems: this.cartItems,
         grandTotal: Math.round(this.grandTotal),
