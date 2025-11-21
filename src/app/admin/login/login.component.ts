@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../environments/environment';
-
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -13,12 +13,13 @@ import { environment } from '../../../environments/environment';
   template: `
     <div class="login-container">
       <h2>🔐 Admin Login</h2>
+
       <form (ngSubmit)="login()">
         <input
-          type="text"
-          placeholder="Username"
-          [(ngModel)]="username"
-          name="username"
+          type="email"
+          placeholder="Email"
+          [(ngModel)]="email"
+          name="email"
           required
         />
         <input
@@ -28,7 +29,11 @@ import { environment } from '../../../environments/environment';
           name="password"
           required
         />
-        <button type="submit">Login</button>
+
+        <button type="submit" [disabled]="loading">
+          {{ loading ? 'Logging in...' : 'Login' }}
+        </button>
+
         <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
       </form>
     </div>
@@ -60,8 +65,9 @@ import { environment } from '../../../environments/environment';
       border-radius: 4px;
       font-size: 15px;
     }
-    button:hover {
-      background: #333;
+    button[disabled] {
+      background: #555;
+      cursor: not-allowed;
     }
     .error {
       color: red;
@@ -69,26 +75,53 @@ import { environment } from '../../../environments/environment';
     }
   `]
 })
-export class LoginComponent {
-  username = '';
+export class LoginComponent implements OnInit {
+
+  email = '';
   password = '';
   errorMessage = '';
+  loading = false;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
-login() {
-  this.http.post<any>(`${environment.apiUrl}/admin/login`, {
-    username: this.username,
-    password: this.password
-  }).subscribe({
-    next: (res) => {
-      localStorage.setItem('admin_token', res.token);
+  ngOnInit() {
+    // If already logged in → go to admin
+    if (this.authService.isAdmin()) {
       this.router.navigate(['/admin/orders']);
-    },
-    error: (err) => {
-      console.error("Login error:", err);
-      this.errorMessage = 'Invalid credentials';
     }
-  });
-}
+  }
+
+  login() {
+    this.errorMessage = '';
+    this.loading = true;
+
+    this.http.post<any>(`${environment.apiUrl}/login`, {
+      email: this.email,
+      password: this.password
+    }).subscribe({
+      next: (res) => {
+        // ✔ Save via AuthService
+        this.authService.saveAuthData(res.token, res.role, res.name);
+
+        // ✔ Redirect by role
+        if (res.role === 'admin') {
+          this.router.navigate(['/admin/orders']);
+        } else {
+          this.router.navigate(['/']);
+        }
+
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error("Login error:", err);
+        this.errorMessage = 'Invalid email or password';
+        this.authService.logout(); // clear everything cleanly
+        this.loading = false;
+      }
+    });
+  }
 }

@@ -1,0 +1,91 @@
+<div class="signup-container">
+  <h2>Create Your Account</h2>
+
+  <form (ngSubmit)="signup()" #form="ngForm">
+
+    <!-- Name -->
+    <div class="form-group">
+      <label>Name *</label>
+      <input
+        type="text"
+        name="name"
+        [(ngModel)]="formData.name"
+        required
+        placeholder="John Doe"
+      />
+    </div>
+
+    <!-- Email -->
+    <div class="form-group">
+      <label>Email *</label>
+      <input
+        type="email"
+        name="email"
+        [(ngModel)]="formData.email"
+        required
+        placeholder="john@example.com"
+        #emailRef="ngModel"
+        pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+      />
+
+      <p class="error" *ngIf="emailRef.invalid && emailRef.touched">
+        Enter a valid email.
+      </p>
+    </div>
+
+    <!-- Phone -->
+    <div class="form-group">
+      <label>Phone *</label>
+      <input
+        type="tel"
+        name="phone"
+        [(ngModel)]="formData.phone"
+        minlength="10"
+        maxlength="10"
+        required
+        placeholder="9876543210"
+      />
+    </div>
+
+    <!-- Password -->
+    <div class="form-group">
+      <label>Password *</label>
+      <input
+        type="password"
+        name="password"
+        [(ngModel)]="formData.password"
+        required
+        minlength="6"
+        placeholder="Minimum 6 characters"
+      />
+    </div>
+
+    <!-- Confirm Password -->
+    <div class="form-group">
+      <label>Confirm Password *</label>
+      <input
+        type="password"
+        name="confirmPassword"
+        [(ngModel)]="formData.confirmPassword"
+        required
+        placeholder="Re-enter password"
+      />
+    </div>
+
+    <p class="error" *ngIf="passwordMismatch">
+      Passwords do not match.
+    </p>
+
+    <button type="submit" [disabled]="loading">
+      {{ loading ? 'Creating account...' : 'Sign Up' }}
+    </button>
+
+    <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
+    <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+    <div class="login-link">
+      Already have an account? <a routerLink="/login">Login</a>
+    </div>
+
+  </form>
+</div>

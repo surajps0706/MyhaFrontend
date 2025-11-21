@@ -1,77 +1,96 @@
-import { Routes, Router } from '@angular/router';
+import { Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { OrderSuccessComponent } from './components/order-success/order-success.component';
 import { TrackOrderComponent } from './components/track-order/track-order.component';
-import { inject } from '@angular/core';
-
-// ✅ Inline guard for admin routes
-function adminGuard() {
-  const token = localStorage.getItem('admin_token');
-  const router = inject(Router);
-
-  if (!token) {
-    router.navigate(['/admin/login']);
-    return false;
-  }
-  return true;
-}
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
+
   // =========================
   // 🏠 PUBLIC ROUTES
   // =========================
   { path: '', component: HomeComponent },
   { path: 'products', component: ProductListComponent },
 
-  // 🛍️ Lazy load Product Detail
   {
     path: 'product/:id',
     loadComponent: () =>
-      import('./components/product-detail/product-detail.component').then(
-        (m) => m.ProductDetailComponent
-      ),
-      runGuardsAndResolvers: 'paramsOrQueryParamsChange'
-        
-      
+      import('./components/product-detail/product-detail.component')
+        .then(m => m.ProductDetailComponent),
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange'
   },
 
-   {
+  {
     path: 'terms-and-conditions',
     loadComponent: () =>
-      import('./pages/terms-and-conditions/terms-and-conditions.component').then(
-        (m) => m.TermsAndConditionsComponent
-      ),
+      import('./pages/terms-and-conditions/terms-and-conditions.component')
+        .then(m => m.TermsAndConditionsComponent),
   },
 
-  // 🛒 Cart
   {
     path: 'cart',
     loadComponent: () =>
-      import('./components/cart/cart.component').then((m) => m.CartComponent),
+      import('./components/cart/cart.component')
+        .then(m => m.CartComponent),
   },
 
-  // ❤️ Wishlist
   {
     path: 'wishlist',
     loadComponent: () =>
-      import('./components/wishlist.component').then(
-        (m) => m.WishlistComponent
-      ),
+      import('./components/wishlist.component')
+        .then(m => m.WishlistComponent),
   },
 
-  // ✅ Checkout
   {
     path: 'checkout',
     loadComponent: () =>
-      import('./components/checkout/checkout.component').then(
-        (m) => m.CheckoutComponent
-      ),
+      import('./components/checkout/checkout.component')
+        .then(m => m.CheckoutComponent),
   },
 
-  // ✅ Order Success + Tracking
   { path: 'order-success', component: OrderSuccessComponent },
   { path: 'track', component: TrackOrderComponent },
+
+  // =========================
+  // 👤 CUSTOMER AUTH ROUTES
+  // =========================
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./pages/user-login/user-login.component')
+        .then(m => m.UserLoginComponent),
+  },
+
+  {
+    path: 'signup',
+    loadComponent: () =>
+      import('./pages/signup/signup.component')
+        .then(m => m.SignupComponent),
+  },
+
+  {
+  path: 'forgot-password',
+  loadComponent: () =>
+    import('./pages/forgot-password/forgot-password.component')
+      .then(m => m.ForgotPasswordComponent),
+},
+
+{
+  path: 'reset-password',
+  loadComponent: () =>
+    import('./pages/reset-password/reset-password.component')
+      .then(m => m.ResetPasswordComponent),
+},
+
+
+{
+  path: 'my-orders',
+  loadComponent: () =>
+    import('./pages/my-orders/my-orders.component')
+      .then(m => m.MyOrdersComponent)
+},
+
 
   // =========================
   // 🔐 ADMIN ROUTES
@@ -79,51 +98,47 @@ export const routes: Routes = [
   {
     path: 'admin/login',
     loadComponent: () =>
-      import('./admin/login/login.component').then((m) => m.LoginComponent),
+      import('./admin/login/login.component')
+        .then(m => m.LoginComponent),
   },
 
   {
     path: 'admin',
+    canActivate: [authGuard],
     loadComponent: () =>
-      import('./components/admin-dashboard/admin-dashboard.component').then(
-        (m) => m.AdminDashboardComponent
-      ),
-    canMatch: [adminGuard],
+      import('./components/admin-dashboard/admin-dashboard.component')
+        .then(m => m.AdminDashboardComponent),
     children: [
       {
         path: 'orders',
         loadComponent: () =>
-          import('./admin/orders/orders.component').then(
-            (m) => m.OrdersComponent
-          ),
+          import('./admin/orders/orders.component')
+            .then(m => m.OrdersComponent),
       },
-      // 🆕 Order Details (renders inside AdminDashboard router-outlet)
-     {
-  path: 'orders/:orderId',
-  loadComponent: () =>
-    import('./admin/order-detail/order-detail.component').then(
-      (m) => m.OrderDetailComponent
-    ),
-},
-
+      {
+        path: 'orders/:orderId',
+        loadComponent: () =>
+          import('./admin/order-detail/order-detail.component')
+            .then(m => m.OrderDetailComponent),
+      },
       {
         path: 'products',
         loadComponent: () =>
-          import('./components/product-list-admin/product-list-admin.component').then(
-            (m) => m.ProductListAdminComponent
-          ),
+          import('./components/product-list-admin/product-list-admin.component')
+            .then(m => m.ProductListAdminComponent),
       },
       {
         path: 'upload',
         loadComponent: () =>
-          import('./components/product-upload/product-upload.component').then(
-            (m) => m.ProductUploadComponent
-          ),
+          import('./components/product-upload/product-upload.component')
+            .then(m => m.ProductUploadComponent),
       },
-      { path: '', redirectTo: 'orders', pathMatch: 'full' }, // default
+      { path: '', redirectTo: 'orders', pathMatch: 'full' },
     ],
   },
 
-  // ✅ Fallback → Home
+  // =========================
+  // 🚨 FALLBACK — ALWAYS LAST
+  // =========================
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];

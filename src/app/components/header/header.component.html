@@ -21,7 +21,7 @@
     <a routerLink="/track" routerLinkActive="active-link">Track Order</a>
   </nav>
 
-  <!-- Search Bar (only visible in /products) -->
+  <!-- Search Bar -->
   <div class="search-bar" *ngIf="showSearchBar">
     <input
       type="text"
@@ -48,8 +48,9 @@
     </div>
   </div>
 
-  <!-- Right Icons -->
+  <!-- Right Section -->
   <div class="right-section">
+
     <!-- Wishlist -->
     <a class="wishlist-icon" routerLink="/wishlist" aria-label="Wishlist">
       <span class="icon">❤️</span>
@@ -62,35 +63,44 @@
       <span class="badge" *ngIf="cartCount > 0">{{ cartCount }}</span>
     </a>
 
-    <!-- Hamburger -->
+    <!-- Login / Username -->
+    <ng-container *ngIf="!isLoggedIn; else loggedInBlock">
+      <a routerLink="/login" class="login-link">Login</a>
+    </ng-container>
+
+    <!-- When logged in -->
+    <ng-template #loggedInBlock>
+      <span class="user-name">Hi, {{ userName }}</span>
+      <button class="logout-btn" (click)="logout()">Logout</button>
+    </ng-template>
+
+    <!-- Hamburger Menu -->
     <button
       class="hamburger"
       [class.open]="isMobileMenuOpen"
       (click)="toggleMenu()"
       aria-label="Toggle Menu"
     >
-      <span></span>
-      <span></span>
-      <span></span>
+      <span></span><span></span><span></span>
     </button>
   </div>
 </header>
 
-<!-- ✅ Mobile Backdrop -->
+<!-- Backdrop -->
 <div
   class="mobile-menu-backdrop"
   *ngIf="isMobileMenuOpen"
   (click)="toggleMenu()"
 ></div>
 
-<!-- ✅ Sliding Mobile Drawer -->
+<!-- Mobile Menu -->
 <div class="mobile-menu" [class.open]="isMobileMenuOpen">
   <div class="mobile-menu-header">
     <h3>Menu</h3>
     <span class="close-btn" (click)="toggleMenu()">✕</span>
   </div>
 
-  <!-- ✅ Mobile Search -->
+  <!-- Mobile Search -->
   <div class="mobile-search">
     <div class="input-wrapper">
       <input
@@ -102,7 +112,6 @@
       <button aria-label="Search">🔍</button>
     </div>
 
-    <!-- ✅ Suggestions under input -->
     <div class="suggestions" *ngIf="suggestions.length > 0">
       <div
         class="suggestion-item"
@@ -119,16 +128,24 @@
     </div>
   </div>
 
-  <!-- ✅ Mobile Links -->
+  <!-- Mobile Navigation -->
   <a routerLink="/" (click)="toggleMenu()">Home</a>
   <a routerLink="/products" (click)="toggleMenu()">Shop</a>
   <a routerLink="/track" (click)="toggleMenu()">Track Order</a>
   <a routerLink="/wishlist" (click)="toggleMenu()">
-    Wishlist ❤️
-    <span *ngIf="wishlistCount > 0">({{ wishlistCount }})</span>
+    Wishlist ❤️ <span *ngIf="wishlistCount > 0">({{ wishlistCount }})</span>
   </a>
   <a routerLink="/cart" (click)="toggleMenu()">
-    Cart 🛒
-    <span *ngIf="cartCount > 0">({{ cartCount }})</span>
+    Cart 🛒 <span *ngIf="cartCount > 0">({{ cartCount }})</span>
   </a>
+
+  <!-- Mobile Login / Logout -->
+  <ng-container *ngIf="!isLoggedIn; else mobileLoggedIn">
+    <a routerLink="/login" (click)="toggleMenu()">Login</a>
+  </ng-container>
+
+  <ng-template #mobileLoggedIn>
+    <span class="mobile-user-name">Hi, {{ userName }}</span>
+    <a (click)="logout(); toggleMenu()">Logout</a>
+  </ng-template>
 </div>

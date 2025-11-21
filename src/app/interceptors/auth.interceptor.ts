@@ -1,0 +1,23 @@
+import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { AuthService } from '../services/auth.service';
+
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+
+  const auth = inject(AuthService);
+  const token = auth.getToken(); // 🔥 We already store user/admin token under this
+
+  // If no token → just send request normally
+  if (!token) {
+    return next(req);
+  }
+
+  // Clone request & attach Authorization header
+  const modifiedReq = req.clone({
+    setHeaders: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  return next(modifiedReq);
+};

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 import { environment } from '../../../environments/environment';
 
 declare var Razorpay: any;
@@ -25,6 +26,10 @@ couponError: boolean = false;
 handlingCharge: number = 0;
 agreedToTerms: boolean = false;
 
+isLoggedIn = false;
+userRole: string | null = null;
+
+
 
 
 
@@ -41,9 +46,13 @@ agreedToTerms: boolean = false;
 
   private baseUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private authService: AuthService) {}
 
 ngOnInit(): void {
+
+  this.isLoggedIn = this.authService.isLoggedIn();
+this.userRole = this.authService.getRole();
+
   // ✅ Load cart from localStorage
   this.cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
 
@@ -103,14 +112,17 @@ placeOrder(): void {
 
   // ✅ Step 3: Build proper payload
   const payload = {
-    amount: cleanAmount,
-    currency: 'INR',
-    destination_pincode: this.checkoutData.pincode,
-    notes: {
-      name: this.checkoutData.name,
-      phone: this.checkoutData.phone,
-    },
-  };
+  amount: cleanAmount,
+  currency: 'INR',
+  destination_pincode: this.checkoutData.pincode,
+  mode: this.isLoggedIn ? 'user' : 'guest',   // NEW
+  userId: this.isLoggedIn ? this.authService.getToken() : null, // optional future
+  notes: {
+    name: this.checkoutData.name,
+    phone: this.checkoutData.phone,
+  }
+};
+
 
   console.log('📦 Payload sent to backend:', payload);
 
@@ -173,27 +185,30 @@ openRazorpay(order: any) {
 
       const fullAddress = `${this.checkoutData.addressLine1}, ${this.checkoutData.addressLine2 || ''}`.trim();
 
-      const orderData = {
-        razorpayPaymentId: response.razorpay_payment_id,
-        razorpayOrderId: order.razorpay_order.id,
-         orderId: order.orderId, // ✅ FIXED here too
-        checkoutData: {
-         name: this.checkoutData.name,
-  phone: this.checkoutData.phone,
-  email: this.checkoutData.email,
-  addressLine1: this.checkoutData.addressLine1,
-  addressLine2: this.checkoutData.addressLine2 || "",
-  address: fullAddress,
-  city: this.checkoutData.city,
-  state: this.checkoutData.state,
-  pincode: this.checkoutData.pincode
-        },
-        cartItems: this.cartItems,
-        grandTotal: Math.round(this.grandTotal),
-        shippingCost: Math.round(this.shippingCost),
-        totalAmount: this.totalAmount,
-        paymentType: 'Prepaid'
-      };
+     const orderData = {
+  mode: this.isLoggedIn ? 'user' : 'guest',   // ✅ NEW
+  userId: this.isLoggedIn ? this.authService.getToken() : null, // optional for future
+  razorpayPaymentId: response.razorpay_payment_id,
+  razorpayOrderId: order.razorpay_order.id,
+  orderId: order.orderId,
+  checkoutData: {
+    name: this.checkoutData.name,
+    phone: this.checkoutData.phone,
+    email: this.checkoutData.email,
+    addressLine1: this.checkoutData.addressLine1,
+    addressLine2: this.checkoutData.addressLine2 || "",
+    address: fullAddress,
+    city: this.checkoutData.city,
+    state: this.checkoutData.state,
+    pincode: this.checkoutData.pincode
+  },
+  cartItems: this.cartItems,
+  grandTotal: Math.round(this.grandTotal),
+  shippingCost: Math.round(this.shippingCost),
+  totalAmount: this.totalAmount,
+  paymentType: 'Prepaid'
+};
+
 
       this.http.post<any>(`${this.baseUrl}/save-order`, orderData)
         .subscribe({

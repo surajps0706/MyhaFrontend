@@ -325,6 +325,22 @@
   color: linear-gradient(135deg, #c1a57b, #a48860);
 }
 
+/* Mobile Login / Logout (inherits base styles) */
+.mobile-menu a.login-link,
+.mobile-menu a.logout-link {
+  font-weight: 500;
+  padding: 14px 0;
+}
+
+
+@media (max-width: 768px) {
+  .right-section .login-link,
+  .right-section .logout-btn {
+    display: none;
+  }
+}
+
+
 /* === DESKTOP SEARCH === */
 .search-bar {
   flex: 1;
@@ -411,6 +427,28 @@
   color: #d63384;
   font-weight: 600;
 }
+
+
+/* Desktop Login/Logout */
+.login-link,
+.logout-btn {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  margin-left: 20px;
+  cursor: pointer;
+  text-decoration: none;
+  background: none;
+  border: none;
+  transition: color 0.2s ease;
+}
+
+.login-link:hover,
+.logout-btn:hover {
+  color: #000;
+}
+
+
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-4px); }
