@@ -108,7 +108,8 @@
   <p><strong>Shipping:</strong> ₹{{ order.shippingCost }}</p>
 
   <p class="gtotal">
-    <strong>Grand Total:</strong> ₹{{ order.grandTotal }}
+    <strong>Grand Total:</strong>₹{{ order.grandTotal | number:'1.0-0' }}
+
   </p>
 
 </div>

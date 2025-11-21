@@ -78,6 +78,17 @@
   margin-top: 20px;
 }
 
+.note {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #444;
+  background: #fff8e6;
+  padding: 8px 12px;
+  border-left: 4px solid #f5b342;
+  border-radius: 6px;
+}
+
+
 .btn {
   display: inline-flex;
   align-items: center;
