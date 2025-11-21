@@ -58,5 +58,60 @@
         </div>
       </div>
     </div>
+
+
+    <!-- =============================== -->
+<!-- 🧾 ORDER DETAILS (Customer + Items + Totals) -->
+<!-- =============================== -->
+<div class="full-order-info" *ngIf="order.checkoutData">
+
+  <h3>Order Details</h3>
+
+  <!-- Customer Info -->
+  <div class="customer-info">
+    <p><strong>Name:</strong> {{ order.checkoutData.name }}</p>
+    <p><strong>Phone:</strong> {{ order.checkoutData.phone }}</p>
+    <p><strong>Email:</strong> {{ order.checkoutData.email }}</p>
+    <p>
+      <strong>Address:</strong><br>
+      {{ order.checkoutData.addressLine1 }},
+      {{ order.checkoutData.addressLine2 }}<br>
+      {{ order.checkoutData.city }},
+      {{ order.checkoutData.state }} - {{ order.checkoutData.pincode }}
+    </p>
+  </div>
+
+  <!-- Items -->
+  <h4>Items</h4>
+  <div class="item-card" *ngFor="let item of order.cartItems">
+    <img [src]="item.image" class="item-img" />
+    <div class="item-details">
+      <p class="item-name">{{ item.name }}</p>
+      <p>Qty: {{ item.quantity }}</p>
+      <p>Base Price: ₹{{ item.price }}</p>
+
+      <div *ngIf="item.sleeveType">
+        Sleeve: {{ item.sleeveType }} (+₹{{ item.sleevePrice }})
+      </div>
+
+      <div *ngIf="item.preferredHeight">
+        Height: {{ item.preferredHeight }} (+₹{{ item.extraHeightPrice }})
+      </div>
+
+      <p><strong>Total:</strong> ₹{{ item.lineTotal }}</p>
+    </div>
+  </div>
+
+  <!-- Totals -->
+  <h4>Price Summary</h4>
+  <p><strong>Item Total:</strong> ₹{{ order.totalAmount }}</p>
+  <p><strong>Shipping:</strong> ₹{{ order.shippingCost }}</p>
+
+  <p class="gtotal">
+    <strong>Grand Total:</strong> ₹{{ order.grandTotal }}
+  </p>
+
+</div>
+
   </div>
 </div>
