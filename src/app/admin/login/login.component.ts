@@ -16,10 +16,10 @@ import { AuthService } from '../../services/auth.service';
 
       <form (ngSubmit)="login()">
         <input
-          type="email"
-          placeholder="Email"
-          [(ngModel)]="email"
-          name="email"
+          type="text"
+          placeholder="Username"
+          [(ngModel)]="username"
+          name="username"
           required
         />
         <input
@@ -77,7 +77,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginComponent implements OnInit {
 
-  email = '';
+  username = '';
   password = '';
   errorMessage = '';
   loading = false;
@@ -89,7 +89,7 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // If already logged in → go to admin
+    // If already logged in as admin → go to admin
     if (this.authService.isAdmin()) {
       this.router.navigate(['/admin/orders']);
     }
@@ -99,15 +99,15 @@ export class LoginComponent implements OnInit {
     this.errorMessage = '';
     this.loading = true;
 
-    this.http.post<any>(`${environment.apiUrl}/login`, {
-      email: this.email,
+    this.http.post<any>(`${environment.apiUrl}/admin/login`, {
+      username: this.username,
       password: this.password
     }).subscribe({
       next: (res) => {
-        // ✔ Save via AuthService
+        // Save via AuthService, same as before
         this.authService.saveAuthData(res.token, res.role, res.name);
 
-        // ✔ Redirect by role
+        // Only admin should reach here, but keep it defensive
         if (res.role === 'admin') {
           this.router.navigate(['/admin/orders']);
         } else {
@@ -118,8 +118,8 @@ export class LoginComponent implements OnInit {
       },
       error: (err) => {
         console.error("Login error:", err);
-        this.errorMessage = 'Invalid email or password';
-        this.authService.logout(); // clear everything cleanly
+        this.errorMessage = 'Invalid username or password';
+        this.authService.logout();
         this.loading = false;
       }
     });
