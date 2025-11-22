@@ -51,7 +51,7 @@ userRole: string | null = null;
 ngOnInit(): void {
 
   this.isLoggedIn = this.authService.isLoggedIn();
-this.userRole = this.authService.getRole();
+this.userRole = this.authService.getUserRole();
 
   // ✅ Load cart from localStorage
   this.cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -116,7 +116,7 @@ placeOrder(): void {
   currency: 'INR',
   destination_pincode: this.checkoutData.pincode,
   mode: this.isLoggedIn ? 'user' : 'guest',   // NEW
-  userId: this.isLoggedIn ? this.authService.getToken() : null, // optional future
+  userId: this.isLoggedIn ? this.authService.getUserToken() : null, // optional future
   notes: {
     name: this.checkoutData.name,
     phone: this.checkoutData.phone,
@@ -187,7 +187,7 @@ openRazorpay(order: any) {
 
      const orderData = {
   mode: this.isLoggedIn ? 'user' : 'guest',   // ✅ NEW
-  userId: this.isLoggedIn ? this.authService.getToken() : null, // optional for future
+userId: this.isLoggedIn ? this.authService.getUserToken() : null,
   razorpayPaymentId: response.razorpay_payment_id,
   razorpayOrderId: order.razorpay_order.id,
   orderId: order.orderId,

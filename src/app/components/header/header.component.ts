@@ -68,7 +68,7 @@ export class HeaderComponent {
   }
 
   logout() {
-    this.authService.logout();
+this.authService.logoutUser();
     this.updateLoginState();
     this.toggleMenu();
   }

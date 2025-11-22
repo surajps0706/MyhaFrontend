@@ -10,7 +10,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const adminToken = auth.getAdminToken();
 
   // If no admin token, then use user token
-  const userToken = auth.getToken();
+  const userToken = auth.getUserToken();
 
   const token = adminToken || userToken;
 

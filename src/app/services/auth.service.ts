@@ -10,7 +10,7 @@ export class AuthService {
   private userRoleKey = 'userRole';
   private userNameKey = 'userName';
 
-  private adminTokenKey = 'adminToken'; // 🔥 Single correct admin key
+  private adminTokenKey = 'adminToken';
 
   constructor(private router: Router) {}
 
@@ -23,11 +23,15 @@ export class AuthService {
     localStorage.setItem(this.userNameKey, name);
   }
 
-  getToken(): string | null {
+  getUserToken(): string | null {
     return localStorage.getItem(this.userTokenKey);
   }
 
-  getUserName() {
+  getUserRole(): string | null {
+    return localStorage.getItem(this.userRoleKey);
+  }
+
+  getUserName(): string | null {
     return localStorage.getItem(this.userNameKey);
   }
 
@@ -65,3 +69,4 @@ export class AuthService {
     this.router.navigate(['/admin/login']);
   }
 }
+
