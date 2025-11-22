@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../environments/environment';
-import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -22,6 +21,7 @@ import { AuthService } from '../../services/auth.service';
           name="username"
           required
         />
+
         <input
           type="password"
           placeholder="Password"
@@ -77,19 +77,20 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginComponent implements OnInit {
 
-  username: string = '';
-  password: string = '';
-  errorMessage: string = '';
-  loading: boolean = false;
+  username = '';
+  password = '';
+  errorMessage = '';
+  loading = false;
 
   constructor(
     private http: HttpClient,
-    private router: Router,
-    private authService: AuthService
+    private router: Router
   ) {}
 
   ngOnInit() {
-    if (this.authService.isAdmin()) {
+    // 🔥 Check ONLY admin token
+    const adminToken = localStorage.getItem('admin_token');
+    if (adminToken) {
       this.router.navigate(['/admin/orders']);
     }
   }
@@ -103,13 +104,15 @@ export class LoginComponent implements OnInit {
       password: this.password
     }).subscribe({
       next: (res) => {
-        this.authService.saveAuthData(res.token, 'admin', 'Admin');
+        // 🔐 Save ADMIN token separately
+        localStorage.setItem('admin_token', res.token);
+
+        // 👉 Go to admin dashboard
         this.router.navigate(['/admin/orders']);
         this.loading = false;
       },
       error: () => {
         this.errorMessage = 'Invalid username or password';
-        this.authService.logout();
         this.loading = false;
       }
     });

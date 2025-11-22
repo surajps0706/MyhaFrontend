@@ -21,7 +21,7 @@ export class AdminDashboardComponent {
 
   // ✅ Logout function
   logout() {
-    localStorage.removeItem('admin_token');
+    localStorage.removeItem('adminToken');
     this.router.navigate(['/admin/login']);
   }
 }

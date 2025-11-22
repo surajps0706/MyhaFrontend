@@ -6,65 +6,62 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
 
-  private tokenKey = 'userToken';
-  private roleKey = 'userRole';
-  private nameKey = 'userName';
+  private userTokenKey = 'userToken';
+  private userRoleKey = 'userRole';
+  private userNameKey = 'userName';
+
+  private adminTokenKey = 'adminToken'; // 🔥 Single correct admin key
 
   constructor(private router: Router) {}
 
-  // Save token, role, name for customer login
+  // ============================
+  // CUSTOMER AUTH
+  // ============================
   saveAuthData(token: string, role: string, name: string) {
-    localStorage.setItem(this.tokenKey, token);
-    localStorage.setItem(this.roleKey, role);   // "customer"
-    localStorage.setItem(this.nameKey, name);
+    localStorage.setItem(this.userTokenKey, token);
+    localStorage.setItem(this.userRoleKey, role);
+    localStorage.setItem(this.userNameKey, name);
   }
 
-  // Save ADMIN token separately
-  saveAdminToken(token: string) {
-    localStorage.setItem('adminToken', token);
-  }
-
-  getAdminToken() {
-    return localStorage.getItem('adminToken');
-  }
-
-  // Customer token
   getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
+    return localStorage.getItem(this.userTokenKey);
   }
 
-  getUserName(): string | null {
-    return localStorage.getItem(this.nameKey);
+  getUserName() {
+    return localStorage.getItem(this.userNameKey);
   }
 
-  // Customer login check
   isLoggedIn(): boolean {
-    return !!localStorage.getItem(this.tokenKey);
+    return !!localStorage.getItem(this.userTokenKey);
   }
 
-  // Admin login check
+  // ============================
+  // ADMIN AUTH
+  // ============================
+  saveAdminToken(token: string) {
+    localStorage.setItem(this.adminTokenKey, token);
+  }
+
+  getAdminToken(): string | null {
+    return localStorage.getItem(this.adminTokenKey);
+  }
+
   isAdmin(): boolean {
-    return !!localStorage.getItem('adminToken');
+    return !!localStorage.getItem(this.adminTokenKey);
   }
 
-  getRole(): string | null {
-    return localStorage.getItem(this.roleKey);
+  // ============================
+  // LOGOUTS
+  // ============================
+  logoutUser() {
+    localStorage.removeItem(this.userTokenKey);
+    localStorage.removeItem(this.userRoleKey);
+    localStorage.removeItem(this.userNameKey);
+    this.router.navigate(['/login']);
   }
-
-logout() {
-  localStorage.removeItem(this.tokenKey);
-  localStorage.removeItem(this.roleKey);
-  localStorage.removeItem(this.nameKey);
-
-  // also remove admin token to avoid conflict
-  localStorage.removeItem('adminToken');
-
-  this.router.navigate(['/login']);
-}
-
 
   logoutAdmin() {
-    localStorage.removeItem('adminToken');
+    localStorage.removeItem(this.adminTokenKey);
     this.router.navigate(['/admin/login']);
   }
 }

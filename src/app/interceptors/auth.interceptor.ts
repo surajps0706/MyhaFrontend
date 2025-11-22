@@ -5,14 +5,17 @@ import { AuthService } from '../services/auth.service';
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   const auth = inject(AuthService);
-  const token = auth.getToken(); // 🔥 We already store user/admin token under this
 
-  // If no token → just send request normally
-  if (!token) {
-    return next(req);
-  }
+  // FIRST check admin token
+  const adminToken = auth.getAdminToken();
 
-  // Clone request & attach Authorization header
+  // If no admin token, then use user token
+  const userToken = auth.getToken();
+
+  const token = adminToken || userToken;
+
+  if (!token) return next(req);
+
   const modifiedReq = req.clone({
     setHeaders: {
       Authorization: `Bearer ${token}`
