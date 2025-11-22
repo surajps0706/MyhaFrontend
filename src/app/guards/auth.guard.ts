@@ -7,18 +7,12 @@ export const authGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
   const router = inject(Router);
 
-  // 1️⃣ Not logged in → block
-  if (!auth.isLoggedIn()) {
-    router.navigate(['/login']);
-    return false;
-  }
-
-  // 2️⃣ Logged in but not admin → block
+  // 🔐 1️⃣ Check ADMIN token only
   if (!auth.isAdmin()) {
-    router.navigate(['/']);
+    router.navigate(['/admin/login']);
     return false;
   }
 
-  // 3️⃣ Admin → allow access
+  // ✔ Admin token present → allow
   return true;
 };

@@ -70,31 +70,31 @@ export const routes: Routes = [
   },
 
   {
-  path: 'forgot-password',
-  loadComponent: () =>
-    import('./pages/forgot-password/forgot-password.component')
-      .then(m => m.ForgotPasswordComponent),
-},
+    path: 'forgot-password',
+    loadComponent: () =>
+      import('./pages/forgot-password/forgot-password.component')
+        .then(m => m.ForgotPasswordComponent),
+  },
 
-{
-  path: 'reset-password',
-  loadComponent: () =>
-    import('./pages/reset-password/reset-password.component')
-      .then(m => m.ResetPasswordComponent),
-},
+  {
+    path: 'reset-password',
+    loadComponent: () =>
+      import('./pages/reset-password/reset-password.component')
+        .then(m => m.ResetPasswordComponent),
+  },
 
-
-{
-  path: 'my-orders',
-  loadComponent: () =>
-    import('./pages/my-orders/my-orders.component')
-      .then(m => m.MyOrdersComponent)
-},
-
+  {
+    path: 'my-orders',
+    loadComponent: () =>
+      import('./pages/my-orders/my-orders.component')
+        .then(m => m.MyOrdersComponent)
+  },
 
   // =========================
   // 🔐 ADMIN ROUTES
   // =========================
+
+  // ADMIN LOGIN — must NOT be guarded
   {
     path: 'admin/login',
     loadComponent: () =>
@@ -102,39 +102,47 @@ export const routes: Routes = [
         .then(m => m.LoginComponent),
   },
 
+  // ADMIN DASHBOARD + PROTECTED ROUTES
   {
     path: 'admin',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./components/admin-dashboard/admin-dashboard.component')
-        .then(m => m.AdminDashboardComponent),
     children: [
       {
-        path: 'orders',
+        path: '',
+        canActivate: [authGuard],
         loadComponent: () =>
-          import('./admin/orders/orders.component')
-            .then(m => m.OrdersComponent),
-      },
-      {
-        path: 'orders/:orderId',
-        loadComponent: () =>
-          import('./admin/order-detail/order-detail.component')
-            .then(m => m.OrderDetailComponent),
-      },
-      {
-        path: 'products',
-        loadComponent: () =>
-          import('./components/product-list-admin/product-list-admin.component')
-            .then(m => m.ProductListAdminComponent),
-      },
-      {
-        path: 'upload',
-        loadComponent: () =>
-          import('./components/product-upload/product-upload.component')
-            .then(m => m.ProductUploadComponent),
-      },
-      { path: '', redirectTo: 'orders', pathMatch: 'full' },
-    ],
+          import('./components/admin-dashboard/admin-dashboard.component')
+            .then(m => m.AdminDashboardComponent),
+        children: [
+          {
+            path: 'orders',
+            loadComponent: () =>
+              import('./admin/orders/orders.component')
+                .then(m => m.OrdersComponent),
+          },
+          {
+            path: 'orders/:orderId',
+            loadComponent: () =>
+              import('./admin/order-detail/order-detail.component')
+                .then(m => m.OrderDetailComponent),
+          },
+          {
+            path: 'products',
+            loadComponent: () =>
+              import('./components/product-list-admin/product-list-admin.component')
+                .then(m => m.ProductListAdminComponent),
+          },
+          {
+            path: 'upload',
+            loadComponent: () =>
+              import('./components/product-upload/product-upload.component')
+                .then(m => m.ProductUploadComponent),
+          },
+
+          // default admin redirect
+          { path: '', redirectTo: 'orders', pathMatch: 'full' },
+        ],
+      }
+    ]
   },
 
   // =========================
