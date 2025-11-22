@@ -77,10 +77,10 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginComponent implements OnInit {
 
-  username = '';
-  password = '';
-  errorMessage = '';
-  loading = false;
+  username: string = '';
+  password: string = '';
+  errorMessage: string = '';
+  loading: boolean = false;
 
   constructor(
     private http: HttpClient,
@@ -89,7 +89,6 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // If already logged in as admin → go to admin
     if (this.authService.isAdmin()) {
       this.router.navigate(['/admin/orders']);
     }
@@ -104,20 +103,11 @@ export class LoginComponent implements OnInit {
       password: this.password
     }).subscribe({
       next: (res) => {
-        // Save via AuthService, same as before
-        this.authService.saveAuthData(res.token, res.role, res.name);
-
-        // Only admin should reach here, but keep it defensive
-        if (res.role === 'admin') {
-          this.router.navigate(['/admin/orders']);
-        } else {
-          this.router.navigate(['/']);
-        }
-
+        this.authService.saveAuthData(res.token, 'admin', 'Admin');
+        this.router.navigate(['/admin/orders']);
         this.loading = false;
       },
-      error: (err) => {
-        console.error("Login error:", err);
+      error: () => {
         this.errorMessage = 'Invalid username or password';
         this.authService.logout();
         this.loading = false;
