@@ -1,5 +1,6 @@
 <div class="success-container">
   <div class="success-card">
+
     <!-- Success Icon -->
     <div class="success-icon">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
@@ -9,27 +10,25 @@
     </div>
 
     <!-- Title & Subtitle -->
-    <h2>🎉 Order Placed Successfully!</h2>
+    <h2>Order Confirmed</h2>
     <p class="thank-you">
-      Thank you for shopping with <b>Myha Couture</b>.
+      Thank you for shopping with <b>Myha Couture</b>
     </p>
 
     <!-- Order Info -->
     <div class="order-info" *ngIf="orderId">
       <p>
-        <strong>Your Order ID:</strong>
+        <strong>Order ID</strong>
         <span class="order-id">{{ orderId }}</span>
       </p>
 
       <p class="note">
-  📌 <strong>Please save this Order ID for tracking and future reference.</strong>
-</p>
+        Please save this Order ID for tracking and future reference.
+      </p>
 
-
-      <!-- 📅 Estimated Delivery -->
-      <p *ngIf="estimatedStart && estimatedEnd">
-        <strong>Estimated Delivery:</strong>
-        <span>{{ estimatedStart | date:'MMM d' }} – {{ estimatedEnd | date:'MMM d, y' }}</span>
+      <p *ngIf="estimatedStart && estimatedEnd" class="delivery">
+        <strong>Estimated Delivery</strong><br />
+        {{ estimatedStart | date:'dd MMM' }} – {{ estimatedEnd | date:'dd MMM yyyy' }}
         <br />
         <small>(Excluding Sundays)</small>
       </p>
@@ -38,16 +37,18 @@
     <!-- Buttons -->
     <div class="button-group">
       <a routerLink="/products" class="btn primary">
-        <span class="icon">🛍️</span> Continue Shopping
+        Continue Shopping
       </a>
+
       <a
         [routerLink]="['/track']"
         [queryParams]="{ orderId: orderId }"
         class="btn secondary"
         *ngIf="orderId"
       >
-        <span class="icon">📦</span> Track My Order
+        Track Order
       </a>
     </div>
+
   </div>
 </div>
