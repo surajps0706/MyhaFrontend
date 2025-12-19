@@ -63,75 +63,107 @@ loadProducts() {
   }
 
   // ✏️ Start editing a product
-  editProduct(product: any) {
-    this.editingProduct = {
-      ...product,
-      images: Array.isArray(product.images)
-        ? product.images.join(', ')
-        : product.images || ''
-    };
-  }
+ editProduct(product: any) {
+  this.editingProduct = {
+    ...product,
+
+    // images → string for textarea
+    images: Array.isArray(product.images)
+      ? product.images.join(', ')
+      : product.images || '',
+
+    // ✅ THIS IS THE FIX
+    sizes: Array.isArray(product.sizes) && product.sizes.length === 8
+      ? product.sizes
+      : this.getDefaultSizes()
+  };
+}
+
+
+getDefaultSizes() {
+  return [
+    { label: 'XXS', available: true },
+    { label: 'XS', available: true },
+    { label: 'S', available: true },
+    { label: 'M', available: true },
+    { label: 'L', available: true },
+    { label: 'XL', available: true },
+    { label: '2XL', available: true },
+    { label: '3XL', available: true }
+  ];
+}
+
+
 
   // 💾 Save product changes
   saveProduct() {
-    const token = localStorage.getItem('admin_token');
-    if (!token) {
-      alert('⚠️ Unauthorized: Please login again.');
-      return;
-    }
-
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    // Convert comma-separated strings → arrays
-    if (typeof this.editingProduct.images === 'string') {
-      this.editingProduct.images = this.editingProduct.images
-        .split(',')
-        .map((url: string) => url.trim())
-        .filter((url: string) => url.length > 0);
-    }
-
-    if (typeof this.editingProduct.colors === 'string') {
-      this.editingProduct.colors = this.editingProduct.colors
-        .split(',')
-        .map((color: string) => color.trim())
-        .filter((color: string) => color.length > 0);
-    }
-
-    // ✅ Ensure boolean for Sold Out flag
-    this.editingProduct.isSoldOut = !!this.editingProduct.isSoldOut;
-
-    // Clean payload
-    const updatedProduct = {
-      name: this.editingProduct.name,
-      price: this.editingProduct.price,
-      description: this.editingProduct.description,
-      sizes: this.editingProduct.sizes,
-      colors: this.editingProduct.colors,
-      selectedSize: this.editingProduct.selectedSize,
-      selectedColor: this.editingProduct.selectedColor,
-      images: this.editingProduct.images,
-      category: this.editingProduct.category,
-      isSoldOut: this.editingProduct.isSoldOut,
-      enableFabricPrice: !!this.editingProduct.enableFabricPrice,
-      fabricBasePrice: this.editingProduct.fabricBasePrice || null,
-      displayOrder: this.editingProduct.displayOrder || 0,
-      stock: Number(this.editingProduct.stock) || 0 
-    };
-
-    this.http
-      .put(`${this.baseUrl}/products/${this.editingProduct.id}`, updatedProduct, { headers })
-      .subscribe({
-        next: () => {
-          alert('✅ Product updated successfully');
-          this.editingProduct = null;
-          this.loadProducts();
-        },
-        error: (err) => {
-          console.error('❌ Update failed:', err);
-          alert('Update failed: ' + err.message);
-        }
-      });
+  const token = localStorage.getItem('admin_token');
+  if (!token) {
+    alert('⚠️ Unauthorized: Please login again.');
+    return;
   }
+
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+  // Convert comma-separated strings → arrays
+  if (typeof this.editingProduct.images === 'string') {
+    this.editingProduct.images = this.editingProduct.images
+      .split(',')
+      .map((url: string) => url.trim())
+      .filter((url: string) => url.length > 0);
+  }
+
+  if (typeof this.editingProduct.colors === 'string') {
+    this.editingProduct.colors = this.editingProduct.colors
+      .split(',')
+      .map((color: string) => color.trim())
+      .filter((color: string) => color.length > 0);
+  }
+
+  // ✅ Ensure boolean for Sold Out flag
+  this.editingProduct.isSoldOut = !!this.editingProduct.isSoldOut;
+
+  // 🔒 CRITICAL: Ensure sizes array always exists and is complete
+  if (
+    !Array.isArray(this.editingProduct.sizes) ||
+    this.editingProduct.sizes.length !== 8
+  ) {
+    this.editingProduct.sizes = this.getDefaultSizes();
+  }
+
+  // Clean payload
+  const updatedProduct = {
+    name: this.editingProduct.name,
+    price: this.editingProduct.price,
+    description: this.editingProduct.description,
+    sizes: this.editingProduct.sizes,
+    colors: this.editingProduct.colors,
+    selectedSize: this.editingProduct.selectedSize,
+    selectedColor: this.editingProduct.selectedColor,
+    images: this.editingProduct.images,
+    category: this.editingProduct.category,
+    isSoldOut: this.editingProduct.isSoldOut,
+    enableFabricPrice: !!this.editingProduct.enableFabricPrice,
+    fabricBasePrice: this.editingProduct.fabricBasePrice || null,
+    displayOrder: this.editingProduct.displayOrder || 0,
+    stock: Number(this.editingProduct.stock) || 0
+  };
+
+  this.http
+    .put(`${this.baseUrl}/products/${this.editingProduct.id}`, updatedProduct, { headers })
+    .subscribe({
+      next: () => {
+        alert('✅ Product updated successfully');
+        this.editingProduct = null;
+        this.loadProducts();
+      },
+      error: (err) => {
+        console.error('❌ Update failed:', err);
+        alert('Update failed: ' + err.message);
+      }
+    });
+}
+
 
   // ❌ Cancel edit mode
   cancelEdit() {

@@ -36,7 +36,7 @@ neckCustomizationText: string = '';
   // sizing mode
   sizingMode: SizingMode = 'size';
 
-  standardSizes = ['XXS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'];
+  // standardSizes = ['XXS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'];
 
   measurementFields = [
     { key: 'bust', label: 'Bust' },
@@ -109,7 +109,12 @@ private loadProduct(id: string): void {
       this.selectedImage = this.product.images?.[0] || '';
       this.selectedSleeve = this.sleeveOptions[0];
       this.isKurti = this.product.category?.toLowerCase() === 'kurti';
-      this.product.selectedSize = '';
+   if (!Array.isArray(this.product.sizes)) {
+  this.product.sizes = [];
+}
+
+
+this.product.selectedSize = null;
 
       // ✅ stock handling + sold out logic
       const stockValue = Number(this.product.stock);
@@ -208,9 +213,22 @@ loadRecommendedProducts(): void {
     this.selectedImage = img;
   }
 
-  onSizeChange(_size: string): void {
-    if (this.sizingMode !== 'size') this.sizingMode = 'size';
+  // onSizeChange(_size: string): void {
+  //   if (this.sizingMode !== 'size') this.sizingMode = 'size';
+  // }
+
+
+  onSizeSelect(size: any): void {
+  if (!size?.available) return;
+
+  // force size mode if user clicks size
+  if (this.sizingMode !== 'size') {
+    this.sizingMode = 'size';
   }
+
+  this.product.selectedSize = size.label;
+}
+
 
   onMeasurementChanged(_key: string, value: string): void {
     if (this.sizingMode !== 'measurements' && String(value ?? '').trim() !== '') {

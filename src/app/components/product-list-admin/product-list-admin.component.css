@@ -281,3 +281,33 @@ select[name='fabricBasePrice']:hover {
   border: 1px solid #ccc;
   border-radius: 6px;
 }
+
+
+/* ===== Size Availability Admin Fix ===== */
+
+.size-checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.size-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.size-checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.size-checkbox label {
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  line-height: 1;
+  margin: 0;
+}

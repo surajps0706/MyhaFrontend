@@ -92,34 +92,41 @@
     </div>
 
     <!-- Size Selection -->
-    <div class="select-row">
-      <label for="size">Size:</label>
-      <select
-        id="size"
-        class="size-dropdown"
-        [(ngModel)]="product.selectedSize"
-        (ngModelChange)="onSizeChange($event)"
-        [disabled]="sizeDisabled"
-      >
-        <option *ngFor="let size of standardSizes" [value]="size">
-          {{ size }}
-        </option>
-      </select>
+<div class="select-row">
+  <label>Size:</label>
 
-      <div class="size-chart-link" (click)="showSizeChart = !showSizeChart">
-        📏 View Size Chart
-      </div>
-      <div class="size-chart-img" *ngIf="showSizeChart">
-        <img
-          src="https://res.cloudinary.com/dos3wtgzq/image/upload/v1763141161/sizechart_ipdkug.jpg"
-          alt="Size chart"
-        />
-      </div>
+  <div class="size-options">
+    <button
+      *ngFor="let size of product.sizes"
+      type="button"
+      class="size-chip"
+      [class.available]="size.available"
+      [class.unavailable]="!size.available"
+      [class.active]="product.selectedSize === size.label"
+      [class.disabled]="sizingMode === 'measurements'"
+      [disabled]="!size.available"
+      (click)="onSizeSelect(size)"
+    >
+      {{ size.label }}
+    </button>
+  </div>
 
-      <p *ngIf="sizeModeNote" class="customization-hint" style="margin-top: 6px">
-        {{ sizeModeNote }}
-      </p>
-    </div>
+  <div class="size-chart-link" (click)="showSizeChart = !showSizeChart">
+    📏 View Size Chart
+  </div>
+
+  <div class="size-chart-img" *ngIf="showSizeChart">
+    <img
+      src="https://res.cloudinary.com/dos3wtgzq/image/upload/v1763141161/sizechart_ipdkug.jpg"
+      alt="Size chart"
+    />
+  </div>
+
+  <p *ngIf="sizeModeNote" class="customization-hint">
+    {{ sizeModeNote }}
+  </p>
+</div>
+
 
     <!-- Measurements -->
     <div class="measurements-section" [class.disabled]="measurementsDisabled">
