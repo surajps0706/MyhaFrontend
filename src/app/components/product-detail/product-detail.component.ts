@@ -105,8 +105,19 @@ ngOnInit(): void {
 private loadProduct(id: string): void {
   this.productService.getProductById(id).subscribe({
     next: (data) => {
-      this.product = data;
-      this.selectedImage = this.product.images?.[0] || '';
+      this.product = {
+  ...data,
+
+  // ✅ FINAL normalization (THIS WAS MISSING)
+  images: Array.isArray(data.images)
+    ? data.images
+    : typeof data.images === 'string'
+      ? data.images.split(',').map((i: string) => i.trim())
+      : []
+};
+
+this.selectedImage = this.product.images[0] || '';
+
       this.selectedSleeve = this.sleeveOptions[0];
       this.isKurti = this.product.category?.toLowerCase() === 'kurti';
    if (!Array.isArray(this.product.sizes)) {
