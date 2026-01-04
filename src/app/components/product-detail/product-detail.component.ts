@@ -109,11 +109,15 @@ private loadProduct(id: string): void {
   ...data,
 
   // ✅ FINAL normalization (THIS WAS MISSING)
-  images: Array.isArray(data.images)
+images: Array.isArray(data.images)
+  ? data.images.filter((i: string) => i && i.trim().length > 0)
+  : typeof data.images === 'string'
     ? data.images
-    : typeof data.images === 'string'
-      ? data.images.split(',').map((i: string) => i.trim())
-      : []
+        .split(',')
+        .map((i: string) => i.trim())
+        .filter((i: string) => i.length > 0)
+    : []
+
 };
 
 this.selectedImage = this.product.images[0] || '';
