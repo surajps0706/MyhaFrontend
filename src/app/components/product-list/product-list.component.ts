@@ -47,19 +47,31 @@ export class ProductListComponent implements OnInit {
     this.fetchProducts();
   }
 
-  fetchProducts() {
-    this.isLoading = true;
-    this.http.get<any[]>(`${this.baseUrl}/products`).subscribe({
-      next: (data) => {
-        this.products = data;
-        this.applyFilters();
-      },
-      error: (err) => {
-        console.error('❌ Error fetching products:', err);
-        this.isLoading= false;
-      }
-    });
-  }
+ fetchProducts() {
+  this.isLoading = true;
+  this.http.get<any[]>(`${this.baseUrl}/products`).subscribe({
+    next: (data) => {
+      this.products = data.map(p => ({
+        ...p,
+
+        // ✅ normalize images here (CRITICAL)
+        images: Array.isArray(p.images)
+          ? p.images
+          : typeof p.images === 'string'
+            ? p.images.split(',').map((i: string) => i.trim())
+            : []
+      }));
+
+      this.applyFilters();
+      this.isLoading = false;
+    },
+    error: (err) => {
+      console.error('❌ Error fetching products:', err);
+      this.isLoading = false;
+    }
+  });
+}
+
 
   toggleCollapse(filter: 'category' | 'price') {
     this.collapsed[filter] = !this.collapsed[filter];
