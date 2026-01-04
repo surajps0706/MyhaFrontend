@@ -28,11 +28,19 @@ export class ProductListAdminComponent implements OnInit {
 loadProducts() {
   this.http.get<any[]>(`${this.baseUrl}/products`).subscribe({
     next: (res) => {
-      // ✅ Ensure every product has at least a default stock of 10
       this.products = res
         .map(p => ({
           ...p,
-          stock: p.stock ?? 10   // if undefined or null, set 10
+
+          // ✅ normalize images ONCE, safely
+          images: Array.isArray(p.images)
+            ? p.images
+            : typeof p.images === 'string'
+              ? p.images.split(',').map((i: string) => i.trim())
+              : [],
+
+          // ✅ ensure stock
+          stock: p.stock ?? 10
         }))
         .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
     },
@@ -42,6 +50,7 @@ loadProducts() {
     }
   });
 }
+
 
 
   // 🖱️ Handle drag-and-drop reorder
