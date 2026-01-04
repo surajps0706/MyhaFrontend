@@ -73,6 +73,19 @@ export class ProductListComponent implements OnInit {
 }
 
 
+getOptimizedImage(url: string, width: number = 600): string {
+  if (!url || !url.includes('/image/upload/')) {
+    return url; // safety fallback
+  }
+
+  return url.replace(
+    '/image/upload/',
+    `/image/upload/w_${width},q_auto,f_auto/`
+  );
+}
+
+
+
   toggleCollapse(filter: 'category' | 'price') {
     this.collapsed[filter] = !this.collapsed[filter];
   }

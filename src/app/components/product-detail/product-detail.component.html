@@ -8,18 +8,19 @@
 <div class="product-detail-container" *ngIf="product; else loading">
   <!-- Left: Image Section -->
   <div class="image-section">
-    <div class="thumbnails">
-      <img
-        *ngFor="let img of product.images; let i = index"
-        [src]="img"
-        [alt]="product.name + ' thumbnail ' + (i + 1)"
-        loading="lazy"
-        (click)="selectImage(img)"
-        [class.active]="img === selectedImage"
-      />
-    </div>
+   <div class="thumbnails">
+  <img
+    *ngFor="let img of product.images; let i = index"
+    [src]="getOptimizedImage(img, 120)"
+    [alt]="product.name + ' thumbnail ' + (i + 1)"
+    loading="lazy"
+    (click)="selectImage(img)"
+    [class.active]="img === selectedImage"
+  />
+</div>
+
     <div class="main-image">
-      <img [src]="selectedImage" [alt]="product.name" />
+      <img [src]="getOptimizedImage(selectedImage, 800)" [alt]="product.name" />
     </div>
   </div>
 

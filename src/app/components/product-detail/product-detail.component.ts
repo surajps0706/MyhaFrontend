@@ -100,6 +100,16 @@ ngOnInit(): void {
   });
 }
 
+getOptimizedImage(url: string, width: number = 800): string {
+  if (!url || !url.includes('/image/upload/')) {
+    return url;
+  }
+
+  return url.replace(
+    '/image/upload/',
+    `/image/upload/w_${width},q_auto,f_auto/`
+  );
+}
 
 
 private loadProduct(id: string): void {
