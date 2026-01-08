@@ -18,7 +18,7 @@ export class ProductUploadComponent {
     description: '',
     category: '',
     colors: '',
-    images: '',
+    image_count: 1,
     enableFabricPrice: false,
     fabricBasePrice: '',
     stock: 10  // ✅ added stock
@@ -41,47 +41,54 @@ export class ProductUploadComponent {
     if (this.uploading) return;
     this.uploading = true;
 
-    const payload = {
-      name: this.product.name.trim(),
-      price: Number(this.product.price),
-      description: this.product.description.trim(),
-      category: this.product.category.trim(),
-      sizes: ["Customizable"],
-      colors: this.product.colors
-        ? this.product.colors.split(',').map(c => c.trim())
-        : ["Default"],
-      selectedSize: "Free Size",
-      selectedColor: this.product.colors.split(',')[0]?.trim() || "",
-      images: this.product.images
-        ? this.product.images.split(',').map(i => i.trim())
-        : [],
-      enableFabricPrice: this.product.enableFabricPrice,
-      fabricBasePrice: this.product.enableFabricPrice
-        ? Number(this.product.fabricBasePrice)
-        : null,
-      stock: this.product.stock  // ✅ include stock in payload
-    };
+ const payload = {
+  name: this.product.name.trim(),
+  price: Number(this.product.price),
+  description: this.product.description.trim(),
+  category: this.product.category.trim(),
+  sizes: ["Customizable"],
+  colors: this.product.colors
+    ? this.product.colors.split(',').map(c => c.trim())
+    : ["Default"],
+  image_count: Number(this.product.image_count),
+  enableFabricPrice: this.product.enableFabricPrice,
+  fabricBasePrice: this.product.enableFabricPrice
+    ? Number(this.product.fabricBasePrice)
+    : null,
+  stock: this.product.stock
+};
+
 
     const token = localStorage.getItem('admin_token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    this.http.post(`${environment.apiUrl}/add-product-url`, payload, { headers })
-      .subscribe({
-        next: (res) => {
-          console.log('✅ Uploaded:', res);
-          alert('✅ Product Uploaded Successfully!');
-          this.product = {
-            name: '', price: '', description: '', category: '',
-            colors: '', images: '', enableFabricPrice: false,
-            fabricBasePrice: '', stock: 10
-          };
-          this.uploading = false;
-        },
-        error: (err) => {
-          console.error('❌ Upload failed:', err);
-          alert('❌ Upload failed');
-          this.uploading = false;
-        }
-      });
+  this.http.post(`${environment.apiUrl}/add-product`, payload, { headers })
+  .subscribe({
+    next: (res) => {
+      console.log('✅ Uploaded:', res);
+      alert('✅ Product Uploaded Successfully!');
+
+      // ✅ RESET FORM (image_count REQUIRED)
+      this.product = {
+        name: '',
+        price: '',
+        description: '',
+        category: '',
+        colors: '',
+        image_count: 1,          // 🔴 REQUIRED
+        enableFabricPrice: false,
+        fabricBasePrice: '',
+        stock: 10
+      };
+
+      this.uploading = false;
+    },
+    error: (err) => {
+      console.error('❌ Upload failed:', err);
+      alert('❌ Upload failed');
+      this.uploading = false;
+    }
+  });
+
   }
 }

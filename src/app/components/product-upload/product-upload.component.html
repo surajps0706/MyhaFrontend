@@ -47,8 +47,23 @@
     <label>Colors (comma separated)</label>
     <input type="text" [(ngModel)]="product.colors" name="colors" placeholder="Lavender, Blue" />
 
-    <label>Cloudinary Image URLs (comma separated)</label>
-    <textarea [(ngModel)]="product.images" name="images" placeholder="Paste URLs here separated by commas"></textarea>
+    <label>Number of Product Images</label>
+<input
+  type="number"
+  [(ngModel)]="product.image_count"
+  name="image_count"
+  min="1"
+  required
+/>
+
+<p class="hint">
+  After saving, upload images to R2:<br>
+  <code>products/&lt;productId&gt;/1.jpg, 2.jpg, ...</code>
+</p>
+
+
+    <!-- <label>Cloudinary Image URLs (comma separated)</label>
+    <textarea [(ngModel)]="product.images" name="images" placeholder="Paste URLs here separated by commas"></textarea> -->
 
     <button type="submit" class="btn" [disabled]="uploading">
       {{ uploading ? 'Uploading...' : 'Save Product' }}
