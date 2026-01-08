@@ -72,21 +72,17 @@ loadProducts() {
   }
 
   // ✏️ Start editing a product
- editProduct(product: any) {
+editProduct(product: any) {
   this.editingProduct = {
     ...product,
-
-    // images → string for textarea
-    images: Array.isArray(product.images)
-      ? product.images.join(', ')
-      : product.images || '',
-
-    // ✅ THIS IS THE FIX
-    sizes: Array.isArray(product.sizes) && product.sizes.length === 8
-      ? product.sizes
-      : this.getDefaultSizes()
+    image_count: product.image_count ?? 1,
+    sizes:
+      Array.isArray(product.sizes) && product.sizes.length === 8
+        ? product.sizes
+        : this.getDefaultSizes()
   };
 }
+
 
 
 getDefaultSizes() {
@@ -104,35 +100,37 @@ getDefaultSizes() {
 
 
 
-  // 💾 Save product changes
-  saveProduct() {
+  // 💾 Save product changes (R2-based image system)
+saveProduct() {
   const token = localStorage.getItem('admin_token');
   if (!token) {
     alert('⚠️ Unauthorized: Please login again.');
     return;
   }
 
-  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  const headers = new HttpHeaders().set(
+    'Authorization',
+    `Bearer ${token}`
+  );
 
-  // Convert comma-separated strings → arrays
-  if (typeof this.editingProduct.images === 'string') {
-    this.editingProduct.images = this.editingProduct.images
-      .split(',')
-      .map((url: string) => url.trim())
-      .filter((url: string) => url.length > 0);
-  }
-
+  /* -------------------------------
+     Normalize colors
+  -------------------------------- */
   if (typeof this.editingProduct.colors === 'string') {
     this.editingProduct.colors = this.editingProduct.colors
       .split(',')
-      .map((color: string) => color.trim())
-      .filter((color: string) => color.length > 0);
+      .map((c: string) => c.trim())
+      .filter((c: string) => c.length > 0);
   }
 
-  // ✅ Ensure boolean for Sold Out flag
+  /* -------------------------------
+     Ensure Sold Out flag is boolean
+  -------------------------------- */
   this.editingProduct.isSoldOut = !!this.editingProduct.isSoldOut;
 
-  // 🔒 CRITICAL: Ensure sizes array always exists and is complete
+  /* -------------------------------
+     Ensure sizes always exist
+  -------------------------------- */
   if (
     !Array.isArray(this.editingProduct.sizes) ||
     this.editingProduct.sizes.length !== 8
@@ -140,26 +138,38 @@ getDefaultSizes() {
     this.editingProduct.sizes = this.getDefaultSizes();
   }
 
-  // Clean payload
+  /* -------------------------------
+     FINAL CLEAN PAYLOAD
+     (NO images field — R2 only)
+  -------------------------------- */
   const updatedProduct = {
     name: this.editingProduct.name,
-    price: this.editingProduct.price,
+    price: Number(this.editingProduct.price),
     description: this.editingProduct.description,
+    category: this.editingProduct.category,
+
     sizes: this.editingProduct.sizes,
     colors: this.editingProduct.colors,
-    selectedSize: this.editingProduct.selectedSize,
-    selectedColor: this.editingProduct.selectedColor,
-    images: this.editingProduct.images,
-    category: this.editingProduct.category,
+
+    image_count: Number(this.editingProduct.image_count),
+
     isSoldOut: this.editingProduct.isSoldOut,
     enableFabricPrice: !!this.editingProduct.enableFabricPrice,
     fabricBasePrice: this.editingProduct.fabricBasePrice || null,
+
     displayOrder: this.editingProduct.displayOrder || 0,
     stock: Number(this.editingProduct.stock) || 0
   };
 
+  /* -------------------------------
+     API call
+  -------------------------------- */
   this.http
-    .put(`${this.baseUrl}/products/${this.editingProduct.id}`, updatedProduct, { headers })
+    .put(
+      `${this.baseUrl}/products/${this.editingProduct.id}`,
+      updatedProduct,
+      { headers }
+    )
     .subscribe({
       next: () => {
         alert('✅ Product updated successfully');

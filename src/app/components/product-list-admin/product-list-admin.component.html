@@ -125,8 +125,23 @@
       <label>Colors (comma separated)</label>
       <input [(ngModel)]="editingProduct.colors" name="colors" />
 
-      <label>Image URLs (comma separated)</label>
-      <textarea [(ngModel)]="editingProduct.images" name="images"></textarea>
+      <!-- <label>Image URLs (comma separated)</label>
+      <textarea [(ngModel)]="editingProduct.images" name="images"></textarea> -->
+
+
+      <label>Number of Images</label>
+<input
+  type="number"
+  min="1"
+  [(ngModel)]="editingProduct.image_count"
+  name="image_count"
+  required
+/>
+<p class="hint">
+  Images must exist in R2 at:
+  products/{{ editingProduct.id }}/1.jpg … {{ editingProduct.image_count }}.jpg
+</p>
+
 
       <div class="form-actions">
         <button type="submit" class="btn save">💾 Save</button>
