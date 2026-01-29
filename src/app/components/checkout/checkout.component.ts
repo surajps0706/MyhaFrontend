@@ -187,7 +187,7 @@ openRazorpay(order: any) {
 
      const orderData = {
   mode: this.isLoggedIn ? 'user' : 'guest',   // ✅ NEW
-userId: this.isLoggedIn ? this.authService.getUserToken() : null,
+  userId: this.isLoggedIn ? this.authService.getUserToken() : null,
   razorpayPaymentId: response.razorpay_payment_id,
   razorpayOrderId: order.razorpay_order.id,
   orderId: order.orderId,
@@ -250,8 +250,8 @@ userId: this.isLoggedIn ? this.authService.getUserToken() : null,
 
 
 validCoupons = [
-  { code: 'MYHADIWALI10', discountType: 'percentage', value: 10 },  // 10% off
-   { code: 'myhadiwali10', discountType: 'percentage', value: 10 },
+  { code: 'MYHA20', discountType: 'percentage', value: 20 },  // 10% off
+  //  { code: 'myhadiwali10', discountType: 'percentage', value: 10 },
   // { code: 'WELCOME100', discountType: 'flat', value: 100 }    // ₹100 off
 ];
 
