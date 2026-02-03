@@ -255,30 +255,30 @@ validCoupons = [
   // { code: 'WELCOME100', discountType: 'flat', value: 100 }    // ₹100 off
 ];
 
-applyCoupon() {
-  const enteredCode = this.couponCode.trim().toUpperCase();
-  const coupon = this.validCoupons.find(c => c.code === enteredCode);
+// applyCoupon() {
+//   const enteredCode = this.couponCode.trim().toUpperCase();
+//   const coupon = this.validCoupons.find(c => c.code === enteredCode);
 
-  if (!coupon) {
-    this.couponSuccess = false;
-    this.couponError = true;
-    this.discountAmount = 0;
-    this.updateGrandTotal();
-    return;
-  }
+//   if (!coupon) {
+//     this.couponSuccess = false;
+//     this.couponError = true;
+//     this.discountAmount = 0;
+//     this.updateGrandTotal();
+//     return;
+//   }
 
-  // Calculate discount
-  if (coupon.discountType === 'percentage') {
-    this.discountAmount = (this.totalAmount * coupon.value) / 100;
-  } else if (coupon.discountType === 'flat') {
-    this.discountAmount = coupon.value;
-  }
+//   // Calculate discount
+//   if (coupon.discountType === 'percentage') {
+//     this.discountAmount = (this.totalAmount * coupon.value) / 100;
+//   } else if (coupon.discountType === 'flat') {
+//     this.discountAmount = coupon.value;
+//   }
 
-  // Apply discount
-  this.couponSuccess = true;
-  this.couponError = false;
-  this.updateGrandTotal();
-}
+//   // Apply discount
+//   this.couponSuccess = true;
+//   this.couponError = false;
+//   this.updateGrandTotal();
+// }
 
 updateGrandTotal() {
   const discount = this.discountAmount || 0;
