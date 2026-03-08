@@ -280,33 +280,52 @@ validCoupons = [
 //   this.updateGrandTotal();
 // }
 
+
 updateGrandTotal() {
   const discount = this.discountAmount || 0;
 
-  // ✅ Calculate total quantity of all items
   const totalQty = this.cartItems.reduce(
     (sum, item) => sum + (item.quantity || 1),
     0
   );
 
-  // ✅ Base delivery (fetched or default)
-  let delivery = this.shippingCost || 0;
+  // 🚀 TEMPORARY FREE SHIPPING
+  this.shippingCost = 0;
 
-  // ✅ Add ₹20 extra to delivery if 3 or more items
-  if (totalQty >= 3) {
-    delivery += 20;
-  }
-
-  // ✅ Save updated delivery cost
-  this.shippingCost = delivery;
-
-  // ✅ Final grand total
   this.grandTotal = this.totalAmount + this.shippingCost - discount;
 
   console.log(
-    `🚚 Delivery: ₹${this.shippingCost} (Qty ${totalQty}), Grand Total: ₹${this.grandTotal}`
+    `🚚 Delivery: ₹${this.shippingCost} (FREE SHIPPING ACTIVE), Grand Total: ₹${this.grandTotal}`
   );
 }
+
+// updateGrandTotal() {
+//   const discount = this.discountAmount || 0;
+
+//   // ✅ Calculate total quantity of all items
+//   const totalQty = this.cartItems.reduce(
+//     (sum, item) => sum + (item.quantity || 1),
+//     0
+//   );
+
+//   // ✅ Base delivery (fetched or default)
+//   let delivery = this.shippingCost || 0;
+
+//   // ✅ Add ₹20 extra to delivery if 3 or more items
+//   if (totalQty >= 3) {
+//     delivery += 20;
+//   }
+
+//   // ✅ Save updated delivery cost
+//   this.shippingCost = delivery;
+
+//   // ✅ Final grand total
+//   this.grandTotal = this.totalAmount + this.shippingCost - discount;
+
+//   console.log(
+//     `🚚 Delivery: ₹${this.shippingCost} (Qty ${totalQty}), Grand Total: ₹${this.grandTotal}`
+//   );
+// }
 
 tac(){
   this.router.navigate(['/terms-and-conditions'])
