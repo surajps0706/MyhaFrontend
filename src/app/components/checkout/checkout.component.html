@@ -13,9 +13,27 @@
         </div>
 
         <div class="form-group">
-          <label>Phone *</label>
-          <input type="tel" [(ngModel)]="checkoutData.phone" minlength="10" maxlength="10" name="phone" required placeholder="9876543210" />
-        </div>
+  <label>Phone *</label>
+
+  <div class="phone-input-wrapper">
+    <span class="country-code">+91</span>
+
+    <input
+      type="tel"
+      [(ngModel)]="checkoutData.phone"
+      name="phone"
+      required
+      pattern="^[0-9]{10}$"
+      maxlength="10"
+      placeholder="9876543210"
+      #phoneInput="ngModel"
+    />
+  </div>
+
+  <div *ngIf="phoneInput.invalid && phoneInput.touched" class="error">
+    Enter a valid 10-digit Indian phone number
+  </div>
+</div>
 
 <div class="form-group">
   <label>Email *</label>
