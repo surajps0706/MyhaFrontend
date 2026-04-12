@@ -21,7 +21,8 @@ export class ProductUploadComponent {
     image_count: 1,
     enableFabricPrice: false,
     fabricBasePrice: '',
-    stock: 10  // ✅ added stock
+    stock: 10,  // ✅ added stock
+    enableCustomizationNotes: true
   };
 
   uploading = false;
@@ -55,7 +56,9 @@ export class ProductUploadComponent {
   fabricBasePrice: this.product.enableFabricPrice
     ? Number(this.product.fabricBasePrice)
     : null,
-  stock: this.product.stock
+  stock: this.product.stock,
+    enableCustomizationNotes: this.product.enableCustomizationNotes
+
 };
 
 
@@ -78,7 +81,8 @@ export class ProductUploadComponent {
         image_count: 1,          // 🔴 REQUIRED
         enableFabricPrice: false,
         fabricBasePrice: '',
-        stock: 10
+        stock: 10,
+        enableCustomizationNotes: true
       };
 
       this.uploading = false;

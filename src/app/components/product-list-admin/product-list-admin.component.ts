@@ -76,6 +76,7 @@ editProduct(product: any) {
   this.editingProduct = {
     ...product,
     image_count: product.image_count ?? 1,
+      enableCustomizationNotes: product.enableCustomizationNotes ?? true,
     sizes:
       Array.isArray(product.sizes) && product.sizes.length === 8
         ? product.sizes

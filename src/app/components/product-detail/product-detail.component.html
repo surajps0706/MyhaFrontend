@@ -274,16 +274,20 @@
 
 
     <!-- Customization Notes -->
-    <div class="customization-section">
-      <h4>
-        Customization Notes <span class="optional-text">(Optional)</span>
-      </h4>
-      <textarea
-        rows="3"
-        [(ngModel)]="customizationNotes"
-        placeholder="e.g., V-neck preferred, height 42 inches"
-      ></textarea>
-    </div>
+ <div 
+  class="customization-section"
+  *ngIf="product.enableCustomizationNotes !== false"
+>
+  <h4>
+    Customization Notes <span class="optional-text">(Optional)</span>
+  </h4>
+
+  <textarea
+    rows="3"
+    [(ngModel)]="customizationNotes"
+    placeholder="e.g., V-neck preferred, height 42 inches"
+  ></textarea>
+</div>
 
 
         <div class="points">

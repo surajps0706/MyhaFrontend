@@ -44,6 +44,16 @@
       </select>
     </div>
 
+    <!-- Customization Notes Toggle -->
+<label class="fabric-toggle">
+  <input 
+    type="checkbox" 
+    [(ngModel)]="product.enableCustomizationNotes" 
+    name="enableCustomizationNotes" 
+  />
+  Enable Customization Notes
+</label>
+
     <label>Colors (comma separated)</label>
     <input type="text" [(ngModel)]="product.colors" name="colors" placeholder="Lavender, Blue" />
 
