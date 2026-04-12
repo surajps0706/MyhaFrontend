@@ -159,7 +159,9 @@ saveProduct() {
     fabricBasePrice: this.editingProduct.fabricBasePrice || null,
 
     displayOrder: this.editingProduct.displayOrder || 0,
-    stock: Number(this.editingProduct.stock) || 0
+    stock: Number(this.editingProduct.stock) || 0,
+      enableCustomizationNotes: this.editingProduct.enableCustomizationNotes
+
   };
 
   /* -------------------------------
