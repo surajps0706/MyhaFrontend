@@ -13,53 +13,41 @@
         </div>
 
         <div class="form-group">
-  <label>Phone *</label>
+          <label>Phone *</label>
 
-  <div class="phone-input-wrapper">
-    <span class="country-code">+91</span>
+          <div class="phone-input-wrapper">
+            <span class="country-code">+91</span>
 
-    <input
-      type="tel"
-      [(ngModel)]="checkoutData.phone"
-      name="phone"
-      required
-      pattern="^[0-9]{10}$"
-      maxlength="10"
-      placeholder="9876543210"
-      #phoneInput="ngModel"
-    />
-  </div>
+            <input type="tel" [(ngModel)]="checkoutData.phone" name="phone" required pattern="^[0-9]{10}$"
+              maxlength="10" placeholder="9876543210" #phoneInput="ngModel" />
+          </div>
 
-  <div *ngIf="phoneInput.invalid && phoneInput.touched" class="error">
-    Enter a valid 10-digit Indian phone number
-  </div>
-</div>
+          <div *ngIf="phoneInput.invalid && phoneInput.touched" class="error">
+            Enter a valid 10-digit Indian phone number
+          </div>
+        </div>
 
-<div class="form-group">
-  <label>Email *</label>
-  <input
-    type="email"
-    [(ngModel)]="checkoutData.email"
-    name="email"
-    required
-    pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-    placeholder="john@example.com"
-    #email="ngModel"
-  />
-  <div *ngIf="email.invalid && email.touched" class="error">
-    Enter a valid email address
-  </div>
-</div>
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" [(ngModel)]="checkoutData.email" name="email" required
+            pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" placeholder="john@example.com"
+            #email="ngModel" />
+          <div *ngIf="email.invalid && email.touched" class="error">
+            Enter a valid email address
+          </div>
+        </div>
 
 
         <div class="form-group">
           <label>Address Line 1 *</label>
-          <input type="text" [(ngModel)]="checkoutData.addressLine1" name="address1" required placeholder="Street, Area" />
+          <input type="text" [(ngModel)]="checkoutData.addressLine1" name="address1" required
+            placeholder="Street, Area" />
         </div>
 
         <div class="form-group">
           <label>Address Line 2</label>
-          <input type="text" [(ngModel)]="checkoutData.addressLine2" name="address2" placeholder="Apartment, Landmark" />
+          <input type="text" [(ngModel)]="checkoutData.addressLine2" name="address2"
+            placeholder="Apartment, Landmark" />
         </div>
 
         <div class="form-row">
@@ -71,25 +59,16 @@
             <label>State</label>
             <input type="text" required [(ngModel)]="checkoutData.state" name="state" />
           </div>
-         <div class="form-group">
-  <label>Pincode</label>
-<input
-  type="text"
-  inputmode="numeric"
-  pattern="^[0-9]{6}$"
-  maxlength="6"
-  [(ngModel)]="checkoutData.pincode"
-  name="pincode"
-  required
-  (blur)="onPincodeChange()"
-  #pincodeInput="ngModel"
-/>
+          <div class="form-group">
+            <label>Pincode</label>
+            <input type="text" inputmode="numeric" pattern="^[0-9]{6}$" maxlength="6" [(ngModel)]="checkoutData.pincode"
+              name="pincode" required (blur)="onPincodeChange()" #pincodeInput="ngModel" />
 
 
-  <div *ngIf="pincodeInput.invalid && pincodeInput.touched" class="error">
-    Please enter a valid 6-digit pincode.
-  </div>
-</div>
+            <div *ngIf="pincodeInput.invalid && pincodeInput.touched" class="error">
+              Please enter a valid 6-digit pincode.
+            </div>
+          </div>
 
         </div>
       </fieldset>
@@ -146,14 +125,14 @@
       </div> -->
 
       <!-- Delivery + Discount + Grand Total -->
-    <div class="summary-total">
-  <span>Delivery Charge:</span>
-  <strong *ngIf="shippingCost">₹{{ shippingCost | number:'1.0-0' }}</strong>
-  <strong *ngIf="!shippingCost">—</strong>
-</div>
+      <div class="summary-total">
+        <span>Delivery Charge:</span>
+        <strong *ngIf="shippingCost">₹{{ shippingCost | number:'1.0-0' }}</strong>
+        <strong *ngIf="!shippingCost">—</strong>
+      </div>
 
 
-  <!-- <div class="summary-total" *ngIf="handlingCharge > 0">
+      <!-- <div class="summary-total" *ngIf="handlingCharge > 0">
   <span>Handling Charge:</span>
   <strong>₹{{ handlingCharge }}</strong>
 </div> -->
@@ -169,32 +148,33 @@
         <strong class="total-amount">₹{{ grandTotal || totalAmount | number: '1.0-0' }}</strong>
       </div>
 
-<!-- Terms & Conditions Agreement (Checkout-specific) -->
-<div class="checkout-terms-container">
-  <label class="checkout-terms-label">
-    <input
-      type="checkbox"
-      [(ngModel)]="agreedToTerms"
-      name="checkoutTerms"
-      required
-      class="checkout-terms-checkbox"
-    />
-    <span>I agree to</span>
- <a
-      (click)="tac()"
-      target="_blank"
-      class="checkout-terms-link"
-    >      Terms & Conditions
-    </a>
-  </label>
-</div>
+      <!-- Terms & Conditions Agreement (Checkout-specific) -->
+      <div class="checkout-terms-container">
+        <label class="checkout-terms-label">
+          <input type="checkbox" [(ngModel)]="agreedToTerms" name="checkoutTerms" required
+            class="checkout-terms-checkbox" />
+          <span>I agree to</span>
+          <a (click)="tac()" target="_blank" class="checkout-terms-link"> Terms & Conditions
+          </a>
+        </label>
+      </div>
 
 
 
 
-      <button type="submit" (click)="placeOrder()"  [disabled]="!agreedToTerms" class="place-order-btn">
-        Proceed to Pay
-      </button>
+      <button 
+ type="submit"
+ (click)="placeOrder()"
+ [disabled]="
+   !agreedToTerms ||
+   !shippingCalculated ||
+   shippingLoading
+ "
+ class="place-order-btn">
+
+ {{ shippingLoading ? 'Calculating Delivery...' : 'Proceed to Pay' }}
+
+</button>
 
       <p class="secure-note">All payments are 100% secure & encrypted via Razorpay.</p>
     </aside>
