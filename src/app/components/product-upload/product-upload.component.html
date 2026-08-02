@@ -57,26 +57,118 @@
     <label>Colors (comma separated)</label>
     <input type="text" [(ngModel)]="product.colors" name="colors" placeholder="Lavender, Blue" />
 
-    <label>Number of Product Images</label>
-<input
-  type="number"
-  [(ngModel)]="product.image_count"
-  name="image_count"
-  min="1"
-  required
-/>
+    <label>Product Images</label>
 
-<p class="hint">
-  After saving, upload images to R2:<br>
-  <code>products/&lt;productId&gt;/1.jpg, 2.jpg, ...</code>
+<div
+  class="image-drop-zone"
+  [class.active]="dragActive"
+  (dragover)="onDragOver($event)"
+  (dragleave)="onDragLeave($event)"
+  (drop)="onDrop($event)"
+>
+
+  <input
+    #fileInput
+    type="file"
+    hidden
+    multiple
+    accept="image/*,.heic,.heif"
+    (change)="onFileSelected($event)"
+  />
+
+  <button
+    type="button"
+    class="browse-btn"
+    (click)="fileInput.click()"
+  >
+    Browse Images
+  </button>
+
+  <p>
+    Drag & Drop images here
+  </p>
+
+  <small>
+
+    JPEG • PNG • WEBP • HEIC
+
+  </small>
+
+</div>
+
+<div
+  class="preview-grid"
+  *ngIf="imagePreviews.length"
+>
+
+  <div
+    class="preview-card"
+    *ngFor="
+      let image of imagePreviews;
+      let i=index
+    "
+  >
+
+      <img
+        [src]="image"
+      />
+
+      <span>
+
+        {{i+1}}
+
+      </span>
+
+  </div>
+
+</div>
+
+<div
+  *ngIf="uploading"
+  class="progress-wrapper"
+>
+
+  <div
+    class="progress-bar"
+    [style.width.%]="uploadProgress"
+  >
+  </div>
+
+</div>
+
+<p *ngIf="uploading">
+
+{{uploadProgress}}%
+
 </p>
 
 
     <!-- <label>Cloudinary Image URLs (comma separated)</label>
     <textarea [(ngModel)]="product.images" name="images" placeholder="Paste URLs here separated by commas"></textarea> -->
 
-    <button type="submit" class="btn" [disabled]="uploading">
-      {{ uploading ? 'Uploading...' : 'Save Product' }}
-    </button>
+    <button
+type="submit"
+class="btn"
+[disabled]="
+uploading ||
+selectedFiles.length===0
+"
+>
+
+{{
+
+uploading
+
+?
+
+'Uploading Product...'
+
+:
+
+'Create Product'
+
+}}
+
+</button>
   </form>
 </div>
