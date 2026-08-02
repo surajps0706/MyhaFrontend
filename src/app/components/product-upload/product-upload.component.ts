@@ -302,6 +302,64 @@ async prepareImage(file: File): Promise<File> {
 
 }
 
+moveRight(index: number) {
+
+  if (index >= this.selectedFiles.length - 1) return;
+
+  const files = [...this.selectedFiles];
+  const previews = [...this.imagePreviews];
+
+  [files[index + 1], files[index]] = [
+    files[index],
+    files[index + 1]
+  ];
+
+  [previews[index + 1], previews[index]] = [
+    previews[index],
+    previews[index + 1]
+  ];
+
+  this.selectedFiles = files;
+  this.imagePreviews = previews;
+
+}
+
+moveLeft(index: number) {
+
+  if (index === 0) return;
+
+  const files = [...this.selectedFiles];
+  const previews = [...this.imagePreviews];
+
+  [files[index - 1], files[index]] = [
+    files[index],
+    files[index - 1]
+  ];
+
+  [previews[index - 1], previews[index]] = [
+    previews[index],
+    previews[index - 1]
+  ];
+
+  this.selectedFiles = files;
+  this.imagePreviews = previews;
+
+}
+
+
+
+removeImage(index: number) {
+
+  URL.revokeObjectURL(this.imagePreviews[index]);
+
+  this.selectedFiles = this.selectedFiles.filter((_, i) => i !== index);
+
+  this.imagePreviews = this.imagePreviews.filter((_, i) => i !== index);
+
+  this.product.image_count = this.selectedFiles.length;
+
+}
+
 uploadImages(
     productId:string,
     headers:HttpHeaders

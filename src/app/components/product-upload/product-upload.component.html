@@ -76,6 +76,20 @@
     (change)="onFileSelected($event)"
   />
 
+  <div class="upload-icon">
+    
+  </div>
+
+  <h3>Upload Product Images</h3>
+
+  <p class="upload-text">
+    Drag & drop your images here
+  </p>
+
+  <span class="upload-divider">
+    or
+  </span>
+
   <button
     type="button"
     class="browse-btn"
@@ -84,14 +98,9 @@
     Browse Images
   </button>
 
-  <p>
-    Drag & Drop images here
-  </p>
-
-  <small>
-
-    JPEG • PNG • WEBP • HEIC
-
+  <small class="upload-info">
+    Supports JPG • PNG • WEBP • HEIC <br>
+    Maximum 20 images
   </small>
 
 </div>
@@ -101,25 +110,52 @@
   *ngIf="imagePreviews.length"
 >
 
-  <div
-    class="preview-card"
-    *ngFor="
-      let image of imagePreviews;
-      let i=index
-    "
-  >
+ <div
+  class="preview-card"
+  *ngFor="let image of imagePreviews; let i = index"
+>
 
-      <img
-        [src]="image"
-      />
+  <img [src]="image" />
 
-      <span>
+  <div class="image-number">
 
-        {{i+1}}
+    {{ i + 1 }}
 
-      </span>
+    <span *ngIf="i === 0" class="cover-badge">
+      Cover
+    </span>
 
   </div>
+
+  <div class="preview-actions">
+
+    <button
+      type="button"
+      (click)="moveLeft(i)"
+      [disabled]="i===0"
+    >
+      ←
+    </button>
+
+    <button
+      type="button"
+      (click)="moveRight(i)"
+      [disabled]="i===imagePreviews.length-1"
+    >
+      →
+    </button>
+
+    <button
+      type="button"
+      class="delete-btn"
+      (click)="removeImage(i)"
+    >
+      ✕
+    </button>
+
+  </div>
+
+</div>
 
 </div>
 

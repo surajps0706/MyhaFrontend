@@ -93,6 +93,156 @@ textarea {
   justify-content: center;
 }
 
+.image-number {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  z-index: 20;
+}
+
+.image-number span {
+  position: static !important;
+  width: auto;
+  height: auto;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.cover-badge {
+  background: #28a745 !important;
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.preview-actions {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 20;
+}
+
+.preview-actions button {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.75);
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.preview-actions button:hover:not(:disabled) {
+  background: #111;
+}
+
+.preview-actions button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.delete-btn {
+  background: #dc3545 !important;
+}
+
+.preview-card img {
+  pointer-events: none;
+}
+
+
+/* ===============================
+image drop zone
+   =============================== */
+
+.image-drop-zone {
+  border: 2px dashed #d8c3a5;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #fffdf9 0%, #faf8f4 100%);
+  padding: 40px 20px;
+  text-align: center;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.image-drop-zone:hover {
+  border-color: #b9975b;
+  background: #fff;
+}
+
+.image-drop-zone.active {
+  border-color: #8d6b36;
+  background: #fef8ee;
+  transform: scale(1.01);
+}
+
+.upload-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.image-drop-zone h3 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  color: #222;
+}
+
+.upload-text {
+  margin: 12px 0 8px;
+  color: #666;
+  font-size: 15px;
+}
+
+.upload-divider {
+  display: inline-block;
+  margin: 12px 0;
+  color: #999;
+  font-size: 13px;
+  position: relative;
+}
+
+.upload-divider::before,
+.upload-divider::after {
+  content: "";
+  display: inline-block;
+  width: 45px;
+  height: 1px;
+  background: #ddd;
+  vertical-align: middle;
+  margin: 0 10px;
+}
+
+.browse-btn {
+  background: linear-gradient(135deg, #c1a57b, #a48860);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.browse-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(161, 136, 96, 0.3);
+}
+
+.upload-info {
+  display: block;
+  margin-top: 18px;
+  color: #777;
+  font-size: 13px;
+  line-height: 1.6;
+}
 
 /* ===============================
    FABRIC PRICE SECTION STYLING
