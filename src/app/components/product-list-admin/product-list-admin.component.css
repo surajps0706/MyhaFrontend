@@ -618,6 +618,108 @@ select[name='fabricBasePrice']:hover {
 }
 
 
+
+
+/* =========================
+   EDIT IMAGE UPLOAD PROGRESS
+========================= */
+
+.edit-upload-progress {
+  width: 100%;
+  margin-top: 18px;
+  padding: 16px 18px;
+  box-sizing: border-box;
+
+  background: #fff;
+  border: 1px solid #e5e0d7;
+  border-radius: 12px;
+
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.edit-upload-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 10px;
+
+  font-size: 13px;
+  color: #333;
+}
+
+.edit-upload-header strong {
+  font-size: 13px;
+  color: #a48860;
+}
+
+.edit-progress-track {
+  width: 100%;
+  height: 8px;
+
+  background: #eeeae3;
+  border-radius: 20px;
+
+  overflow: hidden;
+}
+
+.edit-progress-fill {
+  height: 100%;
+
+  background: linear-gradient(
+    90deg,
+    #c1a57b,
+    #a48860
+  );
+
+  border-radius: 20px;
+
+  transition: width 0.25s ease;
+}
+
+.edit-upload-progress small {
+  display: block;
+
+  margin-top: 9px;
+
+  font-size: 11px;
+  color: #888;
+}
+
+
+/* =========================
+   DISABLED ADD BUTTON
+========================= */
+
+.edit-add-images .browse-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+  .edit-upload-progress {
+    padding: 14px;
+  }
+
+  .edit-upload-header {
+    font-size: 12px;
+  }
+
+  .edit-upload-progress small {
+    font-size: 10px;
+  }
+
+}
+
+
 /* =========================================
    TABLET
 ========================================= */

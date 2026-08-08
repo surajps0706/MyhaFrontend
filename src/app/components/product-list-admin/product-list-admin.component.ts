@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders,  HttpEventType } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { CdkDragDrop, moveItemInArray, DragDropModule } from '@angular/cdk/drag-drop';
 import { FormsModule } from '@angular/forms';
@@ -27,6 +27,10 @@ editUploadingImages = false;
 editDragActive = false;
 
 readonly MAX_IMAGES = 20;
+
+editUploading = false;
+editUploadProgress = 0;
+editUploadStatus = '';
 
   constructor(private http: HttpClient) {}
 
@@ -122,13 +126,132 @@ async prepareEditImage(file: File): Promise<File> {
 
 
 async onEditFilesSelected(event: any) {
+  const files = Array.from(event.target.files || []) as File[];
 
-  const files = Array.from(
-    event.target.files || []
-  ) as File[];
+  if (!files.length) {
+    return;
+  }
 
-  await this.processEditImages(files);
+  if (!this.editingProduct) {
+    return;
+  }
 
+  this.editUploading = true;
+  this.editUploadProgress = 0;
+  this.editUploadStatus = 'Preparing images...';
+
+  try {
+    const processedFiles: File[] = [];
+
+    for (let i = 0; i < files.length; i++) {
+
+      this.editUploadStatus =
+        `Preparing image ${i + 1} of ${files.length}...`;
+
+      const processed = await this.prepareEditImage(files[i]);
+
+      processedFiles.push(processed);
+
+      // Show preparation progress
+      this.editUploadProgress = Math.round(
+        ((i + 1) / files.length) * 30
+      );
+    }
+
+    this.editUploadStatus = 'Uploading images...';
+
+    const formData = new FormData();
+
+    processedFiles.forEach(file => {
+      formData.append('images', file, file.name);
+    });
+
+    const token = localStorage.getItem('admin_token');
+
+    const headers = new HttpHeaders().set(
+      'Authorization',
+      `Bearer ${token}`
+    );
+
+    this.http.post<any>(
+      `${this.baseUrl}/products/${this.editingProduct.id}/add-images`,
+      formData,
+      {
+        headers,
+        observe: 'events',
+        reportProgress: true
+      }
+    ).subscribe({
+
+      next: (event: any) => {
+
+        if (event.type === HttpEventType.UploadProgress) {
+
+          if (event.total) {
+
+            const uploadPercent = Math.round(
+              (event.loaded / event.total) * 70
+            );
+
+            // Preparation = 30%
+            // Upload = remaining 70%
+            this.editUploadProgress =
+              30 + uploadPercent;
+          }
+
+          this.editUploadStatus =
+            `Uploading images... ${this.editUploadProgress}%`;
+        }
+
+        if (event.type === HttpEventType.Response) {
+
+          const response = event.body;
+
+          this.editUploadProgress = 100;
+          this.editUploadStatus = 'Images added successfully!';
+
+          this.editingProduct.images =
+            response.images;
+
+          this.editingProduct.image_count =
+            response.image_count;
+
+          // Small delay so admin sees 100%
+          setTimeout(() => {
+            this.editUploading = false;
+            this.editUploadProgress = 0;
+            this.editUploadStatus = '';
+          }, 800);
+        }
+      },
+
+      error: (err) => {
+
+        console.error('❌ Image upload failed:', err);
+
+        this.editUploading = false;
+        this.editUploadProgress = 0;
+        this.editUploadStatus = '';
+
+        alert(
+          err?.error?.detail ||
+          'Failed to add images.'
+        );
+      }
+    });
+
+  } catch (err) {
+
+    console.error('❌ Image preparation failed:', err);
+
+    this.editUploading = false;
+    this.editUploadProgress = 0;
+    this.editUploadStatus = '';
+
+    alert('Failed to prepare images.');
+  }
+
+  // Reset file input so the same file can be selected again
   event.target.value = '';
 }
 

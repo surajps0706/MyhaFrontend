@@ -226,13 +226,18 @@
     (change)="onEditFilesSelected($event)"
   />
 
-  <button
-    type="button"
-    class="browse-btn"
-    (click)="editFileInput.click()"
-  >
-    ＋ Add Images
-  </button>
+ <button
+  type="button"
+  class="browse-btn"
+  [disabled]="editUploading"
+  (click)="editFileInput.click()"
+>
+  <span *ngIf="!editUploading">+ Add Images</span>
+
+  <span *ngIf="editUploading">
+    Uploading...
+  </span>
+</button>
 
   <p>
     Drag & Drop new images here
@@ -245,6 +250,38 @@
   <p class="image-help-text">
     Drag images to reorder them. The first image is the cover image.
   </p>
+
+</div>
+
+<div
+  class="edit-upload-progress"
+  *ngIf="editUploading"
+>
+
+  <div class="edit-upload-header">
+
+    <span>
+      {{ editUploadStatus }}
+    </span>
+
+    <strong>
+      {{ editUploadProgress }}%
+    </strong>
+
+  </div>
+
+  <div class="edit-progress-track">
+
+    <div
+      class="edit-progress-fill"
+      [style.width.%]="editUploadProgress"
+    ></div>
+
+  </div>
+
+  <small>
+    Please don't close this window while images are being uploaded.
+  </small>
 
 </div>
 
