@@ -147,6 +147,120 @@
   name="image_count"
   required
 />
+
+<label>Product Images</label>
+
+<!-- EXISTING IMAGES ONLY -->
+<div class="edit-images-grid">
+
+  <div
+    class="edit-image-card"
+    *ngFor="let image of editingProduct.images; let i = index"
+  >
+
+    <div class="edit-image-wrapper">
+
+      <img
+        [src]="image"
+        [alt]="editingProduct.name"
+      />
+
+      <div class="edit-image-number">
+        {{ i + 1 }}
+
+        <span
+          *ngIf="i === 0"
+          class="cover-badge"
+        >
+          Cover
+        </span>
+      </div>
+
+    </div>
+
+    <div class="edit-image-actions">
+
+      <button
+        type="button"
+        (click)="moveEditImageLeft(i)"
+        [disabled]="i === 0"
+      >
+        ←
+      </button>
+
+      <button
+        type="button"
+        (click)="moveEditImageRight(i)"
+        [disabled]="i === editingProduct.images.length - 1"
+      >
+        →
+      </button>
+
+      <button
+        type="button"
+        class="remove-image-btn"
+        (click)="removeEditImage(i)"
+      >
+        ✕ Remove
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+<!-- END EXISTING IMAGES GRID -->
+
+
+<!-- ADD NEW IMAGES - OUTSIDE THE GRID -->
+<div class="edit-add-images">
+
+  <h4>Add New Product Images</h4>
+
+  <input
+    #editFileInput
+    type="file"
+    hidden
+    multiple
+    accept="image/*,.heic,.heif"
+    (change)="onEditFilesSelected($event)"
+  />
+
+  <button
+    type="button"
+    class="browse-btn"
+    (click)="editFileInput.click()"
+  >
+    ＋ Add Images
+  </button>
+
+  <p>
+    Drag & Drop new images here
+  </p>
+
+  <small>
+    JPEG • PNG • WEBP • HEIC
+  </small>
+
+  <p class="image-help-text">
+    Drag images to reorder them. The first image is the cover image.
+  </p>
+
+</div>
+
+<p
+  *ngIf="!editingProduct?.images?.length"
+  class="no-images-message"
+>
+  No images available.
+</p>
+
+<p
+  *ngIf="editingProduct?.images?.length"
+  class="image-help-text"
+>
+  Drag images to reorder them. The first image is the cover image.
+</p>
 <p class="hint">
   Images must exist in R2 at:
   products/{{ editingProduct.id }}/1.jpg … {{ editingProduct.image_count }}.jpg

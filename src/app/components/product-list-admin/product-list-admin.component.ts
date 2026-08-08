@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { CdkDragDrop, moveItemInArray, DragDropModule } from '@angular/cdk/drag-drop';
 import { FormsModule } from '@angular/forms';
 import { environment } from '../../../environments/environment';
+import imageCompression from 'browser-image-compression';
+import heic2any from 'heic2any';
 
 @Component({
   selector: 'app-product-list-admin',
@@ -17,6 +19,14 @@ export class ProductListAdminComponent implements OnInit {
   editingProduct: any = null;
 
   private baseUrl = environment.apiUrl;
+
+  editSelectedFiles: File[] = [];
+editImagePreviews: string[] = [];
+
+editUploadingImages = false;
+editDragActive = false;
+
+readonly MAX_IMAGES = 20;
 
   constructor(private http: HttpClient) {}
 
@@ -49,6 +59,152 @@ loadProducts() {
       alert('Failed to load products');
     }
   });
+}
+
+
+async prepareEditImage(file: File): Promise<File> {
+
+  let workingFile = file;
+
+  const fileName = file.name.toLowerCase();
+
+  const isHeic =
+    file.type === 'image/heic' ||
+    file.type === 'image/heif' ||
+    fileName.endsWith('.heic') ||
+    fileName.endsWith('.heif');
+
+  if (isHeic) {
+
+    const converted = await heic2any({
+      blob: file,
+      toType: 'image/jpeg',
+      quality: 0.9
+    });
+
+    const jpegBlob = Array.isArray(converted)
+      ? converted[0]
+      : converted;
+
+    workingFile = new File(
+      [jpegBlob as Blob],
+      file.name.replace(/\.(heic|heif)$/i, '.jpg'),
+      {
+        type: 'image/jpeg'
+      }
+    );
+  }
+
+
+  
+
+  const compressed = await imageCompression(
+    workingFile,
+    {
+      maxSizeMB: 0.5,
+      maxWidthOrHeight: 1800,
+      initialQuality: 0.85,
+      useWebWorker: true
+    }
+  );
+
+  return new File(
+    [compressed],
+    workingFile.name.replace(
+      /\.(png|webp|heic|heif)$/i,
+      '.jpg'
+    ),
+    {
+      type: 'image/jpeg'
+    }
+  );
+}
+
+
+async onEditFilesSelected(event: any) {
+
+  const files = Array.from(
+    event.target.files || []
+  ) as File[];
+
+  await this.processEditImages(files);
+
+  event.target.value = '';
+}
+
+onEditDragOver(event: DragEvent) {
+
+  event.preventDefault();
+
+  this.editDragActive = true;
+}
+
+onEditDragLeave(event: DragEvent) {
+
+  event.preventDefault();
+
+  this.editDragActive = false;
+}
+
+async onEditDrop(event: DragEvent) {
+
+  event.preventDefault();
+
+  this.editDragActive = false;
+
+  const files = Array.from(
+    event.dataTransfer?.files || []
+  );
+
+  await this.processEditImages(files);
+}
+
+
+async processEditImages(files: File[]) {
+
+  if (!this.editingProduct) return;
+
+  const currentCount =
+    this.editingProduct.images?.length || 0;
+
+  if (
+    currentCount +
+    this.editSelectedFiles.length +
+    files.length > this.MAX_IMAGES
+  ) {
+
+    alert(
+      `Maximum ${this.MAX_IMAGES} images allowed`
+    );
+
+    return;
+  }
+
+  for (const file of files) {
+
+    try {
+
+      const processed =
+        await this.prepareEditImage(file);
+
+      this.editSelectedFiles.push(processed);
+
+      this.editImagePreviews.push(
+        URL.createObjectURL(processed)
+      );
+
+    } catch (error) {
+
+      console.error(
+        'Image processing failed:',
+        error
+      );
+
+      alert(
+        `Could not process ${file.name}`
+      );
+    }
+  }
 }
 
 
@@ -100,12 +256,98 @@ getDefaultSizes() {
 }
 
 
+uploadNewEditImages(
+  productId: string,
+  headers: HttpHeaders
+): Promise<void> {
+
+  return new Promise((resolve, reject) => {
+
+    const formData = new FormData();
+
+    this.editSelectedFiles.forEach(file => {
+
+      formData.append(
+        'images',
+        file,
+        file.name
+      );
+
+    });
+
+    this.editUploadingImages = true;
+
+    this.http.post<any>(
+      `${this.baseUrl}/products/${productId}/add-images`,
+      formData,
+      { headers }
+    ).subscribe({
+
+      next: (response) => {
+
+        console.log(
+          '✅ New images uploaded:',
+          response
+        );
+
+        // Add newly uploaded images into editing state
+        this.editingProduct.images =
+          response.images;
+
+        this.editingProduct.image_count =
+          response.image_count;
+
+        this.editUploadingImages = false;
+
+        resolve();
+
+      },
+
+      error: (error) => {
+
+        console.error(
+          '❌ New image upload failed:',
+          error
+        );
+
+        this.editUploadingImages = false;
+
+        reject(error);
+
+      }
+
+    });
+
+  });
+}
+
+clearEditImageState() {
+
+  this.editImagePreviews.forEach(url => {
+    URL.revokeObjectURL(url);
+  });
+
+  this.editSelectedFiles = [];
+  this.editImagePreviews = [];
+
+  this.editUploadingImages = false;
+  this.editDragActive = false;
+}
+
+
+
+
 
   // 💾 Save product changes (R2-based image system)
 saveProduct() {
   const token = localStorage.getItem('admin_token');
+
   if (!token) {
     alert('⚠️ Unauthorized: Please login again.');
+    return;
+  }
+
+  if (!this.editingProduct) {
     return;
   }
 
@@ -114,9 +356,9 @@ saveProduct() {
     `Bearer ${token}`
   );
 
-  /* -------------------------------
-     Normalize colors
-  -------------------------------- */
+  // ================================
+  // Normalize colors
+  // ================================
   if (typeof this.editingProduct.colors === 'string') {
     this.editingProduct.colors = this.editingProduct.colors
       .split(',')
@@ -124,49 +366,98 @@ saveProduct() {
       .filter((c: string) => c.length > 0);
   }
 
-  /* -------------------------------
-     Ensure Sold Out flag is boolean
-  -------------------------------- */
-  this.editingProduct.isSoldOut = !!this.editingProduct.isSoldOut;
+  // ================================
+  // Sold Out
+  // ================================
+  this.editingProduct.isSoldOut =
+    !!this.editingProduct.isSoldOut;
 
-  /* -------------------------------
-     Ensure sizes always exist
-  -------------------------------- */
+  // ================================
+  // Ensure sizes
+  // ================================
   if (
     !Array.isArray(this.editingProduct.sizes) ||
     this.editingProduct.sizes.length !== 8
   ) {
-    this.editingProduct.sizes = this.getDefaultSizes();
+    this.editingProduct.sizes =
+      this.getDefaultSizes();
   }
 
-  /* -------------------------------
-     FINAL CLEAN PAYLOAD
-     (NO images field — R2 only)
-  -------------------------------- */
+  // ================================
+  // Ensure images
+  // ================================
+  if (!Array.isArray(this.editingProduct.images)) {
+    this.editingProduct.images = [];
+  }
+
+  // ================================
+  // Image count ALWAYS from images
+  // ================================
+  this.editingProduct.image_count =
+    this.editingProduct.images.length;
+
+  // ================================
+  // FINAL PRODUCT PAYLOAD
+  // ================================
   const updatedProduct = {
+
     name: this.editingProduct.name,
-    price: Number(this.editingProduct.price),
-    description: this.editingProduct.description,
-    category: this.editingProduct.category,
 
-    sizes: this.editingProduct.sizes,
-    colors: this.editingProduct.colors,
+    price: Number(
+      this.editingProduct.price
+    ),
 
-    image_count: Number(this.editingProduct.image_count),
+    description:
+      this.editingProduct.description,
 
-    isSoldOut: this.editingProduct.isSoldOut,
-    enableFabricPrice: !!this.editingProduct.enableFabricPrice,
-    fabricBasePrice: this.editingProduct.fabricBasePrice || null,
+    category:
+      this.editingProduct.category,
 
-    displayOrder: this.editingProduct.displayOrder || 0,
-    stock: Number(this.editingProduct.stock) || 0,
-      enableCustomizationNotes: this.editingProduct.enableCustomizationNotes
+    sizes:
+      this.editingProduct.sizes,
 
+    colors:
+      this.editingProduct.colors,
+
+    // ⭐ Existing images
+    // ⭐ Reordered images
+    // ⭐ Removed images
+    images:
+      this.editingProduct.images,
+
+    image_count:
+      this.editingProduct.images.length,
+
+    isSoldOut:
+      this.editingProduct.isSoldOut,
+
+    enableFabricPrice:
+      !!this.editingProduct.enableFabricPrice,
+
+    fabricBasePrice:
+      this.editingProduct.enableFabricPrice
+        ? Number(this.editingProduct.fabricBasePrice)
+        : null,
+
+    displayOrder:
+      this.editingProduct.displayOrder || 0,
+
+    stock:
+      Number(this.editingProduct.stock) || 0,
+
+    enableCustomizationNotes:
+      !!this.editingProduct.enableCustomizationNotes
   };
 
-  /* -------------------------------
-     API call
-  -------------------------------- */
+  console.log(
+    '📦 Updating product:',
+    updatedProduct
+  );
+
+  // ================================
+  // STEP 1
+  // Save product + image ordering
+  // ================================
   this.http
     .put(
       `${this.baseUrl}/products/${this.editingProduct.id}`,
@@ -174,15 +465,67 @@ saveProduct() {
       { headers }
     )
     .subscribe({
-      next: () => {
-        alert('✅ Product updated successfully');
+
+      next: async () => {
+
+        // ================================
+        // STEP 2
+        // Upload newly added images
+        // ================================
+        if (
+          this.editSelectedFiles &&
+          this.editSelectedFiles.length > 0
+        ) {
+
+          try {
+
+            await this.uploadNewEditImages(
+              this.editingProduct.id,
+              headers
+            );
+
+          } catch (error) {
+
+            console.error(
+              '❌ New image upload failed:',
+              error
+            );
+
+            alert(
+              '⚠️ Product saved, but new images failed to upload.'
+            );
+
+            return;
+          }
+        }
+
+        // ================================
+        // SUCCESS
+        // ================================
+        alert(
+          '✅ Product updated successfully'
+        );
+
+        this.clearEditImageState();
+
         this.editingProduct = null;
+
         this.loadProducts();
       },
+
       error: (err) => {
-        console.error('❌ Update failed:', err);
-        alert('Update failed: ' + err.message);
+
+        console.error(
+          '❌ Update failed:',
+          err
+        );
+
+        alert(
+          'Update failed: ' +
+          (err.error?.detail || err.message)
+        );
       }
+
     });
 }
 
@@ -226,6 +569,73 @@ decreaseStock() {
   if (!this.editingProduct) return;
   const current = this.editingProduct.stock || 0;
   this.editingProduct.stock = current > 0 ? current - 1 : 0;
+}
+
+dropEditImage(event: CdkDragDrop<any[]>) {
+
+  if (!this.editingProduct?.images) return;
+
+  moveItemInArray(
+    this.editingProduct.images,
+    event.previousIndex,
+    event.currentIndex
+  );
+
+  console.log(
+    'New image order:',
+    this.editingProduct.images
+  );
+}
+
+removeEditImage(index: number) {
+
+  if (!this.editingProduct?.images) return;
+
+  if (this.editingProduct.images.length <= 1) {
+    alert('A product must have at least one image.');
+    return;
+  }
+
+  const confirmed = confirm(
+    'Remove this image from the product?'
+  );
+
+  if (!confirmed) return;
+
+  this.editingProduct.images.splice(index, 1);
+
+  this.editingProduct.image_count =
+    this.editingProduct.images.length;
+}
+
+moveEditImageLeft(index: number) {
+  if (!this.editingProduct?.images || index <= 0) return;
+
+  const images = this.editingProduct.images;
+
+  [images[index - 1], images[index]] =
+    [images[index], images[index - 1]];
+
+  // Trigger Angular change detection
+  this.editingProduct.images = [...images];
+}
+
+
+// ================================
+// Move image right
+// ================================
+moveEditImageRight(index: number) {
+  if (!this.editingProduct?.images) return;
+
+  const images = this.editingProduct.images;
+
+  if (index >= images.length - 1) return;
+
+  [images[index], images[index + 1]] =
+    [images[index + 1], images[index]];
+
+  // Trigger Angular change detection
+  this.editingProduct.images = [...images];
 }
 
 }
