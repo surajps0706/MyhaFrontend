@@ -182,6 +182,10 @@
     </div>
 
 <!-- Sleeve Customization Toggle -->
+<!-- =========================
+     Sleeve Customization
+========================= -->
+
 <div class="sleeve-toggle-wrapper">
   <label class="switch">
     <input
@@ -191,12 +195,19 @@
     />
     <span class="slider round"></span>
   </label>
-  <span class="toggle-label">Sleeve Customization</span>
+
+  <span class="toggle-label">
+    Sleeve Customization
+  </span>
 </div>
 
-<!-- Sleeve Options (visible only if toggle is ON) -->
-<div class="sleeve-options" *ngIf="enableSleeveCustomization">
+<!-- Sleeve Options -->
+<div
+  class="sleeve-options"
+  *ngIf="enableSleeveCustomization"
+>
   <h4>Sleeve Type:</h4>
+
   <div class="sleeve-list">
     <label *ngFor="let option of sleeveOptions">
       <input
@@ -205,6 +216,7 @@
         [value]="option"
         [(ngModel)]="selectedSleeve"
       />
+
       {{ option.name }}
       ({{ option.price > 0 ? '+₹' + option.price : 'Free' }})
     </label>
@@ -212,21 +224,45 @@
 </div>
 
 
-<!-- Height Customization Toggle -->
-<div class="height-toggle-wrapper">
+<!-- =========================
+     Height Customization
+========================= -->
+
+<!-- Show Height toggle ONLY if admin enabled it -->
+<div
+  class="height-toggle-wrapper"
+  *ngIf="product?.enableHeightCustomization"
+>
   <label class="switch">
-    <input type="checkbox" [(ngModel)]="enableHeightCustomization" (change)="onHeightToggle()" />
+    <input
+      type="checkbox"
+      [(ngModel)]="enableHeightCustomization"
+      (change)="onHeightToggle()"
+    />
+
     <span class="slider round"></span>
   </label>
-  <span class="toggle-label">Height Customization</span>
+
+  <span class="toggle-label">
+    Height Customization
+  </span>
 </div>
 
-<!-- Show only when enabled -->
-<div *ngIf="enableHeightCustomization" class="extra-height-section">
+<!-- Show Height input ONLY when customer enables it -->
+<div
+  *ngIf="enableHeightCustomization"
+  class="extra-height-section"
+>
   <h4>
-    Height 
-    <span *ngIf="isKurti">(₹{{ extraHeightPrice }})</span>
-    <span *ngIf="!isKurti">(Optional)</span>
+    Height
+
+    <span *ngIf="isKurti">
+      (₹{{ extraHeightPrice }})
+    </span>
+
+    <span *ngIf="!isKurti">
+      (Optional)
+    </span>
   </h4>
 
   <input
@@ -237,31 +273,55 @@
     placeholder="Enter desired height in inches"
   />
 
-  <p class="extra-height-note" *ngIf="isKurti">
+  <p
+    class="extra-height-note"
+    *ngIf="isKurti"
+  >
     *Extra ₹150 will be charged if height exceeds 35 inches.
   </p>
-  <p class="extra-height-note" *ngIf="!isKurti">
+
+  <p
+    class="extra-height-note"
+    *ngIf="!isKurti"
+  >
     Free Of Cost
   </p>
 </div>
 
 
-<!-- Neck Customization Toggle -->
-<div class="neck-toggle-wrapper">
+<!-- =========================
+     Neck Customization
+========================= -->
+
+<!-- Show Neck toggle ONLY if admin enabled it -->
+<div
+  class="neck-toggle-wrapper"
+  *ngIf="product?.enableNeckCustomization"
+>
   <label class="switch">
     <input
       type="checkbox"
       [(ngModel)]="enableNeckCustomization"
       (change)="onNeckToggle()"
     />
+
     <span class="slider round"></span>
   </label>
-  <span class="toggle-label">Neck Customization</span>
+
+  <span class="toggle-label">
+    Neck Customization
+  </span>
 </div>
 
-<!-- Neck Customization Input -->
-<div *ngIf="enableNeckCustomization" class="neck-section">
-  <h4>Front/Back Neck Details</h4>
+<!-- Show Neck input ONLY when customer enables it -->
+<div
+  *ngIf="enableNeckCustomization"
+  class="neck-section"
+>
+  <h4>
+    Front/Back Neck Details
+  </h4>
+
   <input
     type="text"
     class="neck-input"

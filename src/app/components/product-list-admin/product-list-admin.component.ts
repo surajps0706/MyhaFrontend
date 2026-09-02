@@ -354,8 +354,18 @@ async processEditImages(files: File[]) {
 editProduct(product: any) {
   this.editingProduct = {
     ...product,
+
     image_count: product.image_count ?? 1,
-      enableCustomizationNotes: product.enableCustomizationNotes ?? true,
+
+    enableCustomizationNotes:
+      product.enableCustomizationNotes ?? true,
+
+    enableHeightCustomization:
+      product.enableHeightCustomization ?? false,
+
+    enableNeckCustomization:
+      product.enableNeckCustomization ?? false,
+
     sizes:
       Array.isArray(product.sizes) && product.sizes.length === 8
         ? product.sizes
@@ -561,6 +571,12 @@ saveProduct() {
       this.editingProduct.enableFabricPrice
         ? Number(this.editingProduct.fabricBasePrice)
         : null,
+
+    enableHeightCustomization:
+      !!this.editingProduct.enableHeightCustomization,
+
+    enableNeckCustomization:
+      !!this.editingProduct.enableNeckCustomization,
 
     displayOrder:
       this.editingProduct.displayOrder || 0,

@@ -129,6 +129,15 @@ images: Array.isArray(data.images)
     : []
 
 };
+this.product.enableHeightCustomization =
+  this.product.enableHeightCustomization === true;
+
+this.product.enableNeckCustomization =
+  this.product.enableNeckCustomization === true;
+
+// Customer selections start OFF
+this.enableHeightCustomization = false;
+this.enableNeckCustomization = false;
 
 this.selectedImage = this.product.images[0] || '';
 
