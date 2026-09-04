@@ -20,11 +20,22 @@
   color: #222;
 }
 
-.brand {
-  font-size: 26px;
-  font-weight: 700;
-  margin-bottom: 5px;
-  color: #111;
+
+.footer-logo {
+     width: 300px;
+    height: auto;
+    display: block;
+    /* margin-bottom: 14px; */
+    margin-left: 38px;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+}
+
+
+.brand-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .tagline {
@@ -37,6 +48,13 @@
   list-style: none;
   padding: 0;
   margin: 0;
+}
+
+@media (max-width: 768px) {
+  .footer-logo {
+    width: 130px;
+    margin: 0 0 14px 0;
+  }
 }
 
 .footer-links li,
