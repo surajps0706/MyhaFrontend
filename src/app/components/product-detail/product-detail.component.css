@@ -994,7 +994,7 @@ input:checked + .slider:before {
 ========================= */
 .recommend-section {
   margin: 40px auto;
-  max-width: 1400px;
+  /* max-width: 1400px; */
   padding: 0 20px;
 }
 
@@ -1315,3 +1315,57 @@ input:checked + .slider:before {
 }
 
 
+/* ==========================================
+   MYHA ADMIN REPLY
+========================================== */
+
+.admin-reply {
+  margin-top: 20px;
+  margin-left: 24px;
+  padding: 15px 18px;
+  border-left: 2px solid #222;
+  background: #fafafa;
+}
+
+.admin-reply-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 7px;
+}
+
+.admin-reply-brand {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111;
+}
+
+.admin-reply-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #999;
+}
+
+.admin-reply-comment {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.65;
+  color: #555;
+}
+
+
+/* Mobile */
+
+@media (max-width: 768px) {
+
+  .admin-reply {
+    margin-left: 12px;
+    padding: 13px 15px;
+  }
+
+  .admin-reply-comment {
+    font-size: 13px;
+  }
+
+}

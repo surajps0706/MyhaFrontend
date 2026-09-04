@@ -1,0 +1,353 @@
+<div class="reviews-admin">
+
+  <!-- ==========================================
+       HEADER
+  =========================================== -->
+
+  <div class="page-header">
+
+    <div>
+
+      <h2>Customer Reviews</h2>
+
+      <p>
+        View customer feedback and reply as Myha.
+      </p>
+
+    </div>
+
+    <button
+      type="button"
+      class="refresh-btn"
+      (click)="loadReviews()"
+      [disabled]="loading"
+    >
+      ↻ Refresh
+    </button>
+
+  </div>
+
+
+  <!-- ==========================================
+       MESSAGES
+  =========================================== -->
+
+  <div
+    class="success-message"
+    *ngIf="successMessage"
+  >
+    {{ successMessage }}
+  </div>
+
+
+  <div
+    class="error-message"
+    *ngIf="errorMessage"
+  >
+    {{ errorMessage }}
+  </div>
+
+
+  <!-- ==========================================
+       LOADING
+  =========================================== -->
+
+  <div
+    class="loading-state"
+    *ngIf="loading"
+  >
+
+    <div class="spinner"></div>
+
+    <p>
+      Loading customer reviews...
+    </p>
+
+  </div>
+
+
+  <!-- ==========================================
+       NO REVIEWS
+  =========================================== -->
+
+  <div
+    class="empty-state"
+    *ngIf="!loading && reviews.length === 0"
+  >
+
+    <div class="empty-icon">
+      ★
+    </div>
+
+    <h3>
+      No Reviews Yet
+    </h3>
+
+    <p>
+      Customer reviews will appear here when they are submitted.
+    </p>
+
+  </div>
+
+
+  <!-- ==========================================
+       REVIEWS
+  =========================================== -->
+
+  <div
+    class="reviews-list"
+    *ngIf="!loading && reviews.length > 0"
+  >
+
+    <div
+      class="review-card"
+      *ngFor="
+        let review of reviews;
+        trackBy: trackByReview
+      "
+    >
+
+      <!-- ========================================
+           REVIEW TOP
+      ========================================= -->
+
+      <div class="review-top">
+
+        <div class="customer-info">
+
+          <div class="customer-avatar">
+            {{ review.name?.charAt(0)?.toUpperCase() || '?' }}
+          </div>
+
+          <div>
+
+            <h3>
+              {{ review.name }}
+            </h3>
+
+            <span class="review-date">
+              {{ formatDate(review.createdAt) }}
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- Rating -->
+
+        <div class="rating">
+
+          <ng-container
+            *ngFor="let star of [1,2,3,4,5]"
+          >
+
+            <span
+              class="star"
+              [class.filled]="star <= review.rating"
+            >
+              ★
+            </span>
+
+          </ng-container>
+
+          <span class="rating-number">
+            {{ review.rating }}/5
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- ========================================
+           PRODUCT
+      ========================================= -->
+
+      <div class="product-name">
+
+        Product:
+        <strong>
+          {{ review.productName || 'Unknown Product' }}
+        </strong>
+
+      </div>
+
+
+      <!-- ========================================
+           CUSTOMER COMMENT
+      ========================================= -->
+
+      <div class="customer-comment">
+
+        <p>
+          “{{ review.comment }}”
+        </p>
+
+      </div>
+
+
+      <!-- ========================================
+           CUSTOMER IMAGE
+      ========================================= -->
+
+      <div
+        class="review-photo"
+        *ngIf="review.image || review.imageUrl"
+      >
+
+        <img
+          [src]="review.image || review.imageUrl"
+          [alt]="'Review photo by ' + review.name"
+        />
+
+      </div>
+
+
+      <!-- ========================================
+           EXISTING MYHA REPLY
+      ========================================= -->
+
+      <div
+        class="existing-reply"
+        *ngIf="
+          review.adminReply?.comment &&
+          !isReplying(review)
+        "
+      >
+
+        <div class="reply-heading">
+
+          <span class="myha-name">
+            Myha
+          </span>
+
+          <span class="reply-tag">
+            YOUR REPLY
+          </span>
+
+        </div>
+
+        <p>
+          {{ review.adminReply.comment }}
+        </p>
+
+        <button
+          type="button"
+          class="edit-reply-btn"
+          (click)="openReply(review)"
+        >
+          Edit Reply
+        </button>
+
+      </div>
+
+
+      <!-- ========================================
+           REPLY BUTTON
+      ========================================= -->
+
+      <div
+        class="reply-action"
+        *ngIf="!isReplying(review)"
+      >
+
+        <button
+          type="button"
+          class="reply-btn"
+          (click)="openReply(review)"
+        >
+
+          <span>
+            {{ review.adminReply?.comment
+                ? 'Edit Reply'
+                : 'Reply' }}
+          </span>
+
+        </button>
+
+      </div>
+
+
+      <!-- ========================================
+           REPLY FORM
+      ========================================= -->
+
+      <div
+        class="reply-form"
+        *ngIf="isReplying(review)"
+      >
+
+        <div class="reply-form-header">
+
+          <div>
+
+            <span class="reply-as">
+              Reply as
+            </span>
+
+            <strong>
+              Myha
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <textarea
+          [(ngModel)]="replyText"
+          placeholder="Write your reply to the customer..."
+          rows="4"
+          maxlength="1000"
+        ></textarea>
+
+
+        <div class="reply-form-bottom">
+
+          <span class="character-count">
+            {{ replyText.length }}/1000
+          </span>
+
+
+          <div class="reply-buttons">
+
+            <button
+              type="button"
+              class="cancel-btn"
+              (click)="cancelReply()"
+              [disabled]="savingReply"
+            >
+              Cancel
+            </button>
+
+            <button
+              type="button"
+              class="save-reply-btn"
+              (click)="saveReply(review)"
+              [disabled]="savingReply"
+            >
+
+              <span *ngIf="!savingReply">
+                {{ review.adminReply?.comment
+                    ? 'Update Reply'
+                    : 'Reply' }}
+              </span>
+
+              <span *ngIf="savingReply">
+                Saving...
+              </span>
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

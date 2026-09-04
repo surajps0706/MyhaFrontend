@@ -17,7 +17,8 @@ adminLinks = [
   { label: 'Orders', icon: '📦', path: 'orders' },
   { label: 'Products', icon: '🛍️', path: 'products' },
   { label: 'Upload', icon: '➕', path: 'upload' },
-  { label: 'Homepage', icon: '🏠', path: 'homepage' }
+  { label: 'Homepage', icon: '🏠', path: 'homepage' },
+  { label: 'Reviews', icon: '💬', path: 'reviews' }
 ];
 
   // ✅ Logout function

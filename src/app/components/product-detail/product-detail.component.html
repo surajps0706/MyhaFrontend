@@ -361,85 +361,255 @@
 
 
     <!-- ✅ Reviews Section -->
-    <div class="reviews-section">
-      <h3>Customer Reviews</h3>
+ <div class="reviews-section">
 
-      <!-- Reviews List -->
-      <div *ngIf="reviews.length > 0; else noReviews">
-        <div *ngFor="let r of reviews" class="review-card">
-          <div class="review-header">
-            <span class="reviewer-name">{{ r.name }}</span>
-            <span class="review-rating">
-              <ng-container *ngFor="let star of [1,2,3,4,5]">
-                <span class="star" [class.filled]="star <= r.rating">★</span>
-              </ng-container>
-              <span class="rating-text">{{ r.rating }}/5</span>
+  <h3>Customer Reviews</h3>
+
+  <!-- ==========================================
+       REVIEWS LIST
+  =========================================== -->
+
+  <div *ngIf="reviews.length > 0; else noReviews">
+
+    <div
+      *ngFor="let r of reviews"
+      class="review-card"
+    >
+
+      <!-- Review Header -->
+
+      <div class="review-header">
+
+        <span class="reviewer-name">
+          {{ r.name }}
+        </span>
+
+        <span class="review-rating">
+
+          <ng-container
+            *ngFor="let star of [1,2,3,4,5]"
+          >
+
+            <span
+              class="star"
+              [class.filled]="star <= r.rating"
+            >
+              ★
             </span>
-          </div>
-          <p class="review-comment">“{{ r.comment }}”</p>
 
-          <!-- ✅ Show uploaded image if available -->
-          <div *ngIf="r.image || r.imageUrl" class="review-image">
-            <img [src]="r.image || r.imageUrl" alt="Review image by {{ r.name }}" />
-          </div>
-        </div>
+          </ng-container>
+
+          <span class="rating-text">
+            {{ r.rating }}/5
+          </span>
+
+        </span>
+
       </div>
-      <ng-template #noReviews>
-        <p class="no-reviews">No reviews yet. Be the first to review!</p>
-      </ng-template>
 
-      <!-- Write Review -->
-      <h4>Write a Review</h4>
-      <form (ngSubmit)="submitReview()" class="review-form">
-        <input
-          [(ngModel)]="newReview.name"
-          name="name"
-          placeholder="Your Name"
-          required
-          class="form-input"
+
+      <!-- Customer Comment -->
+
+      <p class="review-comment">
+        “{{ r.comment }}”
+      </p>
+
+
+      <!-- Customer Uploaded Image -->
+
+      <div
+        *ngIf="r.image || r.imageUrl"
+        class="review-image"
+      >
+
+        <img
+          [src]="r.image || r.imageUrl"
+          [alt]="'Review image by ' + r.name"
         />
 
-        <!-- ⭐ Star rating -->
-        <div class="star-input">
-          <label *ngFor="let star of [1,2,3,4,5]">
-            <input
-              type="radio"
-              name="rating"
-              [value]="star"
-              [(ngModel)]="newReview.rating"
-              required
-            />
-            <span class="star" [class.filled]="star <= newReview.rating">★</span>
-          </label>
+      </div>
+
+
+      <!-- ==========================================
+           MYHA ADMIN REPLY
+      =========================================== -->
+
+      <div
+        *ngIf="r.adminReply?.comment"
+        class="admin-reply"
+      >
+
+        <div class="admin-reply-header">
+
+          <span class="admin-reply-brand">
+            Myha
+          </span>
+
+          <span class="admin-reply-label">
+            Reply
+          </span>
+
         </div>
 
-        <!-- Comment -->
-        <textarea
-          [(ngModel)]="newReview.comment"
-          name="comment"
-          placeholder="Write your review..."
-          required
-          class="form-textarea"
-        ></textarea>
+        <p class="admin-reply-comment">
+          {{ r.adminReply.comment }}
+        </p>
 
-        <div class="upload-section">
-          <label for="review-image" class="upload-label">
-            <i class="icon">
-              <svg xmlns="http://www.w3.org/2000/svg" class="feather" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M3 7h4l2-3h6l2 3h4v13H3V7z" />
-                <circle cx="12" cy="13" r="3" />
-              </svg>
-            </i>
-            Upload Photo
-          </label>
-          <input id="review-image" type="file" accept="image/*" (change)="onImageSelected($event)" class="form-file" />
-        </div>
+      </div>
 
-        <!-- Submit button -->
-        <button type="submit"  class="submit-btn">Submit Review</button>
-      </form>
     </div>
+
+  </div>
+
+
+  <!-- ==========================================
+       NO REVIEWS
+  =========================================== -->
+
+  <ng-template #noReviews>
+
+    <p class="no-reviews">
+      No reviews yet. Be the first to review!
+    </p>
+
+  </ng-template>
+
+
+  <!-- ==========================================
+       WRITE A REVIEW
+  =========================================== -->
+
+  <h4>Write a Review</h4>
+
+  <form
+    (ngSubmit)="submitReview()"
+    class="review-form"
+  >
+
+    <!-- Name -->
+
+    <input
+      [(ngModel)]="newReview.name"
+      name="name"
+      placeholder="Your Name"
+      required
+      class="form-input"
+    />
+
+
+    <!-- ==========================================
+         STAR RATING
+    =========================================== -->
+
+    <div class="star-input">
+
+      <label
+        *ngFor="let star of [1,2,3,4,5]"
+      >
+
+        <input
+          type="radio"
+          name="rating"
+          [value]="star"
+          [(ngModel)]="newReview.rating"
+          required
+        />
+
+        <span
+          class="star"
+          [class.filled]="star <= newReview.rating"
+        >
+          ★
+        </span>
+
+      </label>
+
+    </div>
+
+
+    <!-- ==========================================
+         COMMENT
+    =========================================== -->
+
+    <textarea
+      [(ngModel)]="newReview.comment"
+      name="comment"
+      placeholder="Write your review..."
+      required
+      class="form-textarea"
+    ></textarea>
+
+
+    <!-- ==========================================
+         IMAGE UPLOAD
+    =========================================== -->
+
+    <div class="upload-section">
+
+      <label
+        for="review-image"
+        class="upload-label"
+      >
+
+        <i class="icon">
+
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="feather"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            width="18"
+            height="18"
+          >
+
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 7h4l2-3h6l2 3h4v13H3V7z"
+            />
+
+            <circle
+              cx="12"
+              cy="13"
+              r="3"
+            />
+
+          </svg>
+
+        </i>
+
+        Upload Photo
+
+      </label>
+
+
+      <input
+        id="review-image"
+        type="file"
+        accept="image/*"
+        (change)="onImageSelected($event)"
+        class="form-file"
+      />
+
+    </div>
+
+
+    <!-- ==========================================
+         SUBMIT
+    =========================================== -->
+
+    <button
+      type="submit"
+      class="submit-btn"
+    >
+      Submit Review
+    </button>
+
+  </form>
+
+</div>
 
 
 

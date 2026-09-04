@@ -132,6 +132,12 @@ export const routes: Routes = [
                 .then(m => m.ProductListAdminComponent),
           },
           {
+  path: 'reviews',
+  loadComponent: () =>
+    import('./admin/reviews/reviews.component')
+      .then(m => m.ReviewsComponent),
+},
+          {
             path: 'upload',
             loadComponent: () =>
               import('./components/product-upload/product-upload.component')
