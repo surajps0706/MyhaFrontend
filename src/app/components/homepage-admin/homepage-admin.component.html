@@ -1,0 +1,271 @@
+<div class="homepage-admin">
+
+  <div class="page-header">
+    <div>
+      <h2>Homepage</h2>
+      <p>
+        Choose the image displayed for each homepage category.
+      </p>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+
+  <div class="loading-box" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Loading homepage settings...</p>
+  </div>
+
+
+  <div *ngIf="!loading">
+
+    <!-- CATEGORY SELECTOR -->
+
+    <section class="settings-card">
+
+      <div class="card-header">
+        <div>
+          <h3>Category Image</h3>
+          <p>
+            Select a category and choose the image you want
+            customers to see on the homepage.
+          </p>
+        </div>
+      </div>
+
+      <div class="category-selector">
+
+        <label for="category">
+          Category
+        </label>
+
+        <select
+          id="category"
+          [(ngModel)]="selectedCategory"
+          (change)="onCategoryChange()"
+        >
+
+          <option
+            *ngFor="let category of categories"
+            [value]="category"
+          >
+            {{ category }}
+          </option>
+
+        </select>
+
+      </div>
+
+    </section>
+
+
+    <!-- CURRENT SELECTION -->
+
+    <section
+      class="preview-card"
+      *ngIf="selectedImage"
+    >
+
+      <div class="preview-info">
+
+        <span class="preview-label">
+          CURRENT SELECTION
+        </span>
+
+        <h3>
+          {{ selectedCategory }}
+        </h3>
+
+        <p *ngIf="getSelectedProduct()">
+          {{ getSelectedProduct().name }}
+          · Image {{ selectedImageIndex }}
+        </p>
+
+      </div>
+
+      <div class="preview-image">
+
+        <img
+          [src]="selectedImage"
+          [alt]="selectedCategory"
+        />
+
+      </div>
+
+    </section>
+
+
+    <!-- PRODUCTS -->
+
+    <section
+      class="products-section"
+      *ngIf="categoryProducts.length > 0"
+    >
+
+      <div class="section-title">
+
+        <div>
+          <h3>
+            Choose Homepage Image
+          </h3>
+
+          <p>
+            Click any image below to use it for
+            <strong>{{ selectedCategory }}</strong>.
+          </p>
+        </div>
+
+        <span class="product-count">
+          {{ categoryProducts.length }}
+          products
+        </span>
+
+      </div>
+
+
+      <!-- PRODUCT -->
+
+      <div
+        class="product-card"
+        *ngFor="
+          let product of categoryProducts;
+          trackBy: trackByProduct
+        "
+      >
+
+        <div class="product-heading">
+
+          <div>
+            <h4>
+              {{ product.name }}
+            </h4>
+
+            <span>
+              {{ product.images.length }} images
+            </span>
+          </div>
+
+        </div>
+
+
+        <!-- IMAGES -->
+
+        <div
+          class="image-grid"
+          *ngIf="product.images.length > 0"
+        >
+
+          <button
+            type="button"
+            class="image-option"
+            *ngFor="
+              let image of product.images;
+              let i = index;
+              trackBy: trackByImage
+            "
+            [class.selected]="
+              isSelected(product, i + 1)
+            "
+            (click)="selectImage(product, i + 1)"
+          >
+
+            <img
+              [src]="image"
+              [alt]="product.name + ' image ' + (i + 1)"
+              loading="lazy"
+            />
+
+            <span class="image-number">
+              {{ i + 1 }}
+            </span>
+
+            <span
+              class="selected-mark"
+              *ngIf="isSelected(product, i + 1)"
+            >
+              ✓
+            </span>
+
+          </button>
+
+        </div>
+
+
+        <div
+          class="no-images"
+          *ngIf="product.images.length === 0"
+        >
+          No images available.
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- NO PRODUCTS -->
+
+    <section
+      class="empty-state"
+      *ngIf="categoryProducts.length === 0"
+    >
+
+      <h3>
+        No products found
+      </h3>
+
+      <p>
+        There are no products available in
+        {{ selectedCategory }}.
+      </p>
+
+    </section>
+
+
+    <!-- SAVE BAR -->
+
+    <div
+      class="save-bar"
+      *ngIf="selectedImage"
+    >
+
+      <div class="save-status">
+
+        <span
+          class="success"
+          *ngIf="successMessage"
+        >
+          {{ successMessage }}
+        </span>
+
+        <span
+          class="error"
+          *ngIf="errorMessage"
+        >
+          {{ errorMessage }}
+        </span>
+
+      </div>
+
+      <button
+        type="button"
+        class="save-btn"
+        [disabled]="saving"
+        (click)="saveHomepageImage()"
+      >
+
+        <span *ngIf="!saving">
+          Save Homepage Image
+        </span>
+
+        <span *ngIf="saving">
+          Saving...
+        </span>
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

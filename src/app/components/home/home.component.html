@@ -22,6 +22,58 @@
   </div>
 </section>
 
+<!-- INTERACTIVE CATEGORIES -->
+<section class="category-hero">
+
+  <div class="category-content">
+
+    <div class="category-list">
+
+      <div
+        class="category-item"
+        *ngFor="let category of heroCategories"
+
+        [class.active]="
+          activeCategory === category.name
+        "
+
+        (mouseenter)="
+          setActiveCategory(category)
+        "
+
+        (click)="
+          setActiveCategory(category)
+        "
+      >
+
+        <span class="category-name">
+          {{ category.name }}
+        </span>
+
+        <sup class="category-count">
+          {{ category.count }}
+        </sup>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="category-image-wrapper">
+
+    <img
+      *ngIf="activeCategoryData?.image"
+      [src]="activeCategoryData.image"
+      [alt]="activeCategoryData.name"
+      class="category-image"
+    />
+
+  </div>
+
+</section>
+
 <!-- HIGHLIGHT SECTION -->
 <section class="highlight-section">
   <div class="section-header">

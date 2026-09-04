@@ -13,11 +13,12 @@ export class AdminDashboardComponent {
   constructor(private router: Router) {}
 
   // ✅ Sidebar links
-  adminLinks = [
-    { label: 'Orders', icon: '📦', path: 'orders' },
-    { label: 'Products', icon: '🛍️', path: 'products' },
-    { label: 'Upload', icon: '➕', path: 'upload' }
-  ];
+adminLinks = [
+  { label: 'Orders', icon: '📦', path: 'orders' },
+  { label: 'Products', icon: '🛍️', path: 'products' },
+  { label: 'Upload', icon: '➕', path: 'upload' },
+  { label: 'Homepage', icon: '🏠', path: 'homepage' }
+];
 
   // ✅ Logout function
   logout() {

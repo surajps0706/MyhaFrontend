@@ -138,6 +138,13 @@ export const routes: Routes = [
                 .then(m => m.ProductUploadComponent),
           },
 
+          {
+  path: 'homepage',
+  loadComponent: () =>
+    import('./components/homepage-admin/homepage-admin.component')
+      .then(m => m.HomepageAdminComponent),
+},
+
           // default admin redirect
           { path: '', redirectTo: 'orders', pathMatch: 'full' },
         ],
