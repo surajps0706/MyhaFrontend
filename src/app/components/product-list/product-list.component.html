@@ -12,20 +12,29 @@
     <!-- Category Filter -->
     <div class="filter-group" [class.collapsed]="collapsed.category">
       <h4 (click)="toggleCollapse('category')">Category</h4>
-      <div class="filter-options category-options">
-        <button (click)="applyCategory('all')" [class.active]="selectedCategory === 'all'">All</button>
-        <button (click)="applyCategory('kurta')" [class.active]="selectedCategory === 'kurta'">Kurta</button>
-        <button (click)="applyCategory('kurti')" [class.active]="selectedCategory === 'kurti'">Kurti</button>
-                <button (click)="applyCategory('co-ord set')" [class.active]="selectedCategory === 'co-ord set'">co-ord set</button>
+   <div class="filter-options category-options">
 
-        <!-- <button (click)="applyCategory('kurti')" [class.active]="selectedCategory === 'kurti'">top</button>
-         <button (click)="applyCategory('kurti')" [class.active]="selectedCategory === 'kurti'">Anarkali Set</button>
-         <button (click)="applyCategory('kurti')" [class.active]="selectedCategory === 'kurti'">Pant</button> -->
+  <!-- ALL -->
+  <button
+    (click)="applyCategory('all')"
+    [class.active]="selectedCategory === 'all'"
+  >
+    All
+  </button>
 
 
+  <!-- DYNAMIC CATEGORIES -->
+  <button
+    *ngFor="let category of categories"
+    (click)="applyCategory(category)"
+    [class.active]="
+      selectedCategory === normalizeCategory(category)
+    "
+  >
+    {{ category }}
+  </button>
 
-      
-      </div>
+</div>
     </div>
 
     <!-- Price Filter -->

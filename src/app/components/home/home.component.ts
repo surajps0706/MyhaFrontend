@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { ProductService } from '../../services/product.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -27,7 +28,8 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private productService: ProductService,
-    private http: HttpClient
+    private http: HttpClient,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -327,6 +329,17 @@ export class HomeComponent implements OnInit {
     this.activeCategoryData =
       category;
   }
+
+
+  openCategory(category: any): void {
+  if (!category?.name) return;
+
+  this.router.navigate(['/products'], {
+    queryParams: {
+      category: category.name
+    }
+  });
+}
 
 
   // ==========================================
