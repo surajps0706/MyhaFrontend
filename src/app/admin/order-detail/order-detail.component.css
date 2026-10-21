@@ -304,6 +304,55 @@
 
 
 
+
+
+.download-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.download-btn {
+  padding: 11px 18px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.details-btn {
+  background: #e8f0fe;
+  color: #174ea6;
+}
+
+.invoice-btn {
+  background: #e6f4ea;
+  color: #137333;
+}
+
+.download-btn:hover {
+  opacity: 0.85;
+}
+
+.download-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .download-actions {
+    flex-direction: column;
+  }
+
+  .download-btn {
+    width: 100%;
+  }
+}
+
+
 .status-preparing { background: #ff9800; }
 .status-packed { background: #673ab7; }
 .status-shipped { background: #2196f3; }

@@ -96,6 +96,37 @@
 
 </div>
 
+<div class="order-detail" *ngIf="order">
+
+  <h2>📋 Order Details – {{ order.orderId }}</h2>
+
+  <div class="download-actions">
+
+    <button
+      type="button"
+      class="download-btn details-btn"
+      (click)="downloadDetails()"
+      [disabled]="isDownloading">
+
+      📄 Download Details
+    </button>
+
+    <button
+      type="button"
+      class="download-btn invoice-btn"
+      (click)="downloadInvoice()"
+      [disabled]="isDownloading">
+
+      🧾 Download Invoice
+    </button>
+
+  </div>
+
+  <!-- Keep your existing customer information,
+       items table, status and navigation below. -->
+
+</div>
+
 <!-- Order Navigation -->
 <!-- Order Navigation Actions -->
 <div class="order-navigation" *ngIf="order">
