@@ -325,9 +325,9 @@ downloadInvoice(): void {
 
   const sellerDetails = [
     'Myha Couture',
-    'No 1, Karunkuzhi Road, Thirukalukundram - 603109, Tamil Nadu, India',
+    'No 1, Karunkuzhi Road,Thirukalikundram - 603109, Tamil Nadu, India',
     'Contact: +91 9344539530',
-    'Email: coutur emyha@email.com',
+    'Email: couturemyha@email.com',
     'GSTIN: 33BSFPT8227C1ZR'
   ];
 
