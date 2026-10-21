@@ -151,6 +151,157 @@
   background: #333;
 }
 
+/* ============================
+   Order Navigation
+============================ */
+
+.order-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 28px;
+  padding: 18px 0;
+  border-top: 1px solid #e5e5e5;
+  flex-wrap: wrap;
+}
+
+/* Common Button Styles */
+
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 11px 18px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  color: #222;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.nav-btn:hover:not(:disabled) {
+  background: #f3f3f3;
+  border-color: #aaa;
+}
+
+.nav-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Previous Button */
+
+.prev-btn {
+  background: #fff;
+  color: #333;
+  border-color: #ddd;
+}
+
+.prev-btn:hover:not(:disabled) {
+  background: #f5f5f5;
+}
+
+/* Save & Next Button */
+
+.save-next-btn {
+  background: #166534;
+  color: #fff;
+  border-color: #166534;
+}
+
+.save-next-btn:hover:not(:disabled) {
+  background: #14532d;
+  border-color: #14532d;
+}
+
+/* Close Button */
+
+.close-btn {
+  background: #fff;
+  color: #b91c1c;
+  border-color: #fecaca;
+}
+
+.close-btn:hover:not(:disabled) {
+  background: #fef2f2;
+  border-color: #f87171;
+}
+
+/* Order Position */
+
+.order-position {
+  flex: 1;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  white-space: nowrap;
+}
+
+/* ============================
+   Tablet
+============================ */
+
+@media (max-width: 768px) {
+  .order-navigation {
+    gap: 10px;
+  }
+
+  .nav-btn {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+}
+
+/* ============================
+   Mobile
+============================ */
+
+@media (max-width: 480px) {
+  .order-navigation {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 16px 0;
+  }
+
+  .order-position {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    font-size: 13px;
+    padding-bottom: 4px;
+  }
+
+  .nav-btn {
+    width: 100%;
+    padding: 11px 8px;
+    font-size: 12px;
+  }
+
+  .save-next-btn {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
+
+  .close-btn {
+    grid-column: 1 / -1;
+    grid-row: 4;
+  }
+}
+
 
 
 .status-preparing { background: #ff9800; }

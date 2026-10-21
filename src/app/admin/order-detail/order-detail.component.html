@@ -95,3 +95,44 @@
 <p><b>Placed On:</b> {{ order.createdAt | date:'mediumDate' }}</p>
 
 </div>
+
+<!-- Order Navigation -->
+<!-- Order Navigation Actions -->
+<div class="order-navigation" *ngIf="order">
+
+  <!-- Previous -->
+  <button
+    type="button"
+    class="nav-btn prev-btn"
+    (click)="navigateOrder(-1)"
+    [disabled]="currentOrderIndex <= 0 || isNavigating">
+
+    ← Previous
+  </button>
+
+  <!-- Order Position -->
+  <span class="order-position">
+    {{ currentOrderIndex + 1 }} of {{ orderIds.length }}
+  </span>
+
+  <!-- Save & Next -->
+  <button
+    type="button"
+    class="nav-btn save-next-btn"
+    (click)="saveAndNext()"
+    [disabled]="isNavigating || !selectedStatus">
+
+    {{ isNavigating ? 'Saving...' : 'Save & Next →' }}
+  </button>
+
+  <!-- Close -->
+  <button
+    type="button"
+    class="nav-btn close-btn"
+    (click)="closeOrder()"
+    [disabled]="isNavigating">
+
+    ✕ Close
+  </button>
+
+</div>
