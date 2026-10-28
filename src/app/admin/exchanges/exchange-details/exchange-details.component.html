@@ -1,0 +1,572 @@
+
+<div class="exchange-details-page">
+
+  <!-- Header -->
+  <div class="page-header">
+
+    <div class="header-left">
+      <button
+        type="button"
+        class="back-button"
+        (click)="goBack()">
+        ← Back to Exchanges
+      </button>
+
+      <div>
+        <h1>Exchange Details</h1>
+
+        <p class="subtitle">
+          Request ID:
+          <strong>{{ requestId }}</strong>
+        </p>
+      </div>
+    </div>
+
+    <button
+      type="button"
+      class="refresh-button"
+      (click)="loadExchange()"
+      [disabled]="loading">
+      ↻ Refresh
+    </button>
+
+  </div>
+
+  <!-- Loading -->
+  <div class="state-card" *ngIf="loading">
+
+    <div class="loader"></div>
+
+    <h3>Loading exchange details</h3>
+
+    <p>Please wait while we retrieve the request.</p>
+
+  </div>
+
+  <!-- Error -->
+  <div class="state-card error-card" *ngIf="!loading && errorMessage">
+
+    <div class="error-icon">!</div>
+
+    <h3>Unable to load exchange</h3>
+
+    <p>{{ errorMessage }}</p>
+
+    <button
+      type="button"
+      class="primary-button"
+      (click)="loadExchange()">
+      Try Again
+    </button>
+
+  </div>
+
+  <!-- Exchange Data -->
+  <ng-container *ngIf="!loading && exchange">
+
+    <!-- Summary -->
+    <div class="summary-card">
+
+      <div class="summary-product">
+
+     <div class="product-image" *ngIf="productImage">
+  <img
+    [src]="productImage"
+    [alt]="productName"
+  />
+</div>
+
+        <div class="product-info">
+
+          <span class="section-label">
+            EXCHANGE PRODUCT
+          </span>
+
+          <h2>{{ productName }}</h2>
+
+          <p>
+            Request ID:
+            {{ exchange.requestId }}
+          </p>
+
+          <p>
+            Order ID:
+            {{ orderId }}
+          </p>
+
+        </div>
+
+      </div>
+
+      <div class="summary-status">
+
+        <span class="section-label">
+          CURRENT STATUS
+        </span>
+
+        <span
+          class="status-badge"
+          [ngClass]="statusClass">
+
+          {{ exchange.status || 'Unknown' }}
+
+        </span>
+
+        <div class="summary-date">
+
+          <span>Requested on</span>
+
+          <strong>
+            {{ formatDate(exchange.createdAt || exchange.created_at) }}
+          </strong>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Customer Information -->
+    <section class="details-card">
+
+      <div class="card-header">
+
+        <div>
+          <span class="section-label">
+            CUSTOMER
+          </span>
+
+          <h2>Customer Information</h2>
+        </div>
+
+      </div>
+
+      <div class="info-grid">
+
+        <div class="info-item">
+
+          <label>Customer Name</label>
+
+          <p>{{ customerName }}</p>
+
+        </div>
+
+        <div class="info-item">
+
+          <label>Email Address</label>
+
+          <p>
+            {{ customerEmail || 'Not available' }}
+          </p>
+
+        </div>
+
+        <div class="info-item">
+
+          <label>Phone Number</label>
+
+          <p>
+            {{ customerPhone || 'Not available' }}
+          </p>
+
+        </div>
+
+        <div class="info-item">
+
+          <label>Customer ID</label>
+
+          <p>
+            {{ exchange.customerId || customer._id || 'N/A' }}
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- Exchange Information -->
+    <section class="details-card">
+
+      <div class="card-header">
+
+        <div>
+          <span class="section-label">
+            REQUEST
+          </span>
+
+          <h2>Exchange Information</h2>
+        </div>
+
+      </div>
+
+      <div class="info-grid">
+
+        <div class="info-item">
+
+          <label>Product</label>
+
+          <p>{{ productName }}</p>
+
+        </div>
+
+      <div class="info-item">
+  <label>Requested Size</label>
+  <p>
+    {{ exchange.replacementSize || 'N/A' }}
+  </p>
+</div>
+
+<div class="info-item">
+  <label>Current Size</label>
+  <p>
+    {{ exchange.originalSize || 'N/A' }}
+  </p>
+</div>
+
+        <div class="info-item">
+
+          <label>Reason</label>
+
+          <p>
+            {{ exchange.reason || 'Not provided' }}
+          </p>
+
+        </div>
+
+        <div class="info-item">
+
+          <label>Request Date</label>
+
+          <p>
+            {{ formatDate(exchange.createdAt || exchange.created_at) }}
+          </p>
+
+        </div>
+
+        <div class="info-item">
+
+          <label>Last Updated</label>
+
+          <p>
+            {{ formatDate(exchange.updatedAt || exchange.updated_at) }}
+          </p>
+
+        </div>
+
+      </div>
+
+      <div class="description-block">
+
+        <label>Customer Notes</label>
+
+        <p>
+          {{ exchange.customerNotes || exchange.notes || 'No additional notes provided.' }}
+        </p>
+
+      </div>
+
+    </section>
+
+    <!-- Shipping Address -->
+    <section class="details-card">
+
+      <div class="card-header">
+
+        <div>
+          <span class="section-label">
+            DELIVERY
+          </span>
+
+          <h2>Shipping Address</h2>
+        </div>
+
+      </div>
+
+      <div class="address-content"
+           *ngIf="shippingAddress; else noShippingAddress">
+
+        <p
+          *ngFor="let line of formatAddress(shippingAddress)">
+          {{ line }}
+        </p>
+
+      </div>
+
+      <ng-template #noShippingAddress>
+
+        <p class="muted-text">
+          Shipping address is not available.
+        </p>
+
+      </ng-template>
+
+    </section>
+
+    <!-- Billing Address -->
+    <section class="details-card">
+
+      <div class="card-header">
+
+        <div>
+          <span class="section-label">
+            PAYMENT
+          </span>
+
+          <h2>Billing Address</h2>
+        </div>
+
+      </div>
+
+      <div class="address-content"
+           *ngIf="billingAddress; else noBillingAddress">
+
+        <p
+          *ngFor="let line of formatAddress(billingAddress)">
+          {{ line }}
+        </p>
+
+      </div>
+
+      <ng-template #noBillingAddress>
+
+        <p class="muted-text">
+          Billing address is not available.
+        </p>
+
+      </ng-template>
+
+    </section>
+
+    <!-- Order Information -->
+    <section class="details-card">
+
+      <div class="card-header">
+
+        <div>
+          <span class="section-label">
+            ORDER
+          </span>
+
+          <h2>Order Information</h2>
+        </div>
+
+      </div>
+
+      <div class="info-grid">
+
+        <div class="info-item">
+
+          <label>Order ID</label>
+
+          <p>{{ orderId }}</p>
+
+        </div>
+
+        <div class="info-item">
+
+          <label>Order Status</label>
+
+          <p>
+            {{ orderDetails.status || 'N/A' }}
+          </p>
+
+        </div>
+
+        <div class="info-item">
+
+          <label>Payment Status</label>
+
+          <p>
+            {{ orderDetails.paymentStatus || orderDetails.payment_status || 'N/A' }}
+          </p>
+
+        </div>
+
+        <div class="info-item">
+
+          <label>Order Date</label>
+
+          <p>
+            {{ formatDate(orderDetails.createdAt || orderDetails.created_at) }}
+          </p>
+
+        </div>
+
+        <div class="info-item">
+
+          <label>Order Total</label>
+
+          <p>
+            {{ formatCurrency(orderDetails.totalAmount || orderDetails.total || orderDetails.amount) }}
+          </p>
+
+        </div>
+
+      </div>
+
+      <!-- Order Items -->
+      <div class="order-items-section"
+           *ngIf="orderItems.length > 0">
+
+        <h3>Order Items</h3>
+
+        <div class="order-item"
+             *ngFor="let item of orderItems">
+
+          <div class="order-item-info">
+
+            <strong>
+              {{ item.productName || item.name || item.title || 'Product' }}
+            </strong>
+
+            <span>
+              Size: {{ item.size || item.selectedSize || 'N/A' }}
+            </span>
+
+            <span>
+              Quantity: {{ item.quantity || 1 }}
+            </span>
+
+          </div>
+
+          <div class="order-item-price">
+
+            {{ formatCurrency(item.price || item.totalPrice) }}
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <p class="muted-text"
+         *ngIf="orderItems.length === 0">
+
+        Order item details are not available.
+
+      </p>
+
+    </section>
+
+    <!-- Evidence -->
+    <section class="details-card">
+
+      <div class="card-header">
+
+        <div>
+          <span class="section-label">
+            ATTACHMENTS
+          </span>
+
+          <h2>Customer Evidence</h2>
+        </div>
+
+      </div>
+
+      <div class="evidence-grid"
+           *ngIf="evidenceImages.length > 0">
+
+        <a
+          *ngFor="let image of evidenceImages"
+          [href]="image"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="evidence-image">
+
+          <img
+            [src]="image"
+            alt="Exchange evidence">
+
+        </a>
+
+      </div>
+
+      <p class="muted-text"
+         *ngIf="evidenceImages.length === 0">
+
+        No evidence images uploaded.
+
+      </p>
+
+    </section>
+
+    <!-- Admin Notes -->
+    <section class="details-card">
+
+      <div class="card-header">
+
+        <div>
+          <span class="section-label">
+            ADMIN
+          </span>
+
+          <h2>Resolution Information</h2>
+        </div>
+
+      </div>
+
+      <div class="description-block">
+
+        <label>Admin Notes</label>
+
+        <p>
+          {{ exchange.adminNotes || exchange.resolutionNotes || 'No admin notes available.' }}
+        </p>
+
+      </div>
+
+      <button
+  *ngIf="exchange && exchange.status?.toLowerCase() !== 'completed'"
+  type="button"
+  class="complete-btn"
+  (click)="markAsCompleted()"
+  [disabled]="completing">
+
+  {{ completing ? 'Completing...' : 'Mark as Completed' }}
+
+</button>
+
+      <div class="info-grid">
+
+        <div class="info-item">
+
+          <label>Resolved By</label>
+
+          <p>
+            {{ exchange.resolvedBy || 'N/A' }}
+          </p>
+
+        </div>
+
+        <div class="info-item">
+
+          <label>Resolved Date</label>
+
+          <p>
+            {{ formatDate(exchange.resolvedAt || exchange.resolved_at) }}
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- Footer -->
+    <div class="bottom-actions">
+
+      <button
+        type="button"
+        class="back-button"
+        (click)="goBack()">
+
+        ← Back to Exchanges
+
+      </button>
+
+    </div>
+
+  </ng-container>
+
+</div>

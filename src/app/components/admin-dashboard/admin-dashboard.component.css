@@ -10,6 +10,7 @@
 /* ====== Sidebar ====== */
 .sidebar {
   width: 240px;
+  flex-shrink: 0;
   background: #222;
   color: #fff;
   padding: 20px;
@@ -24,6 +25,7 @@
   text-align: center;
 }
 
+/* ====== Sidebar Navigation ====== */
 .sidebar nav {
   display: flex;
   flex-direction: column;
@@ -31,11 +33,17 @@
 }
 
 .sidebar nav a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
   color: #bbb;
   text-decoration: none;
   padding: 10px 15px;
   border-radius: 8px;
-  transition: 0.3s;
+
+  transition: background 0.3s, color 0.3s;
 }
 
 .sidebar nav a:hover,
@@ -44,9 +52,62 @@
   color: #fff;
 }
 
+/* ====== Navigation Label ====== */
+.nav-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* ====== Exchange Count Badge ====== */
+.exchange-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+
+  background: #dc2626;
+  color: #fff;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  border-radius: 50px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* ====== Logout Button ====== */
+.logout-btn {
+  margin-top: auto;
+  padding: 10px 15px;
+  width: 100%;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #e63946;
+  color: #fff;
+
+  font-weight: bold;
+  cursor: pointer;
+
+  transition: background 0.3s;
+}
+
+.logout-btn:hover {
+  background: #c62828;
+}
+
 /* ====== Main Content ====== */
 .content {
   flex: 1;
+  min-width: 0;
+
   display: flex;
   flex-direction: column;
 }
@@ -70,41 +131,84 @@
 
 /* ====== Mobile Responsive ====== */
 @media (max-width: 768px) {
+
   .admin-dashboard {
     flex-direction: column;
   }
 
   .sidebar {
     width: 100%;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
+    box-sizing: border-box;
+    flex-shrink: 0;
+
+    padding: 15px;
+
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sidebar .logo {
+    margin-bottom: 15px;
   }
 
   .sidebar nav {
     flex-direction: row;
-    gap: 10px;
+    flex-wrap: wrap;
+    gap: 8px;
   }
 
   .sidebar nav a {
+    flex: 1 1 auto;
+    min-width: 0;
+
     padding: 8px 10px;
     font-size: 14px;
   }
+
+  .nav-label {
+    gap: 6px;
+  }
+
+  .exchange-badge {
+    min-width: 20px;
+    height: 20px;
+    font-size: 11px;
+  }
+
+  .logout-btn {
+    margin-top: 15px;
+    width: 100%;
+  }
+
+  .admin-header {
+    padding: 15px 20px;
+  }
+
+  .admin-body {
+    padding: 15px;
+  }
 }
 
-.logout-btn {
-  margin-top: auto; /* push to bottom of sidebar */
-  padding: 10px 15px;
-  width: 100%;
-  border: none;
-  border-radius: 8px;
-  background: #e63946;
-  color: #fff;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
+/* ====== Small Mobile Screens ====== */
+@media (max-width: 480px) {
+
+  .sidebar nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .sidebar nav a {
+    width: auto;
+    box-sizing: border-box;
+    font-size: 13px;
+    padding: 9px 10px;
+  }
+
+  .admin-header h1 {
+    font-size: 20px;
+  }
+
 }
 
-.logout-btn:hover {
-  background: #c62828;
-}
+

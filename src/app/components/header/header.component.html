@@ -10,16 +10,24 @@
   </div>
 
   <!-- Desktop Navigation -->
-  <nav class="nav-links">
-    <a
-      routerLink="/"
-      routerLinkActive="active-link"
-      [routerLinkActiveOptions]="{ exact: true }"
-      >Home</a
-    >
-    <a routerLink="/products" routerLinkActive="active-link">Shop</a>
-    <a routerLink="/track" routerLinkActive="active-link">Track Order</a>
-  </nav>
+<nav class="nav-links">
+  <a
+    routerLink="/"
+    routerLinkActive="active-link"
+    [routerLinkActiveOptions]="{ exact: true }"
+    >Home</a
+  >
+
+  <a routerLink="/products" routerLinkActive="active-link">Shop</a>
+
+  <a routerLink="/track" routerLinkActive="active-link">
+    Track Order
+  </a>
+
+  <a routerLink="/exchange" routerLinkActive="active-link">
+    Exchange
+  </a>
+</nav>
 
   <!-- Search Bar -->
   <div class="search-bar" *ngIf="showSearchBar">
@@ -129,15 +137,28 @@
   </div>
 
   <!-- Mobile Navigation -->
-  <a routerLink="/" (click)="toggleMenu()">Home</a>
-  <a routerLink="/products" (click)="toggleMenu()">Shop</a>
-  <a routerLink="/track" (click)="toggleMenu()">Track Order</a>
-  <a routerLink="/wishlist" (click)="toggleMenu()">
-    Wishlist ❤️ <span *ngIf="wishlistCount > 0">({{ wishlistCount }})</span>
-  </a>
-  <a routerLink="/cart" (click)="toggleMenu()">
-    Cart 🛒 <span *ngIf="cartCount > 0">({{ cartCount }})</span>
-  </a>
+<!-- Mobile Navigation -->
+<a routerLink="/" (click)="toggleMenu()">Home</a>
+
+<a routerLink="/products" (click)="toggleMenu()">Shop</a>
+
+<a routerLink="/track" (click)="toggleMenu()">Track Order</a>
+
+<a routerLink="/exchange" (click)="toggleMenu()">Exchange</a>
+
+<a routerLink="/wishlist" (click)="toggleMenu()">
+  Wishlist ❤️
+  <span *ngIf="wishlistCount > 0">
+    ({{ wishlistCount }})
+  </span>
+</a>
+
+<a routerLink="/cart" (click)="toggleMenu()">
+  Cart 🛒
+  <span *ngIf="cartCount > 0">
+    ({{ cartCount }})
+  </span>
+</a>
 
   <!-- Mobile Login / Logout -->
   <ng-container *ngIf="!isLoggedIn; else mobileLoggedIn">

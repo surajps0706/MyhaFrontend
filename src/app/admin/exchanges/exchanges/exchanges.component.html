@@ -1,0 +1,434 @@
+
+<div class="exchange-page">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div>
+      <span class="page-eyebrow">ORDER MANAGEMENT</span>
+
+      <h1>Exchanges</h1>
+
+      <p>
+        Manage customer exchange requests and exchange history.
+      </p>
+    </div>
+  </div>
+
+
+  <!-- Summary Cards -->
+  <div class="summary-grid">
+
+    <!-- Total Exchanges -->
+    <div class="summary-card">
+      <div class="summary-top">
+        <span>Total Exchanges</span>
+        <span class="summary-icon">↻</span>
+      </div>
+
+      <h2>{{ totalExchanges }}</h2>
+
+      <p>All exchange requests</p>
+    </div>
+
+
+    <!-- Pending Review -->
+    <div class="summary-card">
+      <div class="summary-top">
+        <span>Pending Review</span>
+        <span class="summary-icon">◷</span>
+      </div>
+
+      <h2>{{ pendingCount }}</h2>
+
+      <p>Awaiting admin review</p>
+    </div>
+
+
+    <!-- Processing -->
+    <div class="summary-card">
+      <div class="summary-top">
+        <span>Processing</span>
+        <span class="summary-icon">↗</span>
+      </div>
+
+      <h2>{{ processingCount }}</h2>
+
+      <p>Exchange in progress</p>
+    </div>
+
+
+    <!-- Completed -->
+    <div class="summary-card">
+      <div class="summary-top">
+        <span>Completed</span>
+        <span class="summary-icon">✓</span>
+      </div>
+
+      <h2>{{ completedCount }}</h2>
+
+      <p>Successfully completed</p>
+    </div>
+
+  </div>
+
+
+  <!-- Exchange Table Section -->
+  <section class="exchange-section">
+
+    <!-- Section Header -->
+    <div class="section-header">
+
+      <div>
+        <h2>Exchange Requests</h2>
+
+        <p>
+          Review and manage all customer exchanges.
+        </p>
+      </div>
+
+      <span class="total-label">
+        {{ filteredExchanges.length }} requests
+      </span>
+
+    </div>
+
+
+    <!-- Status Tabs -->
+    <div class="status-tabs">
+
+      <button
+        *ngFor="let status of statusTabs"
+        type="button"
+        [class.active]="selectedStatus === status"
+        (click)="selectStatus(status)"
+      >
+
+        {{ status }}
+
+        <span *ngIf="status === 'All'">
+          {{ totalExchanges }}
+        </span>
+
+        <span *ngIf="status === 'Pending Review'">
+          {{ pendingCount }}
+        </span>
+
+        <span *ngIf="status === 'Approved'">
+          {{ approvedCount }}
+        </span>
+
+        <span *ngIf="status === 'Processing'">
+          {{ processingCount }}
+        </span>
+
+        <span *ngIf="status === 'Completed'">
+          {{ completedCount }}
+        </span>
+
+        <span *ngIf="status === 'Rejected'">
+          {{ rejectedCount }}
+        </span>
+
+      </button>
+
+    </div>
+
+
+    <!-- Search -->
+    <div class="table-toolbar">
+
+      <div class="search-box">
+
+        <span class="search-icon">⌕</span>
+
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="onSearchChange()"
+          placeholder="Search request, order, customer or product..."
+        />
+
+      </div>
+
+    </div>
+
+
+    <!-- Exchange Table -->
+    <div class="table-container">
+
+      <table>
+
+        <!-- Table Header -->
+        <thead>
+
+          <tr>
+            <th>REQUEST</th>
+            <th>CUSTOMER</th>
+            <th>PRODUCT</th>
+            <th>SIZE</th>
+            <th>REASON</th>
+            <th>STATUS</th>
+            <th>DATE</th>
+            <th>ACTION</th>
+          </tr>
+
+        </thead>
+
+
+        <!-- Table Body -->
+        <tbody>
+
+          <tr
+            *ngFor="let exchange of filteredExchanges"
+          >
+
+            <!-- Request Information -->
+            <td>
+
+              <div class="request-id">
+                {{ exchange.requestId }}
+              </div>
+
+              <div class="order-id">
+                Order #{{ exchange.orderId }}
+              </div>
+
+            </td>
+
+
+            <!-- Customer Information -->
+            <td>
+
+              <div class="customer-info">
+
+                <!-- Customer Name -->
+                <span class="customer-name">
+                  {{ exchange.customerName || 'Unknown Customer' }}
+                </span>
+
+
+                <!-- Customer Email -->
+                <span class="customer-email">
+                  {{ exchange.customerEmail || 'No email available' }}
+                </span>
+
+
+                <!-- Customer Phone -->
+                <span class="customer-phone">
+                  {{ exchange.customerPhone || 'No phone available' }}
+                </span>
+
+              </div>
+
+            </td>
+
+
+            <!-- Product Information -->
+          
+<td>
+  <div *ngIf="exchange.exchangeItems?.length">
+    <div
+      class="product-name"
+      *ngFor="let item of exchange.exchangeItems"
+    >
+      {{ item.productName || item.name || 'Unknown Product' }}
+    </div>
+  </div>
+
+  <span *ngIf="!exchange.exchangeItems?.length">
+    {{ exchange.productName || 'Unknown Product' }}
+  </span>
+</td>
+
+
+
+            <!-- Size Change -->
+           
+<td>
+  <div *ngIf="exchange.exchangeItems?.length">
+    <div
+      class="size-change"
+      *ngFor="let item of exchange.exchangeItems"
+    >
+      {{ item.originalSize || '-' }}
+      <span>→</span>
+      {{ item.replacementSize || '-' }}
+    </div>
+  </div>
+
+  <span *ngIf="!exchange.exchangeItems?.length">
+    {{ exchange.originalSize || '-' }}
+    <span>→</span>
+    {{ exchange.replacementSize || '-' }}
+  </span>
+</td>
+
+
+
+            <!-- Exchange Reason -->
+            <td>
+
+              {{
+                exchange.reason === 'size_issue'
+                  ? 'Size Exchange'
+                  : exchange.reason === 'defective_product'
+                    ? 'Defective Product'
+                    : exchange.reason || 'Not specified'
+              }}
+
+            </td>
+
+
+            <!-- Exchange Status -->
+            <td>
+
+              <span
+                class="status-badge"
+                [ngClass]="
+                  (exchange.status || 'Pending Review')
+                    .toLowerCase()
+                    .replace(' ', '-')
+                "
+              >
+
+                {{ exchange.status || 'Pending Review' }}
+
+              </span>
+
+            </td>
+
+
+            <!-- Request Date -->
+            <td>
+
+              {{
+                exchange.createdAt
+                  ? (exchange.createdAt | date:'dd MMM yyyy')
+                  : '-'
+              }}
+
+            </td>
+
+
+            <!-- Actions -->
+            <td>
+
+              <button
+                type="button"
+                class="view-btn"
+                (click)="viewDetails(exchange)"
+              >
+
+                View Details
+
+                <span>→</span>
+
+              </button>
+
+            </td>
+
+          </tr>
+
+
+          <!-- Loading State -->
+          <tr *ngIf="isLoading">
+
+            <td colspan="8">
+
+              <div class="empty-state">
+
+                <h3>Loading exchanges...</h3>
+
+                <p>
+                  Please wait while exchange requests are loaded.
+                </p>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+
+          <!-- Error State -->
+          <tr
+            *ngIf="!isLoading && errorMessage"
+          >
+
+            <td colspan="8">
+
+              <div class="empty-state">
+
+                <h3>Unable to load exchanges</h3>
+
+                <p>
+                  {{ errorMessage }}
+                </p>
+
+                <button
+                  type="button"
+                  class="view-btn"
+                  (click)="retryLoading()"
+                >
+
+                  Retry
+
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+
+          <!-- Empty State -->
+          <tr
+            *ngIf="
+              !isLoading &&
+              !errorMessage &&
+              filteredExchanges.length === 0
+            "
+          >
+
+            <td colspan="8">
+
+              <div class="empty-state">
+
+                <div class="empty-icon">↻</div>
+
+                <h3>
+
+                  {{
+                    searchTerm
+                      ? 'No matching exchanges'
+                      : 'No exchange requests yet'
+                  }}
+
+                </h3>
+
+                <p>
+
+                  {{
+                    searchTerm
+                      ? 'Try another search term or status.'
+                      : 'Customer exchange requests will appear here.'
+                  }}
+
+                </p>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+</div>

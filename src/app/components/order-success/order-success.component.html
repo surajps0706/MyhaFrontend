@@ -1,3 +1,4 @@
+
 <div class="success-container">
   <div class="success-card">
 
@@ -10,44 +11,86 @@
     </div>
 
     <!-- Title & Subtitle -->
-    <h2>Order Confirmed</h2>
+    <h2>
+      {{ isExchange ? 'Exchange Approved' : 'Order Confirmed' }}
+    </h2>
+
     <p class="thank-you">
-      Thank you for shopping with <b>Myha Couture</b>
+      <ng-container *ngIf="isExchange">
+        Your exchange payment was successful.
+      </ng-container>
+
+      <ng-container *ngIf="!isExchange">
+        Thank you for shopping with <b>Myha Couture</b>
+      </ng-container>
     </p>
 
     <!-- Order Info -->
     <div class="order-info" *ngIf="orderId">
+
       <p>
-        <strong>Order ID</strong>
+        <strong>Original Order ID</strong>
         <span class="order-id">{{ orderId }}</span>
       </p>
 
-      <p class="note">
+      <!-- Exchange Request ID -->
+      <p *ngIf="isExchange && exchangeRequestId">
+        <strong>Exchange Request ID</strong>
+        <span class="order-id">{{ exchangeRequestId }}</span>
+      </p>
+
+      <!-- Exchange Status -->
+      <p *ngIf="isExchange">
+        <strong>Exchange Status</strong>
+        <span class="exchange-approved">Approved</span>
+      </p>
+
+      <!-- Normal Order Note -->
+      <p class="note" *ngIf="!isExchange">
         Please save this Order ID for tracking and future reference.
       </p>
 
-      <p *ngIf="estimatedStart && estimatedEnd" class="delivery">
+      <!-- Exchange Note -->
+      <p class="note" *ngIf="isExchange">
+        Your size exchange has been approved.
+        Please save your original Order ID and exchange request ID
+        for future reference.
+      </p>
+
+      <!-- Normal Order Delivery -->
+      <p
+        *ngIf="!isExchange && estimatedStart && estimatedEnd"
+        class="delivery"
+      >
         <strong>Estimated Delivery</strong><br />
-        {{ estimatedStart | date:'dd MMM' }} – {{ estimatedEnd | date:'dd MMM yyyy' }}
+
+        {{ estimatedStart | date:'dd MMM' }} –
+        {{ estimatedEnd | date:'dd MMM yyyy' }}
+
         <br />
+
         <small>(Excluding Sundays)</small>
       </p>
+
     </div>
 
     <!-- Buttons -->
     <div class="button-group">
+
       <a routerLink="/products" class="btn primary">
         Continue Shopping
       </a>
 
+      <!-- Track normal order only -->
       <a
         [routerLink]="['/track']"
         [queryParams]="{ orderId: orderId }"
         class="btn secondary"
-        *ngIf="orderId"
+        *ngIf="orderId && !isExchange"
       >
         Track Order
       </a>
+
     </div>
 
   </div>

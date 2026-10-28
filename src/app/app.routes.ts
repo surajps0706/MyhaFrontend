@@ -10,7 +10,9 @@ export const routes: Routes = [
   // =========================
   // 🏠 PUBLIC ROUTES
   // =========================
+
   { path: '', component: HomeComponent },
+
   { path: 'products', component: ProductListComponent },
 
   {
@@ -50,11 +52,24 @@ export const routes: Routes = [
   },
 
   { path: 'order-success', component: OrderSuccessComponent },
+
   { path: 'track', component: TrackOrderComponent },
+
+  // =========================
+  // 🔄 EXCHANGE ROUTE — PUBLIC
+  // =========================
+
+  {
+    path: 'exchange',
+    loadComponent: () =>
+      import('./pages/exchange/exchange.component')
+        .then(m => m.ExchangeComponent),
+  },
 
   // =========================
   // 👤 CUSTOMER AUTH ROUTES
   // =========================
+
   {
     path: 'login',
     loadComponent: () =>
@@ -106,37 +121,58 @@ export const routes: Routes = [
   {
     path: 'admin',
     children: [
+
       {
         path: '',
         canActivate: [authGuard],
         loadComponent: () =>
           import('./components/admin-dashboard/admin-dashboard.component')
             .then(m => m.AdminDashboardComponent),
+
         children: [
+
           {
             path: 'orders',
             loadComponent: () =>
               import('./admin/orders/orders.component')
                 .then(m => m.OrdersComponent),
           },
+
           {
             path: 'orders/:orderId',
             loadComponent: () =>
               import('./admin/order-detail/order-detail.component')
                 .then(m => m.OrderDetailComponent),
           },
+
           {
             path: 'products',
             loadComponent: () =>
               import('./components/product-list-admin/product-list-admin.component')
                 .then(m => m.ProductListAdminComponent),
           },
+
           {
-  path: 'reviews',
+            path: 'reviews',
+            loadComponent: () =>
+              import('./admin/reviews/reviews.component')
+                .then(m => m.ReviewsComponent),
+          },
+
+       {
+  path: 'exchanges',
   loadComponent: () =>
-    import('./admin/reviews/reviews.component')
-      .then(m => m.ReviewsComponent),
+    import('./admin/exchanges/exchanges/exchanges.component')
+      .then(m => m.ExchangesComponent),
 },
+
+{
+  path: 'exchanges/:requestId',
+  loadComponent: () =>
+    import('./admin/exchanges/exchange-details/exchange-details.component')
+      .then(m => m.ExchangeDetailsComponent),
+},
+
           {
             path: 'upload',
             loadComponent: () =>
@@ -145,21 +181,29 @@ export const routes: Routes = [
           },
 
           {
-  path: 'homepage',
-  loadComponent: () =>
-    import('./components/homepage-admin/homepage-admin.component')
-      .then(m => m.HomepageAdminComponent),
-},
+            path: 'homepage',
+            loadComponent: () =>
+              import('./components/homepage-admin/homepage-admin.component')
+                .then(m => m.HomepageAdminComponent),
+          },
 
-          // default admin redirect
-          { path: '', redirectTo: 'orders', pathMatch: 'full' },
+          // DEFAULT ADMIN REDIRECT
+          {
+            path: '',
+            redirectTo: 'orders',
+            pathMatch: 'full'
+          },
+
         ],
       }
+
     ]
   },
 
   // =========================
   // 🚨 FALLBACK — ALWAYS LAST
   // =========================
+
   { path: '**', redirectTo: '', pathMatch: 'full' },
+
 ];

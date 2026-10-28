@@ -1,0 +1,1637 @@
+/* =========================================================
+   MYHA COUTURE — EXCHANGE EXPERIENCE
+   Scoped to this component to avoid changing global styles.
+========================================================= */
+
+:host {
+  display: block;
+  min-height: 100%;
+  color: #332b25;
+  background: #f8f6f2;
+  font-family: inherit;
+}
+
+.exchange-page,
+.exchange-page * {
+  box-sizing: border-box;
+}
+
+.exchange-page {
+  min-height: 100vh;
+  padding: 46px 24px 64px;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(231, 220, 204, 0.22), transparent 48%),
+    #f8f6f2;
+}
+
+.exchange-shell {
+  width: min(100%, 860px);
+  margin: 0 auto;
+}
+
+.exchange-hero {
+  padding: 8px 20px 34px;
+  text-align: center;
+}
+
+.exchange-brand {
+  display: inline-block;
+  color: #947653;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3.2px;
+}
+
+.hero-rule {
+  width: 42px;
+  height: 1px;
+  margin: 20px auto 17px;
+  background: #b89b77;
+}
+
+.hero-kicker {
+  margin: 0 0 10px;
+  color: #9a8063;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.exchange-hero h1 {
+  margin: 0;
+  color: #302720;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(38px, 5.4vw, 54px);
+  font-weight: 400;
+  letter-spacing: -1.5px;
+  line-height: 1.12;
+}
+
+.hero-description {
+  max-width: 520px;
+  margin: 16px auto 0;
+  color: #766e65;
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.hero-assurance {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 19px;
+  color: #7c7064;
+  font-size: 12px;
+}
+
+.assurance-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #a58a68;
+  box-shadow: 0 0 0 4px rgba(165, 138, 104, 0.12);
+}
+
+.exchange-main {
+  display: grid;
+  gap: 18px;
+}
+
+.exchange-panel {
+  min-width: 0;
+  padding: 30px;
+  background: #fff;
+  border: 1px solid #e9e1d7;
+  border-radius: 8px;
+  box-shadow: 0 8px 26px rgba(48, 39, 32, 0.035);
+}
+
+.panel-topline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.panel-eyebrow {
+  display: block;
+  margin-bottom: 8px;
+  color: #987b59;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.7px;
+}
+
+.panel-topline h2 {
+  margin: 0;
+  color: #342b25;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(24px, 3.3vw, 31px);
+  font-weight: 400;
+  letter-spacing: -0.45px;
+  line-height: 1.24;
+}
+
+.panel-description {
+  margin: 9px 0 0;
+  color: #81786f;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.panel-step {
+  display: inline-flex;
+  flex: 0 0 38px;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid #e6d8c8;
+  border-radius: 50%;
+  color: #987b59;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 13px;
+}
+
+.lookup-form {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.lookup-form > label,
+.field-label {
+  display: block;
+  margin: 0 0 9px;
+  color: #494037;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.order-input-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+}
+
+.order-input-row input,
+.reason-details select,
+.evidence-input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 52px;
+  padding: 13px 15px;
+  border: 1px solid #dcd1c4;
+  border-radius: 5px;
+  outline: none;
+  background: #fff;
+  color: #332b25;
+  font: inherit;
+  font-size: 15px;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.order-input-row input::placeholder {
+  color: #aaa096;
+}
+
+.order-input-row input:focus,
+.reason-details select:focus,
+.evidence-input:focus-visible {
+  border-color: #9b7b57;
+  box-shadow: 0 0 0 3px rgba(155, 123, 87, 0.14);
+}
+
+.order-input-row input:disabled {
+  background: #f4f1ed;
+  cursor: wait;
+}
+
+.primary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 14px 21px;
+  border: 1px solid #332b25;
+  border-radius: 5px;
+  background: #332b25;
+  color: #fff;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.primary-button:hover:not(:disabled) {
+  border-color: #806448;
+  background: #806448;
+}
+
+.primary-button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.primary-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.field-hint {
+  margin: 11px 0 0;
+  color: #8b8278;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.status-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 16px 0 0;
+  padding: 13px 15px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  font-size: 13px;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.status-icon {
+  display: inline-flex;
+  flex: 0 0 20px;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin-top: 0;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.status-error {
+  border-color: #efd4ce;
+  background: #fff6f3;
+  color: #9d4034;
+}
+
+.status-error .status-icon {
+  background: #f7e2dc;
+  color: #9d4034;
+}
+
+.status-success {
+  border-color: #d9e7d2;
+  background: #f4f8f1;
+  color: #4f7047;
+}
+
+.status-success .status-icon {
+  background: #e1ecd9;
+  color: #4f7047;
+}
+
+/* Verified order */
+
+.verified-banner {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 17px 20px;
+  border: 1px solid #d9e5d1;
+  border-radius: 7px;
+  background: #f3f7ef;
+}
+
+.verified-icon {
+  display: inline-flex;
+  flex: 0 0 32px;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #e1ecd9;
+  color: #4f7047;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.verified-copy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.verified-copy strong {
+  color: #3e5f37;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.verified-copy span {
+  color: #62765b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.verified-badge {
+  flex: 0 0 auto;
+  padding: 6px 10px;
+  border: 1px solid #cbdcc2;
+  border-radius: 20px;
+  color: #4d7044;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.order-facts {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr 0.8fr;
+  gap: 18px;
+  padding: 22px 24px;
+  border: 1px solid #e8ded1;
+  border-radius: 7px;
+  background: #f1ece5;
+}
+
+.order-fact {
+  min-width: 0;
+}
+
+.fact-label {
+  display: block;
+  margin-bottom: 8px;
+  color: #85796c;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  line-height: 1.4;
+}
+
+.order-fact strong {
+  display: block;
+  color: #332b25;
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.order-fact small {
+  color: #81776d;
+  font-size: 11px;
+  font-weight: 400;
+}
+
+/* Items */
+
+.item-list {
+  display: grid;
+  gap: 12px;
+}
+
+.item-option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-width: 0;
+  padding: 19px;
+  border: 1px solid #e6ddd2;
+  border-radius: 7px;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+}
+
+.item-option:hover {
+  border-color: #c6b095;
+}
+
+.item-option.selected {
+  border-color: #927653;
+  background: #faf7f2;
+  box-shadow: inset 0 0 0 1px #927653;
+}
+
+.item-option > input[type="radio"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.item-radio-visual {
+  display: inline-flex;
+  flex: 0 0 20px;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid #b9aa98;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.item-option.selected .item-radio-visual {
+  border: 6px solid #8d704e;
+}
+
+.item-information {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 9px;
+  min-width: 0;
+}
+
+.item-information > strong {
+  color: #342b25;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.item-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  color: #7d746a;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.item-meta b {
+  color: #50463c;
+  font-weight: 650;
+}
+
+.meta-divider {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #b6a795;
+}
+
+.selection-indicator {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 6px;
+  color: #8a7e71;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.selected-check {
+  display: none;
+  color: #806448;
+  font-weight: 800;
+}
+
+.item-option.selected .selection-indicator {
+  color: #806448;
+}
+
+.item-option.selected .selected-check {
+  display: inline;
+}
+
+/* Reason cards */
+
+.reason-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.reason-option {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) 18px;
+  align-items: start;
+  gap: 13px;
+  min-width: 0;
+  min-height: 142px;
+  padding: 19px;
+  border: 1px solid #e5dcd1;
+  border-radius: 7px;
+  background: #fff;
+  color: #332b25;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+}
+
+.reason-option:hover {
+  border-color: #c5af94;
+  background: #fdfbf8;
+}
+
+.reason-option.selected {
+  border-color: #927653;
+  background: #faf6f0;
+  box-shadow: inset 0 0 0 1px #927653;
+}
+
+.reason-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid #e8ddd0;
+  border-radius: 6px;
+  background: #f8f4ee;
+  color: #8d704e;
+}
+
+.reason-card-icon svg {
+  display: block;
+  width: 23px;
+  height: 23px;
+}
+
+.reason-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.reason-copy strong {
+  color: #342b25;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.reason-copy > span {
+  color: #7e756b;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.reason-radio {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #c7b9a8;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.reason-option.selected .reason-radio {
+  border: 5px solid #8d704e;
+}
+
+/* Reason detail panels */
+
+.reason-details {
+  margin-top: 22px;
+  padding: 23px;
+  border: 1px solid #e9e0d5;
+  border-radius: 7px;
+  background: #faf8f5;
+}
+
+.details-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  margin-bottom: 20px;
+}
+
+.details-icon {
+  display: inline-flex;
+  flex: 0 0 36px;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #e4d6c5;
+  border-radius: 6px;
+  background: #fff;
+  color: #8d704e;
+  font-size: 18px;
+}
+
+.details-heading h3 {
+  margin: 0 0 6px;
+  color: #342b25;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 23px;
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+.details-heading p {
+  margin: 0;
+  color: #7e756b;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.reason-details select {
+  min-height: 50px;
+  background-color: #fff;
+}
+
+.evidence-input {
+  min-height: 50px;
+  padding: 9px;
+  font-size: 13px;
+}
+
+.evidence-input::file-selector-button {
+  margin-right: 12px;
+  padding: 9px 12px;
+  border: 0;
+  border-radius: 4px;
+  background: #eee6dc;
+  color: #55483a;
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.policy-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 13px 14px;
+  border: 1px solid #e4ddd1;
+  border-radius: 5px;
+  background: #fff;
+}
+
+.policy-check {
+  display: inline-flex;
+  flex: 0 0 19px;
+  align-items: center;
+  justify-content: center;
+  width: 19px;
+  height: 19px;
+  margin-top: 1px;
+  border-radius: 50%;
+  background: #f0e9de;
+  color: #806448;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.policy-note p {
+  margin: 0;
+  color: #70675d;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.review-note {
+  border-color: #e7ddcf;
+  background: #f7f2eb;
+}
+
+.inline-state {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #806448;
+  font-size: 13px;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 17px;
+  height: 17px;
+  border: 2px solid #e5d8c8;
+  border-top-color: #8d704e;
+  border-radius: 50%;
+  animation: exchange-spin 0.8s linear infinite;
+}
+
+@keyframes exchange-spin {
+  to { transform: rotate(360deg); }
+}
+
+.required-mark {
+  color: #a44335;
+}
+
+/* Submission area */
+
+.submit-section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px 18px;
+  margin-top: 25px;
+  padding-top: 22px;
+  border-top: 1px solid #ece4da;
+}
+
+.submit-reassurance {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #81776c;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.reassurance-lock {
+  color: #947653;
+  font-size: 17px;
+}
+
+.submit-button {
+  min-width: 160px;
+}
+
+.submit-footnote {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #958b80;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* Footer */
+
+.exchange-footer {
+  padding: 35px 0 0;
+  text-align: center;
+}
+
+.footer-rule {
+  display: block;
+  width: 38px;
+  height: 1px;
+  margin: 0 auto 15px;
+  background: #c7b49d;
+}
+
+.exchange-footer p {
+  margin: 0;
+  color: #9a8b7a;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.exchange-footer p span {
+  padding: 0 5px;
+  color: #b39a7c;
+}
+
+/* Accessibility */
+
+.exchange-page button:focus-visible,
+.exchange-page input:focus-visible,
+.exchange-page select:focus-visible,
+.item-option:focus-within {
+  outline: 2px solid #927653;
+  outline-offset: 3px;
+}
+
+/* Tablet */
+
+@media (max-width: 700px) {
+  .exchange-page {
+    padding: 35px 18px 48px;
+  }
+
+  .exchange-panel {
+    padding: 25px;
+  }
+
+  .order-facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .order-fact:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .reason-option {
+    grid-template-columns: 36px minmax(0, 1fr) 16px;
+    gap: 10px;
+    padding: 16px;
+  }
+
+  .reason-card-icon {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 520px) {
+  .exchange-page {
+    padding: 27px 13px 38px;
+  }
+
+  .exchange-hero {
+    padding: 6px 8px 26px;
+  }
+
+  .exchange-brand {
+    font-size: 10px;
+    letter-spacing: 2.8px;
+  }
+
+  .hero-rule {
+    margin: 16px auto 14px;
+  }
+
+  .exchange-hero h1 {
+    font-size: clamp(35px, 10vw, 43px);
+    letter-spacing: -1px;
+  }
+
+  .hero-description {
+    margin-top: 13px;
+    font-size: 13px;
+    line-height: 1.75;
+  }
+
+  .hero-assurance {
+    margin-top: 15px;
+    font-size: 11px;
+  }
+
+  .exchange-main {
+    gap: 13px;
+  }
+
+  .exchange-panel {
+    padding: 21px 17px;
+    border-radius: 7px;
+  }
+
+  .panel-topline {
+    gap: 12px;
+    margin-bottom: 21px;
+  }
+
+  .panel-topline h2 {
+    font-size: 25px;
+  }
+
+  .panel-description {
+    font-size: 12px;
+  }
+
+  .panel-step {
+    flex-basis: 32px;
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+
+  .order-input-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .order-input-row input,
+  .primary-button {
+    min-height: 50px;
+  }
+
+  .lookup-button {
+    width: 100%;
+  }
+
+  .verified-banner {
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px;
+  }
+
+  .verified-icon {
+    flex-basis: 28px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .verified-copy span {
+    font-size: 11px;
+  }
+
+  .verified-badge {
+    padding: 5px 7px;
+    font-size: 10px;
+  }
+
+  .order-facts {
+    gap: 16px 12px;
+    padding: 17px;
+  }
+
+  .fact-label {
+    font-size: 9px;
+    letter-spacing: 0.65px;
+  }
+
+  .order-fact strong {
+    font-size: 12px;
+  }
+
+  .item-option {
+    align-items: flex-start;
+    gap: 10px;
+    padding: 15px 12px;
+  }
+
+  .item-radio-visual {
+    flex-basis: 18px;
+    width: 18px;
+    height: 18px;
+    margin-top: 1px;
+  }
+
+  .item-option.selected .item-radio-visual {
+    border-width: 5px;
+  }
+
+  .item-information > strong {
+    font-size: 14px;
+  }
+
+  .item-meta {
+    gap: 5px 8px;
+    font-size: 11px;
+  }
+
+  .selection-indicator {
+    align-self: flex-start;
+    margin-left: auto;
+    font-size: 10px;
+  }
+
+  .selection-indicator .selected-check {
+    display: none;
+  }
+
+  .reason-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .reason-option {
+    grid-template-columns: 40px minmax(0, 1fr) 18px;
+    min-height: 0;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .reason-card-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .reason-copy strong {
+    font-size: 14px;
+  }
+
+  .reason-copy > span {
+    font-size: 12px;
+  }
+
+  .reason-details {
+    margin-top: 17px;
+    padding: 17px 14px;
+  }
+
+  .details-heading {
+    gap: 10px;
+    margin-bottom: 17px;
+  }
+
+  .details-heading h3 {
+    font-size: 21px;
+  }
+
+  .details-heading p {
+    font-size: 12px;
+  }
+
+  .submit-section {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 18px;
+  }
+
+  .submit-button {
+    width: 100%;
+  }
+
+  .submit-footnote {
+    grid-column: auto;
+  }
+
+  .exchange-footer {
+    padding-top: 27px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .exchange-page *,
+  .exchange-page *::before,
+  .exchange-page *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+
+/* =========================================
+   EXCHANGE DELIVERY ADDRESS
+========================================= */
+
+.exchange-address-section {
+  margin-top: 28px;
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #e8e4df;
+  border-radius: 16px;
+}
+
+.exchange-address-title {
+  margin: 0 0 6px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #222;
+}
+
+.exchange-address-subtitle {
+  margin: 0 0 22px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #777;
+}
+
+/* =========================================
+   ADDRESS OPTION CARDS
+========================================= */
+
+.exchange-address-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.exchange-address-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 17px;
+  border: 1px solid #e5e1dc;
+  border-radius: 12px;
+  background: #fff;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.exchange-address-option:hover {
+  border-color: #b9a28a;
+  background: #fdfbf8;
+}
+
+.exchange-address-option.active {
+  border-color: #8b6b4a;
+  background: #faf6f1;
+  box-shadow: 0 0 0 1px rgba(139, 107, 74, 0.12);
+}
+
+.exchange-address-option input[type="radio"] {
+  flex-shrink: 0;
+  width: 17px;
+  height: 17px;
+  margin: 3px 0 0;
+  accent-color: #8b6b4a;
+  cursor: pointer;
+}
+
+.exchange-address-option-content {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.exchange-address-option-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #252525;
+}
+
+.exchange-address-option-description {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #777;
+}
+
+/* =========================================
+   ORIGINAL ADDRESS DISPLAY
+========================================= */
+
+.address-preview {
+  padding: 20px;
+  border: 1px solid #e9e2d9;
+  border-radius: 12px;
+  background: #faf8f5;
+  animation: addressFadeIn 0.25s ease;
+}
+
+.address-preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.address-preview-header h4 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #292929;
+}
+
+.address-original-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 20px;
+  background: #eee7de;
+  color: #795d40;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.address-preview-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.address-preview-name {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #262626;
+}
+
+.address-preview-phone {
+  margin: 0;
+  font-size: 13px;
+  color: #555;
+}
+
+.address-preview-location {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #666;
+  overflow-wrap: anywhere;
+}
+
+.address-preview-location strong {
+  color: #333;
+  font-weight: 500;
+}
+
+/* =========================================
+   NEW ADDRESS FORM
+========================================= */
+
+.exchange-new-address-form {
+  padding: 22px;
+  border: 1px solid #e8e4df;
+  border-radius: 12px;
+  background: #fcfbfa;
+  animation: addressFadeIn 0.25s ease;
+}
+
+.exchange-new-address-heading {
+  margin: 0 0 18px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #292929;
+}
+
+.exchange-address-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.exchange-address-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+.exchange-address-field.full-width {
+  grid-column: 1 / -1;
+}
+
+.exchange-address-field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #555;
+}
+
+.exchange-address-field input,
+.exchange-address-field textarea,
+.exchange-address-field select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 13px;
+  border: 1px solid #dedad5;
+  border-radius: 8px;
+  outline: none;
+  background: #fff;
+  color: #292929;
+  font-family: inherit;
+  font-size: 13px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.exchange-address-field input {
+  min-height: 44px;
+}
+
+.exchange-address-field textarea {
+  min-height: 95px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.exchange-address-field input::placeholder,
+.exchange-address-field textarea::placeholder {
+  color: #aaa;
+}
+
+.exchange-address-field input:focus,
+.exchange-address-field textarea:focus,
+.exchange-address-field select:focus {
+  border-color: #9b7a58;
+  box-shadow: 0 0 0 3px rgba(155, 122, 88, 0.10);
+}
+
+.exchange-address-field input:disabled,
+.exchange-address-field textarea:disabled {
+  background: #f3f1ee;
+  cursor: not-allowed;
+}
+
+/* =========================================
+   ADDRESS VALIDATION
+========================================= */
+
+.exchange-address-field input.ng-invalid.ng-touched,
+.exchange-address-field textarea.ng-invalid.ng-touched {
+  border-color: #d9534f;
+}
+
+.exchange-address-error {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #c0392b;
+}
+
+.exchange-address-hint {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #888;
+}
+
+/* =========================================
+   ADDRESS TRANSITION
+========================================= */
+
+@keyframes addressFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 768px) {
+  .exchange-address-section {
+    margin-top: 20px;
+    padding: 18px;
+    border-radius: 12px;
+  }
+
+  .exchange-address-title {
+    font-size: 18px;
+  }
+
+  .exchange-address-options {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .exchange-address-option {
+    padding: 15px;
+  }
+
+  .address-preview {
+    padding: 16px;
+  }
+
+  .exchange-new-address-form {
+    padding: 17px;
+  }
+
+  .exchange-address-form-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .exchange-address-field.full-width {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 380px) {
+  .exchange-address-section {
+    padding: 14px;
+  }
+
+  .address-preview-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .exchange-address-option-title {
+    font-size: 13px;
+  }
+}
+
+
+
+.exchange-success-screen {
+  max-width: 550px;
+  margin: 40px auto;
+  padding: 32px 24px;
+  text-align: center;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+}
+
+.exchange-success-icon {
+  width: 65px;
+  height: 65px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #dcfce7;
+  color: #15803d;
+  border-radius: 50%;
+  font-size: 36px;
+  font-weight: 700;
+}
+
+.exchange-success-screen h2 {
+  margin-bottom: 12px;
+  color: #15803d;
+  font-size: 24px;
+}
+
+.exchange-success-screen > p {
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.exchange-success-details {
+  margin: 24px 0;
+  padding: 16px;
+  background: #f9fafb;
+  border-radius: 10px;
+}
+
+.success-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.success-detail-row:last-child {
+  border-bottom: none;
+}
+
+.success-detail-row span {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.success-detail-row strong {
+  color: #111827;
+  font-size: 14px;
+  text-align: right;
+}
+
+.approved-status {
+  color: #15803d !important;
+}
+
+.exchange-success-screen .success-message {
+  color: #15803d;
+  margin-top: 16px;
+}
+
+/* Submit Exchange Button */
+.submit-exchange-btn {
+  width: 100%;
+  padding: 14px 24px;
+  margin-top: 20px;
+
+  background: #1a1a1a;
+  color: #ffffff;
+
+  border: 1px solid #1a1a1a;
+  border-radius: 8px;
+
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.2s ease,
+    box-shadow 0.25s ease;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  box-sizing: border-box;
+}
+
+/* Hover */
+.submit-exchange-btn:not(:disabled):hover {
+  background: #333333;
+  border-color: #333333;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
+}
+
+/* Click */
+.submit-exchange-btn:not(:disabled):active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Disabled State */
+.submit-exchange-btn:disabled {
+  background: #e5e5e5;
+  color: #888888;
+  border-color: #e5e5e5;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+  opacity: 0.85;
+}
+
+/* Keyboard Accessibility */
+.submit-exchange-btn:focus-visiblee {
+  outline: 3px solid rgba(26, 26, 26, 0.25);
+  outline-offset: 3px;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  button[type="button"] {
+    padding: 13px 18px;
+    font-size: 14px;
+    min-height: 48px;
+  }
+}
+
+.exchange-product-reference {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 18px 0;
+  padding: 16px 18px;
+  background: #f8f6f2;
+  border: 1px solid #e8e1d8;
+  border-left: 3px solid #8b7355;
+  border-radius: 8px;
+}
+
+.product-reference-label {
+  color: #8b7355;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+}
+
+.exchange-product-reference strong {
+  color: #222;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.product-size-reference {
+  color: #666;
+  font-size: 13px;
+}
+
+.reason-option {
+  background: #ffffff;
+  color: #29231f;
+  border: 1px solid #e5d8ca;
+}
+
+.reason-option .reason-copy strong {
+  color: #29231f;
+}
+
+.reason-option .reason-copy span {
+  color: #71665d;
+}
+
+.reason-option.selected {
+  background: #f8f3ed;
+  border-color: #9b7955;
+}
+
+.reason-option.selected .reason-copy strong {
+  color: #29231f;
+}
+
+.reason-option.selected .reason-copy span {
+  color: #71665d;
+}
+
+/* Fix exchange reason card text visibility */
+.exchange-page .reason-option,
+.exchange-page .reason-option.selected {
+  background: #ffffff;
+  color: #332b25;
+}
+
+.exchange-page .reason-option .reason-copy strong {
+  color: #342b25;
+}
+
+.exchange-page .reason-option .reason-copy > span {
+  color: #71665d;
+}
+
+.exchange-page .reason-option.selected {
+  background: #faf6f0;
+  border-color: #927653;
+}

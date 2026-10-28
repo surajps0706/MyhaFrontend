@@ -124,3 +124,34 @@
     padding: 28px 22px;
   }
 }
+
+
+/* EXCHANGE APPROVED */
+
+.exchange-approved {
+  display: inline-block;
+  color: #15803d;
+  font-weight: 600;
+}
+
+/* Exchange confirmation text */
+
+.success-card .thank-you {
+  line-height: 1.6;
+}
+
+/* Exchange confirmation details */
+
+.success-card .order-info p {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Original order ID and exchange request ID */
+
+.success-card .order-id {
+  display: block;
+  overflow-wrap: anywhere;
+}
+

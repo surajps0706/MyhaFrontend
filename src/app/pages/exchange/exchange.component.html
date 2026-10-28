@@ -1,0 +1,1013 @@
+
+<div class="exchange-page">
+  <div class="exchange-shell">
+
+    <!-- Page Header -->
+    <header class="exchange-hero">
+      <span class="exchange-brand">MYHA COUTURE</span>
+      <div class="hero-rule" aria-hidden="true"></div>
+      <p class="hero-kicker">A LITTLE MORE YOU</p>
+
+      <h1>Exchange your order</h1>
+
+      <p class="hero-description">
+        The right fit makes all the difference. Tell us what you need and
+        we’ll help you with the next step.
+      </p>
+
+      <div class="hero-assurance">
+        <span class="assurance-dot" aria-hidden="true"></span>
+        A simple, guided exchange experience
+      </div>
+    </header>
+
+    <main class="exchange-main">
+
+      <!-- Order Lookup -->
+      <section
+        class="exchange-panel order-lookup-panel"
+        aria-labelledby="lookup-title"
+      >
+        <div class="panel-topline">
+          <div>
+            <span class="panel-eyebrow">FIRST THINGS FIRST</span>
+            <h2 id="lookup-title">Find your order</h2>
+            <p class="panel-description">
+              Enter the Order ID from your confirmation details.
+            </p>
+          </div>
+
+          <span class="panel-step" aria-hidden="true">01</span>
+        </div>
+
+        <form
+          class="lookup-form"
+          (ngSubmit)="validateOrder()"
+          #exchangeForm="ngForm"
+        >
+          <label for="orderId">Order ID</label>
+
+          <div class="order-input-row">
+            <input
+              id="orderId"
+              name="orderId"
+              type="text"
+              [(ngModel)]="orderId"
+              placeholder="e.g. MYHA012345"
+              autocomplete="off"
+              required
+              [disabled]="isLoading"
+            />
+
+            <button
+              type="submit"
+              class="primary-button lookup-button"
+              [disabled]="isLoading || !orderId.trim()"
+            >
+              <span *ngIf="!isLoading">
+                Check eligibility <span aria-hidden="true">→</span>
+              </span>
+
+              <span *ngIf="isLoading">Checking order…</span>
+            </button>
+          </div>
+
+          <p class="field-hint">
+            We’ll check the courier’s delivery record to confirm whether
+            your order is within the exchange window.
+          </p>
+        </form>
+
+        <p
+          *ngIf="errorMessage"
+          class="status-message status-error"
+          role="alert"
+        >
+          <span class="status-icon" aria-hidden="true">!</span>
+          <span>{{ errorMessage }}</span>
+        </p>
+
+        <p
+          *ngIf="successMessage"
+          class="status-message status-success"
+          role="status"
+        >
+          <span class="status-icon" aria-hidden="true">✓</span>
+          <span>{{ successMessage }}</span>
+        </p>
+      </section>
+
+      <!-- Verified Order Details -->
+<ng-container *ngIf="orderValidated && orderDetails as order">
+
+  <!-- PAYMENT SUCCESS SCREEN -->
+  <section
+    class="exchange-success-screen"
+    *ngIf="exchangeCompleted"
+  >
+
+    <div class="exchange-success-icon">
+      ✓
+    </div>
+
+    <h2>Exchange Approved Successfully!</h2>
+
+    <p>
+      Your payment was successful and your size exchange
+      has been approved.
+    </p>
+
+    <div class="exchange-success-details">
+
+      <div class="success-detail-row">
+        <span>Original Order ID</span>
+        <strong>{{ order.orderId }}</strong>
+      </div>
+
+      <div class="success-detail-row">
+        <span>Exchange Status</span>
+        <strong class="approved-status">Approved</strong>
+      </div>
+
+    </div>
+
+    <p class="success-message">
+      {{ successMessage }}
+    </p>
+
+  </section>
+
+  <!-- EXISTING EXCHANGE FORM START -->
+  <div *ngIf="!exchangeCompleted">
+        <section
+          class="verified-banner"
+          aria-label="Order eligibility confirmed"
+        >
+          <span class="verified-icon" aria-hidden="true">✓</span>
+
+          <div class="verified-copy">
+            <strong>Order verified</strong>
+            <span>Your order is within the exchange window.</span>
+          </div>
+
+          <span class="verified-badge">Eligible</span>
+        </section>
+
+        <!-- Delivery Information -->
+        <section class="order-facts" aria-label="Order delivery details">
+
+          <div class="order-fact">
+            <span class="fact-label">ORDER ID</span>
+            <strong>{{ order.orderId }}</strong>
+          </div>
+
+          <div class="order-fact">
+            <span class="fact-label">DELIVERED ON</span>
+            <strong>
+              {{ order.deliveryConfirmedAt | date:'medium' }}
+            </strong>
+          </div>
+
+          <div class="order-fact">
+            <span class="fact-label">DAYS SINCE DELIVERY</span>
+            <strong>
+              {{ order.daysSinceDelivery }} <small>days</small>
+            </strong>
+          </div>
+
+        </section>
+
+        <!-- Step 1: Item Selection -->
+        <section
+          class="exchange-panel flow-panel"
+          aria-labelledby="item-title"
+        >
+          <div class="panel-topline">
+            <div>
+              <span class="panel-eyebrow">STEP 1 OF 3</span>
+
+              <h2 id="item-title">
+                What would you like to exchange?
+              </h2>
+
+              <p class="panel-description">
+               Select the dresses you would like to exchange.
+              </p>
+            </div>
+
+            <span class="panel-step" aria-hidden="true">01</span>
+          </div>
+
+          <div class="item-list">
+
+            <label
+              class="item-option"
+              *ngFor="let item of order.items"
+             [class.selected]="isItemSelected(item.item_index)"
+            >
+            <input
+  type="checkbox"
+  [checked]="isItemSelected(item.item_index)"
+  (change)="toggleItem(item)"
+/>
+
+              <span
+                class="item-radio-visual"
+                aria-hidden="true"
+              ></span>
+
+              <span class="item-information">
+                <strong>{{ item.name || 'Product' }}</strong>
+
+                <span class="item-meta">
+                  <span>
+                    Qty <b>{{ item.quantity }}</b>
+                  </span>
+
+                  <span
+                    class="meta-divider"
+                    aria-hidden="true"
+                  ></span>
+
+                  <span>
+                    Original size
+                    <b>{{ item.selectedSize || 'Not specified' }}</b>
+                  </span>
+                </span>
+              </span>
+
+              <span class="selection-indicator">
+                <span
+                  class="selected-check"
+                  aria-hidden="true"
+                >✓</span>
+
+               {{
+  isItemSelected(item.item_index)
+    ? 'Selected'
+    : 'Select item'
+}}
+              </span>
+            </label>
+
+          </div>
+        </section>
+
+        <!-- Step 2: Exchange Reason -->
+
+      
+      <ng-container *ngFor="let itemIndex of selectedItemIndices">
+
+        
+        <section
+          class="exchange-panel flow-panel"
+          aria-labelledby="reason-title"
+        >
+         <div class="panel-topline">
+  <div>
+    <span class="panel-eyebrow">
+      STEP 2 OF 3 · ITEM {{ selectedItemIndices.indexOf(itemIndex) + 1 }}
+      OF {{ selectedItemIndices.length }}
+    </span>
+
+    <h2 id="reason-title">
+      {{ getProductName(itemIndex, order.items) }}
+    </h2>
+
+    <p class="panel-description">
+      Original size: {{ getOriginalSize(itemIndex, order.items) }}.
+      Choose the reason for exchanging this dress.
+    </p>
+  </div>
+
+  <span class="panel-step" aria-hidden="true">02</span>
+</div>
+
+          <!-- Reason Cards -->
+          <div class="reason-grid">
+
+            <button
+  type="button"
+  class="reason-option"
+  [class.selected]="getSelection(itemIndex).reason === 'size_issue'"
+  [attr.aria-pressed]="getSelection(itemIndex).reason === 'size_issue'"
+  (click)="selectItemReason(itemIndex, 'size_issue')"
+>
+              <span class="reason-card-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M4 8.5 12 4l8 4.5v7L12 20l-8-4.5v-7Z"
+                    stroke="currentColor"
+                    stroke-width="1.4"
+                  />
+                  <path
+                    d="m4.4 8.7 7.6 4.4 7.6-4.4M12 13.1V20M8 6.2l8 4.6"
+                    stroke="currentColor"
+                    stroke-width="1.4"
+                  />
+                </svg>
+              </span>
+
+              <span class="reason-copy">
+                <strong>Size or fit issue</strong>
+
+                <span>
+                  The fit isn’t quite right. Choose another available
+                  size for the same item.
+                </span>
+              </span>
+
+              <span class="reason-radio" aria-hidden="true"></span>
+            </button>
+
+            <button
+  type="button"
+  class="reason-option"
+  [class.selected]="getSelection(itemIndex).reason === 'defective_product'"
+  [attr.aria-pressed]="getSelection(itemIndex).reason === 'defective_product'"
+  (click)="selectItemReason(itemIndex, 'defective_product')"
+>
+              <span class="reason-card-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M12 3.5 20 7v5.3c0 4.2-3.1 6.9-8 8.7-4.9-1.8-8-4.5-8-8.7V7l8-3.5Z"
+                    stroke="currentColor"
+                    stroke-width="1.4"
+                  />
+                  <path
+                    d="M12 8v5M12 16.2v.1"
+                    stroke="currentColor"
+                    stroke-width="1.7"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </span>
+
+              <span class="reason-copy">
+                <strong>Defective or damaged</strong>
+
+                <span>
+                  The item arrived damaged or has a product defect.
+                  Add a photo or video for review.
+                </span>
+              </span>
+
+              <span class="reason-radio" aria-hidden="true"></span>
+            </button>
+
+          </div>
+
+          <!-- Size Exchange -->
+          <div
+            class="reason-details"
+            *ngIf="getSelection(itemIndex).reason === 'size_issue'"
+          >
+           <div class="details-heading">
+  <span class="details-icon" aria-hidden="true">↔</span>
+
+  <div>
+    <h3>Choose your replacement size</h3>
+
+    <p>
+      We’ll keep the product the same and change only the size.
+    </p>
+  </div>
+</div>
+
+<!-- Product identification -->
+<!-- Product identification -->
+
+
+
+            <div
+              *ngIf="getSelection(itemIndex).isLoadingSizes"
+              class="inline-state"
+              role="status"
+            >
+              <span
+                class="loading-spinner"
+                aria-hidden="true"
+              ></span>
+
+              Checking available sizes…
+            </div>
+
+            <p
+              *ngIf="getSelection(itemIndex).sizeLoadError && !getSelection(itemIndex).isLoadingSizes"
+              class="status-message status-error"
+              role="alert"
+            >
+              <span class="status-icon" aria-hidden="true">!</span>
+              <span>{{ getSelection(itemIndex).sizeLoadError }}</span>
+            </p>
+
+            <ng-container
+              *ngIf="!getSelection(itemIndex).isLoadingSizes && getSelection(itemIndex).availableSizes.length > 0"
+            >
+              <label
+                class="field-label"
+                for="replacementSize"
+              >
+                Available sizes
+              </label>
+
+              <select
+  [id]="'replacementSize-' + itemIndex"
+  [name]="'replacementSize-' + itemIndex"
+  [(ngModel)]="getSelection(itemIndex).replacementSize"
+>
+                <option value="">Choose a size</option>
+
+                <option
+  *ngFor="let size of getSelection(itemIndex).availableSizes"
+  [value]="size"
+>
+  {{ size }}
+</option>
+              </select>
+
+             
+            </ng-container>
+          </div>
+
+          <!-- Defective Product Evidence -->
+          <div
+            class="reason-details evidence-details"
+            *ngIf="getSelection(itemIndex).reason === 'defective_product'"
+          >
+            <div class="details-heading">
+              <span class="details-icon" aria-hidden="true">＋</span>
+
+              <div>
+                <h3>Show us what went wrong</h3>
+
+                <p>
+                  A clear photo or short video helps our team review
+                  your request.
+                </p>
+              </div>
+            </div>
+
+            <label
+              class="field-label"
+              for="evidenceFile"
+            >
+              Photo or video <span class="required-mark">*</span>
+            </label>
+
+            <input
+  [id]="'evidenceFile-' + itemIndex"
+  class="evidence-input"
+  type="file"
+  accept=".jpg,.jpeg,.png,.webp,.mp4,.mov"
+  (change)="onEvidenceSelected($event, itemIndex)"
+/>
+
+            <p class="field-hint">
+              JPG, PNG, WEBP, MP4 or MOV · Maximum file size 20 MB
+            </p>
+
+            <p
+              *ngIf="getSelection(itemIndex).evidenceFile"
+              class="status-message status-success"
+              role="status"
+            >
+              <span class="status-icon" aria-hidden="true">✓</span>
+              <span>Selected: {{ getSelection(itemIndex).evidenceFile?.name }}</span>
+            </p>
+
+            <p
+              *ngIf="getSelection(itemIndex).evidenceError"
+              class="status-message status-error"
+              role="alert"
+            >
+              <span class="status-icon" aria-hidden="true">!</span>
+              <span>{{ getSelection(itemIndex).evidenceError }}</span>
+            </p>
+
+            <div class="policy-note review-note">
+              <span class="policy-check" aria-hidden="true">i</span>
+
+              <p>
+                Defective-product requests are reviewed by our team.
+                Submission does not mean automatic approval.
+              </p>
+            </div>
+          </div>
+
+     
+        </section>
+
+      </ng-container>
+
+     <!-- Continue -->
+          <!-- Exchange Delivery Address -->
+
+
+<!-- =========================================
+     STEP 3: EXCHANGE DELIVERY ADDRESS
+========================================= -->
+
+<section
+  class="exchange-panel flow-panel exchange-address-section"
+  *ngIf="selectedItemIndices.length > 0"
+  aria-labelledby="exchange-address-title"
+>
+
+  <!-- =========================================
+       SECTION HEADER
+  ========================================= -->
+
+  <div class="panel-topline">
+
+    <div>
+
+      <span class="panel-eyebrow">
+        STEP 3 OF 3
+      </span>
+
+      <h2
+        id="exchange-address-title"
+        class="exchange-address-title"
+      >
+        Where should we deliver your exchange?
+      </h2>
+
+      <p class="panel-description exchange-address-subtitle">
+        Choose your original delivery address or enter a different address.
+      </p>
+
+    </div>
+
+    <span
+      class="panel-step"
+      aria-hidden="true"
+    >
+      03
+    </span>
+
+  </div>
+
+
+  <!-- =========================================
+       ADDRESS OPTIONS
+  ========================================= -->
+
+  <div class="exchange-address-options">
+
+
+    <!-- =========================================
+         OPTION 1: ORIGINAL ADDRESS
+    ========================================= -->
+
+    <label
+      class="exchange-address-option"
+      [class.active]="sameAsOriginalAddress"
+    >
+
+      <input
+        type="radio"
+        name="exchangeAddressChoice"
+        [value]="true"
+        [(ngModel)]="sameAsOriginalAddress"
+      />
+
+      <span class="exchange-address-option-content">
+
+        <span class="exchange-address-option-title">
+          Use my original delivery address
+        </span>
+
+        <span class="exchange-address-option-description">
+          Deliver the exchange to the address used for your original order.
+        </span>
+
+      </span>
+
+    </label>
+
+
+    <!-- =========================================
+         OPTION 2: DIFFERENT ADDRESS
+    ========================================= -->
+
+    <label
+      class="exchange-address-option"
+      [class.active]="!sameAsOriginalAddress"
+    >
+
+      <input
+        type="radio"
+        name="exchangeAddressChoice"
+        [value]="false"
+        [(ngModel)]="sameAsOriginalAddress"
+      />
+
+      <span class="exchange-address-option-content">
+
+        <span class="exchange-address-option-title">
+          Deliver to a different address
+        </span>
+
+        <span class="exchange-address-option-description">
+          Enter another address for this exchange.
+        </span>
+
+      </span>
+
+    </label>
+
+  </div>
+
+
+  <!-- =========================================
+       ORIGINAL ADDRESS PREVIEW
+
+       Display only when original address selected.
+  ========================================= -->
+
+  <div
+    *ngIf="sameAsOriginalAddress"
+    class="address-preview"
+  >
+
+    <div class="address-preview-header">
+
+      <h4>
+        Original Delivery Address
+      </h4>
+
+      <span class="address-original-badge">
+        Original Address
+      </span>
+
+    </div>
+
+
+    <div class="address-preview-details">
+
+      <!-- CUSTOMER NAME -->
+
+      <p
+        class="address-preview-name"
+        *ngIf="originalAddress.name"
+      >
+
+        {{ originalAddress.name }}
+
+      </p>
+
+
+      <!-- PHONE -->
+
+      <p
+        class="address-preview-phone"
+        *ngIf="originalAddress.phone"
+      >
+
+        {{ originalAddress.phone }}
+
+      </p>
+
+
+      <!-- ADDRESS -->
+
+      <p
+        class="address-preview-location"
+        *ngIf="originalAddress.address"
+      >
+
+        {{ originalAddress.address }}
+
+      </p>
+
+
+      <!-- CITY, STATE, PINCODE -->
+
+      <p
+        class="address-preview-location"
+        *ngIf="
+          originalAddress.city ||
+          originalAddress.state ||
+          originalAddress.pincode
+        "
+      >
+
+        <strong>
+
+          {{ originalAddress.city }}
+
+          <span
+            *ngIf="
+              originalAddress.city &&
+              originalAddress.state
+            "
+          >
+            ,
+          </span>
+
+          {{ originalAddress.state }}
+
+        </strong>
+
+        <span
+          *ngIf="
+            originalAddress.pincode
+          "
+        >
+
+          - {{ originalAddress.pincode }}
+
+        </span>
+
+      </p>
+
+
+      <!-- ADDRESS NOT AVAILABLE -->
+
+      <p
+        class="exchange-address-hint"
+        *ngIf="
+          !originalAddress.name &&
+          !originalAddress.phone &&
+          !originalAddress.address &&
+          !originalAddress.city &&
+          !originalAddress.state &&
+          !originalAddress.pincode
+        "
+      >
+
+        Original delivery address is unavailable.
+        Please select a different address.
+
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================
+       NEW ADDRESS FORM
+
+       Display only when different address selected.
+  ========================================= -->
+
+  <div
+    class="exchange-new-address-form"
+    *ngIf="!sameAsOriginalAddress"
+  >
+
+    <h3
+      class="exchange-new-address-heading"
+    >
+
+      New Exchange Delivery Address
+
+    </h3>
+
+
+    <div class="exchange-address-form-grid">
+
+
+      <!-- =====================================
+           FULL NAME
+      ===================================== -->
+
+      <div class="exchange-address-field">
+
+        <label
+          for="exchangeAddressName"
+        >
+
+          Full name *
+
+        </label>
+
+        <input
+          id="exchangeAddressName"
+          type="text"
+          name="exchangeAddressName"
+          [(ngModel)]="exchangeAddress.name"
+          placeholder="Recipient name"
+          autocomplete="name"
+          required
+        />
+
+      </div>
+
+
+      <!-- =====================================
+           PHONE NUMBER
+      ===================================== -->
+
+      <div class="exchange-address-field">
+
+       <label for="exchangeAddressPhone">
+  Phone number *
+</label>
+
+<input
+  id="exchangeAddressPhone"
+  type="tel"
+  name="exchangeAddressPhone"
+  [(ngModel)]="exchangeAddress.phone"
+  placeholder="Enter 10-digit phone number"
+  autocomplete="tel"
+  inputmode="numeric"
+  pattern="[0-9]{10}"
+  minlength="10"
+  maxlength="10"
+(input)="onExchangePhoneInput($event)"
+  required
+/>
+
+      </div>
+
+
+      <!-- =====================================
+           ADDRESS
+      ===================================== -->
+
+      <div
+        class="exchange-address-field full-width"
+      >
+
+        <label
+          for="exchangeAddressLine1"
+        >
+
+          Address *
+
+        </label>
+
+        <textarea
+          id="exchangeAddressLine1"
+          name="exchangeAddressLine1"
+          [(ngModel)]="exchangeAddress.addressLine1"
+          placeholder="House number, street, area"
+          autocomplete="street-address"
+          rows="3"
+          required
+        ></textarea>
+
+      </div>
+
+
+      <!-- =====================================
+           CITY
+      ===================================== -->
+
+      <div class="exchange-address-field">
+
+        <label
+          for="exchangeAddressCity"
+        >
+
+          City *
+
+        </label>
+
+        <input
+          id="exchangeAddressCity"
+          type="text"
+          name="exchangeAddressCity"
+          [(ngModel)]="exchangeAddress.city"
+          placeholder="City"
+          autocomplete="address-level2"
+          required
+        />
+
+      </div>
+
+
+      <!-- =====================================
+           STATE
+      ===================================== -->
+
+      <div class="exchange-address-field">
+
+        <label
+          for="exchangeAddressState"
+        >
+
+          State *
+
+        </label>
+
+        <input
+          id="exchangeAddressState"
+          type="text"
+          name="exchangeAddressState"
+          [(ngModel)]="exchangeAddress.state"
+          placeholder="State"
+          autocomplete="address-level1"
+          required
+        />
+
+      </div>
+
+
+      <!-- =====================================
+           PINCODE
+      ===================================== -->
+
+      <div class="exchange-address-field">
+
+        <label
+          for="exchangeAddressPincode"
+        >
+
+          Pincode *
+
+        </label>
+
+        <input
+          id="exchangeAddressPincode"
+          type="text"
+          name="exchangeAddressPincode"
+          [(ngModel)]="exchangeAddress.pincode"
+          placeholder="6-digit pincode"
+          autocomplete="postal-code"
+          maxlength="6"
+          inputmode="numeric"
+          pattern="[0-9]{6}"
+          required
+        />
+
+        <p class="exchange-address-hint">
+
+          Enter the pincode for your exchange delivery location.
+
+        </p>
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+
+</section>
+
+
+<!-- Continue -->
+
+<div
+  class="submit-section"
+  *ngIf="selectedItemIndices.length > 0"
+>
+
+  <div class="submit-reassurance">
+
+    <span class="reassurance-lock" aria-hidden="true">◇</span>
+
+    <span>
+      Review your selection and delivery address before continuing.
+    </span>
+
+  </div>
+
+ <button class="submit-exchange-btn"
+  type="button"
+  [disabled]="isSubmitting || isProcessingPayment || !canSubmitExchange()"
+  (click)="submitExchangeRequest()"
+>
+  <ng-container *ngIf="isSubmitting">
+    Submitting Exchange...
+  </ng-container>
+
+  <ng-container *ngIf="!isSubmitting && isProcessingPayment">
+    Verifying Payment...
+  </ng-container>
+
+  <ng-container *ngIf="!isSubmitting && !isProcessingPayment">
+    Submit Exchange
+  </ng-container>
+</button>  
+
+  <p class="submit-footnote">
+    Your exchange request has not been submitted yet.
+  </p>
+
+</div>
+  </div>
+
+      </ng-container>
+    </main>
+
+    <!-- Footer -->
+    <footer class="exchange-footer">
+      <span class="footer-rule" aria-hidden="true"></span>
+
+      <p>
+        MYHA COUTURE
+        <span aria-hidden="true">·</span>
+        MADE WITH CARE
+      </p>
+    </footer>
+
+  </div>
+</div>
+```
