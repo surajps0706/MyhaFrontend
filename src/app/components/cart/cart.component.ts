@@ -21,6 +21,7 @@ export class CartComponent implements OnInit {
   handlingCharge: number = 0;
   total: number = 0;
   totalQty: number = 0;
+  builtInPadsTotal: number = 0;
 
   constructor(private cartService: CartService, private router: Router) {}
 
@@ -63,30 +64,62 @@ export class CartComponent implements OnInit {
     );
   }
 
-  updateTotal(): void {
-    this.baseTotal = 0;
-    this.sleeveTotal = 0;
-    this.heightTotal = 0;
-    this.totalQty = 0;
 
-    this.cartItems.forEach(item => {
-      const basePrice = Number(item.price?.toString().replace(/[^0-9]/g, '') || 0);
-      const sleevePrice = Number(item.sleevePrice || 0);
-      const heightPrice = Number(item.extraHeightPrice || 0);
-      const qty = item.quantity || 1;
+updateTotal(): void {
+  this.baseTotal = 0;
+  this.sleeveTotal = 0;
+  this.heightTotal = 0;
+  this.builtInPadsTotal = 0;
+  this.totalQty = 0;
 
-      this.baseTotal += basePrice * qty;
-      this.sleeveTotal += sleevePrice * qty;
-      this.heightTotal += heightPrice * qty;
-      this.totalQty += qty;
-    });
+  this.cartItems.forEach(item => {
+    const basePrice = Number(
+      item.price?.toString().replace(/[^0-9.]/g, '') || 0
+    );
 
-    // ✅ Apply handling charge for 3 or more total items
-    this.handlingCharge = this.totalQty >= 3 ? 20 : 0;
+    const sleevePrice = Number(item.sleevePrice || 0);
+    const heightPrice = Number(item.extraHeightPrice || 0);
 
-    // ✅ Compute grand total
-    this.total = this.baseTotal + this.sleeveTotal + this.heightTotal + this.handlingCharge;
-  }
+    // Charge pads only when selected
+    const builtInPadsPrice = item.hasBuiltInPads
+      ? Number(item.builtInPadsPrice || 200)
+      : 0;
+
+    const qty = Number(item.quantity) || 1;
+
+    this.baseTotal += basePrice * qty;
+    this.sleeveTotal += sleevePrice * qty;
+    this.heightTotal += heightPrice * qty;
+    this.builtInPadsTotal += builtInPadsPrice * qty;
+    this.totalQty += qty;
+  });
+
+  // Existing handling charge
+  this.handlingCharge = this.totalQty >= 3 ? 20 : 0;
+
+  this.total =
+    this.baseTotal +
+    this.sleeveTotal +
+    this.heightTotal +
+    this.builtInPadsTotal +
+    this.handlingCharge;
+}
+
+
+getItemTotal(item: any): number {
+  const base = Number(
+    item.price?.toString().replace(/[^0-9.]/g, '') || 0
+  );
+
+  const sleeve = Number(item.sleevePrice || 0);
+  const height = Number(item.extraHeightPrice || 0);
+  const pads = item.hasBuiltInPads
+    ? Number(item.builtInPadsPrice || 200)
+    : 0;
+
+  return (base + sleeve + height + pads) * (Number(item.quantity) || 1);
+}
+
 
   goToCheckout(): void {
     this.cartItems = this.cartItems.map(item => ({

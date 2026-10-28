@@ -78,13 +78,29 @@ shippingLoading = false;
   }
 
 
-  getItemTotal(item: any): number {
-    const basePrice = Number(item.price?.toString().replace(/[^0-9]/g, '') || 0);
-    const sleevePrice = Number(item.sleevePrice || 0);
-    const heightPrice = Number(item.extraHeightPrice || 0);
-    const qty = item.quantity || 1;
-    return (basePrice + sleevePrice + heightPrice) * qty;
-  }
+  
+getItemTotal(item: any): number {
+  const basePrice = Number(
+    item.price?.toString().replace(/[^0-9.]/g, '') || 0
+  );
+
+  const sleevePrice = Number(item.sleevePrice || 0);
+  const heightPrice = Number(item.extraHeightPrice || 0);
+
+  const builtInPadsPrice = item.hasBuiltInPads
+    ? Number(item.builtInPadsPrice || 200)
+    : 0;
+
+  const qty = Number(item.quantity) || 1;
+
+  return (
+    basePrice +
+    sleevePrice +
+    heightPrice +
+    builtInPadsPrice
+  ) * qty;
+}
+
 
   get totalAmount(): number {
     return this.cartItems.reduce((total, item) => total + this.getItemTotal(item), 0);

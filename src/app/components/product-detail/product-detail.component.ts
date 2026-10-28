@@ -30,6 +30,8 @@ export class ProductDetailComponent implements OnInit {
   enableHeightCustomization = false; // default OFF
   enableNeckCustomization = false;
 neckCustomizationText: string = '';
+enableBuiltInPads = false;
+builtInPadsPrice = 200;
 
 
 
@@ -138,6 +140,8 @@ this.product.enableNeckCustomization =
 // Customer selections start OFF
 this.enableHeightCustomization = false;
 this.enableNeckCustomization = false;
+this.enableBuiltInPads = false;
+
 
 this.selectedImage = this.product.images[0] || '';
 
@@ -183,6 +187,11 @@ this.product.selectedSize = null;
     },
     error: (err) => console.error('Error fetching product:', err)
   });
+}
+
+
+get builtInPadsExtra(): number {
+  return this.enableBuiltInPads ? this.builtInPadsPrice : 0;
 }
 
 
@@ -302,13 +311,17 @@ get heightExtra(): number {
 
 
 get totalPrice(): number {
-  return this.basePrice + this.sleeveExtra + this.heightExtra + this.bustExtra;
+  return this.basePrice + this.sleeveExtra + this.heightExtra + this.bustExtra + this.builtInPadsExtra;;
 }
 
 get sleeveExtra(): number {
   // ✅ Only add sleeve price if customization toggle is ON
   if (!this.enableSleeveCustomization) return 0;
   return this.selectedSleeve?.price || 0;
+}
+
+onBuiltInPadsToggle(): void {
+  this.updateTotalPrice();
 }
 
 
@@ -356,6 +369,8 @@ Link: ${window.location.href}`;
     measurements: this.sizingMode === 'measurements' ? this.measurements : {},
     customizationNotes: this.customizationNotes || null,
     bustExtra: this.bustExtra || 0,
+    hasBuiltInPads: this.enableBuiltInPads,
+    builtInPadsPrice: this.builtInPadsExtra,
   };
 
   // ✅ Sleeve

@@ -89,6 +89,9 @@
             <span *ngIf="item.sleeveType">Sleeve: {{ item.sleeveType }} (+₹{{ item.sleevePrice }})</span>
             <span *ngIf="item.extraHeightPrice">Height: +₹{{ item.extraHeightPrice }}</span>
             <span *ngIf="item.preferredHeight">Height : {{ item.preferredHeight }} inches (Free of Cost)</span>
+            <span *ngIf="item.hasBuiltInPads">
+  Built-in Pads: Yes (+₹{{ item.builtInPadsPrice || 200 }})
+</span>
             <span *ngIf="item.customizationNotes">Customization Notes: {{ item.customizationNotes }}</span>
           </div>
         </div>

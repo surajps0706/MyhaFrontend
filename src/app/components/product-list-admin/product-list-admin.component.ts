@@ -366,6 +366,8 @@ editProduct(product: any) {
     enableNeckCustomization:
       product.enableNeckCustomization ?? false,
 
+      enableBuiltInPads: product.enableBuiltInPads ?? false,
+
     sizes:
       Array.isArray(product.sizes) && product.sizes.length === 8
         ? product.sizes
@@ -574,6 +576,9 @@ saveProduct() {
 
     enableHeightCustomization:
       !!this.editingProduct.enableHeightCustomization,
+
+      enableBuiltInPads:
+  !!this.editingProduct.enableBuiltInPads,
 
     enableNeckCustomization:
       !!this.editingProduct.enableNeckCustomization,

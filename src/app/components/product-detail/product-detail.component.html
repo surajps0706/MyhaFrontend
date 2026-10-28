@@ -333,6 +333,26 @@
 
 
 
+<!-- Built-in Pads Customization -->
+<div
+  class="built-in-pads-toggle-wrapper"
+  *ngIf="product?.enableBuiltInPads"
+>
+  <label class="switch">
+    <input
+      type="checkbox"
+      [(ngModel)]="enableBuiltInPads"
+      (change)="onBuiltInPadsToggle()"
+    />
+    <span class="slider round"></span>
+  </label>
+
+  <span class="toggle-label">Add Built-in Pads (+₹200)</span>
+</div>
+
+
+
+
     <!-- Customization Notes -->
  <div 
   class="customization-section"
@@ -616,15 +636,33 @@
     <!-- Sticky Footer -->
     <div class="sticky-footer" *ngIf="product">
       <div class="footer-content">
-   <div class="price-breakdown">
+ 
+<div class="price-breakdown">
   <span>Base: ₹{{ basePrice }}</span>
-  <span *ngIf="bustExtra">Bust Size: +₹{{ bustExtra }}</span>
-  <span *ngIf="sleeveExtra">Sleeve: +₹{{ sleeveExtra }}</span>
-  <span *ngIf="heightExtra">Height: +₹{{ heightExtra }}</span>
-  <strong *ngIf="bustExtra || sleeveExtra || heightExtra">
+
+  <span *ngIf="bustExtra">
+    Bust Size: +₹{{ bustExtra }}
+  </span>
+
+  <span *ngIf="sleeveExtra">
+    Sleeve: +₹{{ sleeveExtra }}
+  </span>
+
+  <span *ngIf="heightExtra">
+    Height: +₹{{ heightExtra }}
+  </span>
+
+  <span *ngIf="builtInPadsExtra">
+    Built-in Pads: +₹{{ builtInPadsExtra }}
+  </span>
+
+  <strong
+    *ngIf="bustExtra || sleeveExtra || heightExtra || builtInPadsExtra"
+  >
     Total: ₹{{ totalPrice }}
   </strong>
 </div>
+
 
 
        <button

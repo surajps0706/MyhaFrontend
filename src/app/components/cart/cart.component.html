@@ -28,7 +28,14 @@
         <div class="title-price-row">
           <h3 class="product-title">{{ item.name }}</h3>
           <span class="item-total">
-            ₹{{ (item.price + (item.sleevePrice || 0) + (item.extraHeightPrice || 0)) * item.quantity }}
+           ₹{{
+  (
+    (item.price || 0) +
+    (item.sleevePrice || 0) +
+    (item.extraHeightPrice || 0) +
+    (item.builtInPadsPrice || 0)
+  ) * (item.quantity || 1)
+}}
           </span>
         </div>
 
@@ -48,6 +55,9 @@
     <span class="tag" *ngIf="item.selectedSleeve">Sleeve: {{ item.selectedSleeve ? 'Yes' : 'No'}}</span>
   <span style="display: flex;" class="tag">Height: {{ item.hasHeightCustomization ? 'Yes' : 'No' }}</span>
   <span class="tag">Neck: {{ item.hasNeckCustomization ? 'Yes' : 'No' }}</span>
+  <span class="tag" *ngIf="item.hasBuiltInPads">
+  Built-in Pads: Yes (+₹{{ item.builtInPadsPrice }})
+</span>
   <span
     style="display: flex;"
     class="tag"
@@ -91,6 +101,9 @@
 <div class="price-breakup">
   <p><span>Base Price:</span> ₹{{ baseTotal }}</p>
   <p><span>Sleeve Add-ons:</span> ₹{{ sleeveTotal }}</p>
+  <p *ngIf="builtInPadsTotal > 0">
+  <span>Built-in Pads:</span> ₹{{ builtInPadsTotal }}
+</p>
   <p *ngIf="heightTotal > 0" class="height-total-line">
     <span>Height Customization:</span> ₹{{ heightTotal }}</p>
 
