@@ -27,6 +27,9 @@
         <!-- Title + Price -->
         <div class="title-price-row">
           <h3 class="product-title">{{ item.name }}</h3>
+          <span class="sold-out-label" *ngIf="item.isSoldOut">
+  SOLD OUT
+</span>
           <span class="item-total">
            ₹{{
   (
@@ -118,7 +121,7 @@
 
 
     <button class="pay-btn"
-            [disabled]="cartItems.length === 0"
+            [disabled]="cartItems.length === 0 || hasSoldOutItems"
             (click)="goToCheckout()">
       Proceed to Checkout →
     </button>

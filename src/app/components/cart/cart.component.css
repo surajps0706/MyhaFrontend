@@ -8,6 +8,18 @@
   font-family: 'Poppins', sans-serif;
 }
 
+.sold-out-label {
+  display: inline-block;
+  background: #ffe5e5;
+  color: #c62828;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 4px;
+  margin-top: 6px;
+  letter-spacing: 0.5px;
+}
+
 /* Header */
 .cart-header {
   display: flex;

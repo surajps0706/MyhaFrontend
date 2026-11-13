@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { CartService } from '../../services/cart.service';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router'; 
+import { ProductService } from '../../services/product.service';
 
 @Component({
   selector: 'app-cart',
@@ -23,18 +24,53 @@ export class CartComponent implements OnInit {
   totalQty: number = 0;
   builtInPadsTotal: number = 0;
 
-  constructor(private cartService: CartService, private router: Router) {}
+  constructor(private cartService: CartService, private router: Router, private productService: ProductService,) {}
 
   ngOnInit(): void {
-    this.cartItems = this.cartService.getCart() || [];
+  this.cartItems = this.cartService.getCart() || [];
 
-    // ✅ Ensure quantity defaults
-    this.cartItems.forEach(item => {
-      if (!item.quantity || item.quantity < 1) item.quantity = 1;
-    });
+  this.cartItems.forEach(item => {
+    if (!item.quantity || item.quantity < 1) {
+      item.quantity = 1;
+    }
+  });
 
-    this.updateTotal();
-  }
+  // Fetch latest product status from backend
+  this.productService.getProducts().subscribe({
+    next: (products: any[]) => {
+
+      this.cartItems = this.cartItems.map(item => {
+
+        const latestProduct = products.find(p =>
+          String(p.id || p._id) === String(item.id || item._id)
+        );
+
+        if (latestProduct) {
+          return {
+            ...item,
+            isSoldOut: latestProduct.isSoldOut === true
+          };
+        }
+
+        return item;
+      });
+
+      // Save updated status in cart
+      this.cartService.updateCart(this.cartItems);
+
+      this.updateTotal();
+    },
+    error: err => {
+      console.error('Error refreshing cart product status:', err);
+    }
+  });
+
+  this.updateTotal();
+}
+
+get hasSoldOutItems(): boolean {
+  return this.cartItems.some(item => item.isSoldOut === true);
+}
 
   updateQuantity(index: number, quantity: number): void {
     if (quantity < 1) return; // prevent 0 or negative qty
