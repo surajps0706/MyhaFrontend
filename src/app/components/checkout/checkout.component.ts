@@ -5,6 +5,8 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { environment } from '../../../environments/environment';
+import { firstValueFrom } from 'rxjs';
+import { timeout } from 'rxjs';
 
 declare var Razorpay: any;
 
@@ -247,80 +249,136 @@ getItemTotal(item: any): number {
 }
 
 
-  openRazorpay(order: any) {
-    const options = {
-      key: environment.razorpayKey,
-      amount: Math.round(this.grandTotal) * 100, // ✅ amount in paise
-      currency: order.currency || 'INR',
-      name: 'Myha Couture',
-      description: 'Order Payment',
-      order_id: order.razorpay_order.id, // ✅ FIXED: use nested ID from backend
-      handler: (response: any) => {
-        console.log('✅ Payment successful:', response);
+ 
+async openRazorpay(order: any) {
+  const razorpayOrderId = order.razorpay_order.id;
+  const orderId = order.orderId;
 
-        const fullAddress = `${this.checkoutData.addressLine1}, ${this.checkoutData.addressLine2 || ''}`.trim();
+  const options = {
+    key: environment.razorpayKey,
+    amount: Math.round(this.grandTotal) * 100,
+    currency: order.currency || 'INR',
+    name: 'Myha Couture',
+    description: 'Order Payment',
+    order_id: razorpayOrderId,
 
-        const orderData = {
-          mode: this.isLoggedIn ? 'user' : 'guest',   // ✅ NEW
-          userId: this.isLoggedIn ? this.authService.getUserToken() : null,
-          razorpayPaymentId: response.razorpay_payment_id,
-          razorpayOrderId: order.razorpay_order.id,
-          orderId: order.orderId,
-          checkoutData: {
-            name: this.checkoutData.name,
-            phone: this.checkoutData.phone,
-            email: this.checkoutData.email,
-            addressLine1: this.checkoutData.addressLine1,
-            addressLine2: this.checkoutData.addressLine2 || "",
-            address: fullAddress,
-            city: this.checkoutData.city,
-            state: this.checkoutData.state,
-            pincode: this.checkoutData.pincode
-          },
-          cartItems: this.cartItems,
-          grandTotal: Math.round(this.grandTotal),
-          shippingCost: Math.round(this.shippingCost),
-          totalAmount: this.totalAmount,
-          paymentType: 'Prepaid'
-        };
+    handler: async (response: any) => {
+      console.log('Payment successful:', response);
 
+      const fullAddress =
+        `${this.checkoutData.addressLine1}, ${this.checkoutData.addressLine2 || ''}`.trim();
 
-        this.http.post<any>(`${this.baseUrl}/save-order`, orderData)
-          .subscribe({
-            next: (res) => {
-              if (res.orderId) {
-                this.shippingCost = res.shippingCost;
-                this.grandTotal = res.grandTotal;
+      const orderData = {
+        mode: this.isLoggedIn ? 'user' : 'guest',
+        userId: this.isLoggedIn ? this.authService.getUserToken() : null,
+        razorpayPaymentId: response.razorpay_payment_id,
+        razorpayOrderId: response.razorpay_order_id,
+        razorpaySignature: response.razorpay_signature,
+        orderId: orderId,
 
-                localStorage.removeItem('cart');
-                this.cartItems = [];
-                this.router.navigate(['/order-success'], {
-                  queryParams: {
-                    orderId: res.orderId,
-                    total: res.grandTotal
-                  }
-                });
-              }
-            },
-            error: (err) => {
-              console.error('❌ Order save failed:', err);
-              alert('❌ Could not save order.');
-            }
-          });
-      },
-      prefill: {
-        name: this.checkoutData.name,
-        email: this.checkoutData.email,
-        contact: this.checkoutData.phone
-      },
-      theme: {
-        color: '#3399cc'
+        checkoutData: {
+          name: this.checkoutData.name,
+          phone: this.checkoutData.phone,
+          email: this.checkoutData.email,
+          addressLine1: this.checkoutData.addressLine1,
+          addressLine2: this.checkoutData.addressLine2 || '',
+          address: fullAddress,
+          city: this.checkoutData.city,
+          state: this.checkoutData.state,
+          pincode: this.checkoutData.pincode
+        },
+
+        cartItems: this.cartItems,
+        grandTotal: Math.round(this.grandTotal),
+        shippingCost: Math.round(this.shippingCost),
+        totalAmount: this.totalAmount,
+        paymentType: 'Prepaid'
+      };
+
+      // Navigate only after backend confirms payment.
+      const completeOrder = (res: any) => {
+        this.shippingCost = res.shippingCost ?? this.shippingCost;
+        this.grandTotal = res.grandTotal ?? this.grandTotal;
+
+        localStorage.removeItem('cart');
+        this.cartItems = [];
+
+        this.router.navigate(['/order-success'], {
+          queryParams: {
+            orderId: orderId,
+            total: this.grandTotal
+          }
+        });
+      };
+
+      try {
+        // First attempt: save and verify payment directly.
+        const res = await firstValueFrom(
+          this.http.post<any>(
+            `${this.baseUrl}/save-order`,
+            orderData
+          ).pipe(timeout(10000))
+        );
+
+        if (res.paymentStatus === 'Paid' || res.orderId) {
+          completeOrder(res);
+          return;
+        }
+
+      } catch (err) {
+        console.error('Direct order confirmation failed:', err);
       }
-    };
 
-    const rzp = new Razorpay(options);
-    rzp.open();
-  }
+      // Fallback: check whether the webhook confirmed payment.
+      console.log('Checking payment confirmation through backend...');
+
+      for (let attempt = 1; attempt <= 20; attempt++) {
+        try {
+          const status = await firstValueFrom(
+            this.http.get<any>(
+              `${this.baseUrl}/order-payment-status/${orderId}`,
+              {
+                params: {
+                  razorpayOrderId: razorpayOrderId
+                }
+              }
+            ).pipe(timeout(5000))
+          );
+
+          if (status.paymentStatus === 'Paid') {
+            completeOrder(status);
+            return;
+          }
+
+        } catch (err) {
+          console.error(`Payment status check ${attempt} failed:`, err);
+        }
+
+        await new Promise(resolve => setTimeout(resolve, 3000));
+      }
+
+      alert(
+        `Your payment was successful, but order confirmation is taking longer than expected.\n\n` +
+        `Order ID: ${orderId}\n\n` +
+        `Please do NOT make another payment. Contact support with this Order ID.`
+      );
+    },
+
+    prefill: {
+      name: this.checkoutData.name,
+      email: this.checkoutData.email,
+      contact: this.checkoutData.phone
+    },
+
+    theme: {
+      color: '#3399cc'
+    }
+  };
+
+  const rzp = new Razorpay(options);
+  rzp.open();
+}
+
 
 
 
