@@ -138,7 +138,15 @@ getItemTotal(item: any): number {
       notes: {
         name: this.checkoutData.name,
         phone: this.checkoutData.phone,
-      }
+      },
+       checkoutData: this.checkoutData,
+    cartItems: this.cartItems,
+
+    cartTotal: this.totalAmount,
+    shippingCost: this.shippingCost,
+    grandTotal: this.grandTotal,
+
+    paymentType: 'Prepaid'
     };
 
 
