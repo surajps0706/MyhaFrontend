@@ -13,8 +13,7 @@ import { Observable } from 'rxjs';
 })
 export class ExchangeService {
 
-  private readonly apiUrl = 'http://localhost:8000';
-
+private readonly apiUrl = 'https://myhabackend-production.up.railway.app';
   constructor(
     private http: HttpClient
   ) {}
