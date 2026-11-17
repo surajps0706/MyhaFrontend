@@ -109,6 +109,15 @@ getItemTotal(item: any): number {
   }
 
   placeOrder(): void {
+
+    if (!this.checkoutData.name.trim()) {
+  alert('Please enter your full name.');
+  return;
+}
+this.checkoutData.name = this.checkoutData.name.trim();
+this.checkoutData.phone = this.checkoutData.phone.trim();
+this.checkoutData.email = this.checkoutData.email.trim();
+this.checkoutData.addressLine1 = this.checkoutData.addressLine1.trim();
     // ✅ Step 1: Basic validation
     if (
       !this.checkoutData.name ||
@@ -256,7 +265,7 @@ async openRazorpay(order: any) {
 
   const options = {
     key: environment.razorpayKey,
-    amount: Math.round(this.grandTotal) * 100,
+    amount: order.razorpay_order.amount,
     currency: order.currency || 'INR',
     name: 'Myha Couture',
     description: 'Order Payment',
@@ -320,7 +329,7 @@ async openRazorpay(order: any) {
           ).pipe(timeout(10000))
         );
 
-        if (res.paymentStatus === 'Paid' || res.orderId) {
+        if (res.paymentStatus === 'Paid') {
           completeOrder(res);
           return;
         }

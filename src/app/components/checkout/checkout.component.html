@@ -3,7 +3,7 @@
 
   <div class="checkout-wrapper">
     <!-- Billing Form -->
-    <form class="billing-form section" (ngSubmit)="placeOrder()" #checkoutForm="ngForm">
+    <form id="checkoutForm" class="billing-form section" (ngSubmit)="placeOrder()" #checkoutForm="ngForm">
       <fieldset>
         <legend>Billing Details</legend>
 
@@ -185,18 +185,18 @@
 
 
 
-      <button 
- type="submit"
- (click)="placeOrder()"
- [disabled]="
- checkoutForm.invalid ||
-   !agreedToTerms ||
-   !shippingCalculated ||
-   shippingLoading 
- "
- class="place-order-btn">
+  <button
+  type="button"
+  (click)="placeOrder()"
+  [disabled]="
+    checkoutForm.invalid ||
+    !agreedToTerms ||
+    !shippingCalculated ||
+    shippingLoading
+  "
+  class="place-order-btn">
 
- {{ shippingLoading ? 'Calculating Delivery...' : 'Proceed to Pay' }}
+  {{ shippingLoading ? 'Calculating Delivery...' : 'Proceed to Pay' }}
 
 </button>
 
