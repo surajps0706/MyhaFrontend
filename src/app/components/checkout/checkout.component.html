@@ -29,8 +29,7 @@
       maxlength="10"
       placeholder="9876543210"
       #phoneInput="ngModel"
-      (input)="checkoutData.phone = checkoutData.phone.replace(/[^0-9]/g, '').slice(0, 10)"
-    />
+      (input)="onPhoneInput()"    />
   </div>
 
   <div

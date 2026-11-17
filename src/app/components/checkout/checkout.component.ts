@@ -108,6 +108,12 @@ getItemTotal(item: any): number {
     return this.cartItems.reduce((total, item) => total + this.getItemTotal(item), 0);
   }
 
+  onPhoneInput(): void {
+  this.checkoutData.phone = this.checkoutData.phone
+    .replace(/[^0-9]/g, '')
+    .slice(0, 10);
+}
+
   placeOrder(): void {
 
     if (!this.checkoutData.name.trim()) {
