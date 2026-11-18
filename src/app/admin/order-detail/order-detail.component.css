@@ -352,6 +352,55 @@
   }
 }
 
+/* Invoice Number Editor */
+.invoice-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 350px;
+  margin: 20px 0;
+}
+
+.invoice-editor label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.invoice-editor input {
+  width: 100%;
+  padding: 11px 14px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #1f2937;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.invoice-editor input::placeholder {
+  color: #9ca3af;
+}
+
+.invoice-editor input:hover {
+  border-color: #9ca3af;
+}
+
+.invoice-editor input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+  .invoice-editor {
+    max-width: 100%;
+  }
+}
+
 
 .status-preparing { background: #ff9800; }
 .status-packed { background: #673ab7; }

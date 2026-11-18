@@ -306,12 +306,12 @@ downloadInvoice(): void {
   }
 
   // Get manually entered invoice number
-  const invoiceNumber = this.invoiceNumber?.trim();
-
-  if (!invoiceNumber) {
-    alert('Please enter an invoice number.');
-    return;
-  }
+  // Use manually entered invoice number if available.
+// Otherwise, use the existing invoice number or order ID.
+const invoiceNumber =
+  this.invoiceNumber?.trim() ||
+  this.order.invoiceNumber ||
+  this.order.orderId;
 
   const doc = new jsPDF();
 
