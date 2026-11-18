@@ -51,9 +51,19 @@ export const routes: Routes = [
         .then(m => m.CheckoutComponent),
   },
 
-  { path: 'order-success', component: OrderSuccessComponent },
+ {
+  path: 'order-success',
+  loadComponent: () =>
+    import('./components/order-success/order-success.component')
+      .then(m => m.OrderSuccessComponent)
+},
 
-  { path: 'track', component: TrackOrderComponent },
+{
+  path: 'track',
+  loadComponent: () =>
+    import('./components/track-order/track-order.component')
+      .then(m => m.TrackOrderComponent)
+},
 
   // =========================
   // 🔄 EXCHANGE ROUTE — PUBLIC
