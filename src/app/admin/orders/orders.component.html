@@ -61,7 +61,9 @@
         </td>
 
         <td>{{ order.checkoutData?.name || '—' }}</td>
-        <td>₹{{ order.totalAmount }}</td>
+        <td>
+  {{ (order.grandTotal ?? order.totalAmount ?? 0) | currency:'INR':'symbol':'1.0-2' }}
+</td>
 
         <td>
           <span class="status" [ngClass]="(order.status || '').toLowerCase()">
@@ -69,29 +71,26 @@
           </span>
         </td>
 
- <td>
-  <span>{{ order.awb || '—' }}</span>
+        <td>
+          <span>{{ order.awb || '—' }}</span>
   <button
     *ngIf="order.awb"
     class="tiny-btn"
     (click)="copyAwb(order.awb, $event)"
     title="Copy AWB"
   >
-    Copy
-  </button>
-</td>
+            Copy
+          </button>
+        </td>
 
 
-<td>{{ order.createdAt | date:'medium':'Asia/Kolkata' }}</td>
+        <td>{{ order.createdAt | date:'medium':'Asia/Kolkata' }}</td>
 
         <td>
           <!-- ✅ Admin can update until Packed -->
-          <select
-            [(ngModel)]="order.status"
-            (change)="updateStatus(order, order.status); $event.stopPropagation()"
+          <select [(ngModel)]="order.status" (change)="updateStatus(order, order.status); $event.stopPropagation()"
             [disabled]="order.status === 'Shipped' || order.status === 'Delivered' || order.status === 'Cancelled'"
-            title="Update status"
-          >
+            title="Update status">
             <option>Preparing</option>
             <option>Packed</option>
           </select>
@@ -104,24 +103,18 @@
 
         <td class="actions">
           <!-- View button (alternative to clicking Order ID) -->
-          <button
-            class="view-btn"
-            (click)="viewDetails(order.orderId); $event.stopPropagation()"
-            [disabled]="!order.orderId"
-          >
+          <button class="view-btn" (click)="viewDetails(order.orderId); $event.stopPropagation()"
+            [disabled]="!order.orderId">
             👁 View
           </button>
 
           <!-- Cancel -->
-          <button
-            class="cancel-btn"
-            (click)="cancelOrder(order.orderId); $event.stopPropagation()"
-            [disabled]="order.status === 'Shipped' || order.status === 'Delivered' || order.status === 'Cancelled'"
-          >
+          <button class="cancel-btn" (click)="cancelOrder(order.orderId); $event.stopPropagation()"
+            [disabled]="order.status === 'Shipped' || order.status === 'Delivered' || order.status === 'Cancelled'">
             ❌ Cancel
           </button>
 
-  <button class="delete-btn" (click)="deleteOrder(order.orderId)">Delete</button>
+          <button class="delete-btn" (click)="deleteOrder(order.orderId)">Delete</button>
 
 
         </td>
