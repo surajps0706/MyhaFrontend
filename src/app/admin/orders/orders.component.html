@@ -62,7 +62,7 @@
 
         <td>{{ order.checkoutData?.name || '—' }}</td>
         <td>
-  {{ (order.grandTotal ?? order.totalAmount ?? 0) | currency:'INR':'symbol':'1.0-2' }}
+  {{ ( order.totalAmount ) | currency:'INR':'symbol':'1.0-2' }}
 </td>
 
         <td>
