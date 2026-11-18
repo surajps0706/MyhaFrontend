@@ -144,77 +144,68 @@ export class ProductListComponent implements OnInit {
   // FETCH PRODUCTS
   // ==========================================
 
-  fetchProducts(): void {
 
-    this.isLoading = true;
+fetchProducts(): void {
 
-    this.http.get<any[]>(
-      `${this.baseUrl}/products`
-    ).subscribe({
+  this.isLoading = true;
 
-      next: (data) => {
+  this.http.get<any[]>(`${this.baseUrl}/products`).subscribe({
 
-        this.products = Array.isArray(data)
+    next: (data) => {
 
-          ? data
-              .map(p => ({
+      this.products = Array.isArray(data)
+        ? data.map(p => {
 
-                ...p,
+            const images = Array.isArray(p.images)
+              ? p.images
+              : typeof p.images === 'string'
+                ? p.images.split(',')
+                    .map((i: string) => i.trim())
+                    .filter(Boolean)
+                : [];
 
-                images: Array.isArray(p.images)
+            return {
+              ...p,
+              images,
 
-                  ? p.images
+              // Calculate category only once
+              normalizedCategory: this.normalizeCategory(p.category),
 
-                  : typeof p.images === 'string'
+              // Calculate numeric price only once
+              numericPrice: typeof p.price === 'number'
+                ? p.price
+                : parseInt(
+                    String(p.price || '0').replace(/\D/g, ''),
+                    10
+                  ) || 0
+            };
 
-                    ? p.images
-                        .split(',')
-                        .map((i: string) => i.trim())
-                        .filter((i: string) => i.length > 0)
+          }).sort((a, b) =>
+            new Date(b.createdAt || 0).getTime() -
+            new Date(a.createdAt || 0).getTime()
+          )
+        : [];
 
-                    : []
+      this.buildCategories();
 
-              }))
+      this.applyFilters();
 
-              .sort((a, b) =>
-                new Date(b.createdAt || 0).getTime() -
-                new Date(a.createdAt || 0).getTime()
-              )
+      this.isLoading = false;
 
-          : [];
+    },
 
+    error: (err) => {
 
-        // ==========================
-        // BUILD DYNAMIC CATEGORIES
-        // ==========================
+      console.error('Error fetching products:', err);
 
-        this.buildCategories();
+      this.isLoading = false;
 
+    }
 
-        // ==========================
-        // APPLY FILTER
-        // ==========================
+  });
 
-        this.applyFilters();
+}
 
-
-        this.isLoading = false;
-
-      },
-
-      error: (err) => {
-
-        console.error(
-          '❌ Error fetching products:',
-          err
-        );
-
-        this.isLoading = false;
-
-      }
-
-    });
-  }
 
 
   // ==========================================
@@ -300,82 +291,32 @@ export class ProductListComponent implements OnInit {
   // APPLY ALL FILTERS
   // ==========================================
 
-  applyFilters(): void {
+ 
+applyFilters(): void {
 
-    console.log(
-      'Selected Category:',
-      this.selectedCategory
-    );
+  const selectedCategory = this.normalizeCategory(
+    this.selectedCategory
+  );
 
-    console.log(
-      'Price Range:',
-      this.priceRange
-    );
+  const filtered = this.products.filter(p => {
 
+    const matchCategory =
+      selectedCategory === 'all' ||
+      p.normalizedCategory === selectedCategory;
 
-    const filtered =
-      this.products.filter((p) => {
+    const matchPrice =
+      p.numericPrice <= this.priceRange;
 
-        // ==========================
-        // CATEGORY
-        // ==========================
+    return matchCategory && matchPrice;
 
-        const matchCategory =
+  });
 
-          this.selectedCategory === 'all'
+  this.filteredProducts = filtered;
 
-            ? true
+  this.currentPage = 1;
 
-            : this.normalizeCategory(
-                p.category
-              ) ===
-              this.normalizeCategory(
-                this.selectedCategory
-              );
+}
 
-
-        // ==========================
-        // PRICE
-        // ==========================
-
-        const priceValue =
-
-          typeof p.price === 'number'
-
-            ? p.price
-
-            : parseInt(
-                p.price
-                  ?.toString()
-                  .replace(/\D/g, '') || '0',
-                10
-              );
-
-
-        const matchPrice =
-          priceValue <= this.priceRange;
-
-
-        return (
-          matchCategory &&
-          matchPrice
-        );
-
-      });
-
-
-    console.log(
-      'Filtered Count:',
-      filtered.length
-    );
-
-
-    this.filteredProducts =
-      filtered;
-
-    this.currentPage = 1;
-
-  }
 
 
   // ==========================================
