@@ -61,10 +61,9 @@
         </td>
 
         <td>{{ order.checkoutData?.name || '—' }}</td>
-        <td>
-  {{ ( order.totalAmount ) | currency:'INR':'symbol':'1.0-2' }}
+       <td>
+  {{ (order.grandTotal ?? order.totalAmount ?? order.cartTotal ?? 0) | currency:'INR':'symbol':'1.0-2' }}
 </td>
-
         <td>
           <span class="status" [ngClass]="(order.status || '').toLowerCase()">
             {{ order.status || '—' }}
