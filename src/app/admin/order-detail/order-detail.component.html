@@ -120,6 +120,23 @@
       🧾 Download Invoice
     </button>
 
+    <!-- Invoice Number Editor -->
+<!-- Invoice Number Editor -->
+<div class="invoice-editor" *ngIf="order">
+
+  <label for="invoiceNumber">
+    <b>Invoice Number:</b>
+  </label>
+
+  <input
+    type="text"
+    id="invoiceNumber"
+    [(ngModel)]="invoiceNumber"
+    placeholder="Enter invoice number"
+  />
+
+</div>
+
   </div>
 
   <!-- Keep your existing customer information,

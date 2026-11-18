@@ -22,6 +22,9 @@ export class OrderDetailComponent implements OnInit {
   baseUrl: string = environment.apiUrl;
   objectKeys = Object.keys;
 
+  invoiceNumber: string = '';
+
+
   // Order navigation
 orderIds: string[] = [];
 currentOrderIndex: number = -1;
@@ -294,9 +297,19 @@ downloadDetails(): void {
   doc.save(`Order-Details-${this.order.orderId}.pdf`);
 }
 
+
 downloadInvoice(): void {
+
   if (!this.order) {
     alert('Order details are not available.');
+    return;
+  }
+
+  // Get manually entered invoice number
+  const invoiceNumber = this.invoiceNumber?.trim();
+
+  if (!invoiceNumber) {
+    alert('Please enter an invoice number.');
     return;
   }
 
@@ -305,11 +318,12 @@ downloadInvoice(): void {
   const margin = 14;
   const pageWidth = doc.internal.pageSize.getWidth();
 
-  const invoiceNumber = `INV-${this.order.orderId}`;
-
   const customer = this.order.checkoutData || {};
-
   const items = this.getOrderItems();
+
+  // =========================
+  // INVOICE HEADER
+  // =========================
 
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(16);
@@ -317,7 +331,6 @@ downloadInvoice(): void {
   doc.text('TAX INVOICE', margin, 20);
 
   doc.setFontSize(11);
-
   doc.text('From:', margin, 32);
 
   doc.setFont('helvetica', 'normal');
@@ -339,6 +352,10 @@ downloadInvoice(): void {
   });
 
   y += 3;
+
+  // =========================
+  // INVOICE DETAILS
+  // =========================
 
   doc.setFont('helvetica', 'bold');
   doc.text('Invoice Details:', margin, y);
@@ -367,6 +384,10 @@ downloadInvoice(): void {
 
   y += 3;
 
+  // =========================
+  // CUSTOMER DETAILS
+  // =========================
+
   doc.setFont('helvetica', 'bold');
   doc.text('Billed To:', margin, y);
 
@@ -381,6 +402,7 @@ downloadInvoice(): void {
   ];
 
   billedTo.forEach(line => {
+
     const wrapped = doc.splitTextToSize(
       line,
       pageWidth - margin * 2
@@ -388,18 +410,23 @@ downloadInvoice(): void {
 
     doc.text(wrapped, margin + 5, y);
     y += wrapped.length * 5;
+
   });
 
   y += 5;
 
+  // =========================
+  // PRODUCT TABLE
+  // =========================
+
   const rows = items.map((item: any, index: number) => {
+
     const quantity = Number(item.quantity || 1);
 
     const lineTotal = item.lineTotal != null
       ? Number(item.lineTotal)
       : Number(item.price || 0) * quantity;
 
-    // Derive the displayed rate from the actual line total.
     const rate = quantity ? lineTotal / quantity : 0;
 
     return [
@@ -409,10 +436,13 @@ downloadInvoice(): void {
       this.formatCurrency(rate),
       this.formatCurrency(lineTotal)
     ];
+
   });
 
   autoTable(doc, {
+
     startY: y,
+
     head: [[
       'S.No.',
       'Description',
@@ -420,20 +450,29 @@ downloadInvoice(): void {
       'Rate',
       'Total'
     ]],
+
     body: rows,
+
     styles: {
       fontSize: 8,
       cellPadding: 3
     },
+
     headStyles: {
       fillColor: [240, 240, 240],
       textColor: [0, 0, 0]
     },
+
     margin: {
       left: margin,
       right: margin
     }
+
   });
+
+  // =========================
+  // TOTAL SUMMARY
+  // =========================
 
   let finalY =
     (doc as any).lastAutoTable.finalY + 10;
@@ -477,16 +516,25 @@ downloadInvoice(): void {
 
   finalY += 8;
 
+  // =========================
+  // AMOUNT IN WORDS
+  // =========================
+
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(9);
 
-  doc.text(
+  const amountText = doc.splitTextToSize(
     `Amount in Words: ${this.amountInWords(grandTotal)}`,
-    margin,
-    finalY
+    pageWidth - margin * 2
   );
 
-  finalY += 10;
+  doc.text(amountText, margin, finalY);
+
+  finalY += amountText.length * 5 + 5;
+
+  // =========================
+  // TERMS & CONDITIONS
+  // =========================
 
   doc.setFont('helvetica', 'bold');
   doc.text('Terms & Conditions:', margin, finalY);
@@ -495,31 +543,43 @@ downloadInvoice(): void {
 
   doc.setFont('helvetica', 'normal');
 
-  doc.text(
+  const terms = [
     '1. Goods once sold are subject to the applicable return and exchange policy.',
-    margin + 3,
-    finalY
-  );
-
-  finalY += 6;
-
-  doc.text(
     '2. This invoice is mapped against the shipping logistics tracking ID.',
-    margin + 3,
-    finalY
-  );
+    '3. Delivery timelines may vary depending on the courier/logistics provider.'
+  ];
 
-  finalY += 6;
+  terms.forEach(term => {
 
-doc.text(
-  '3. Delivery timelines may vary depending on the courier/logistics provider.',
-  margin + 3,
-  finalY
-);
+    const wrapped = doc.splitTextToSize(
+      term,
+      pageWidth - margin * 2 - 3
+    );
 
-  finalY += 12;
-  
+    // Prevent text from going outside the PDF page
+    if (finalY + wrapped.length * 5 > doc.internal.pageSize.getHeight() - 20) {
+      doc.addPage();
+      finalY = 20;
+    }
 
+    doc.text(wrapped, margin + 3, finalY);
+
+    finalY += wrapped.length * 5 + 2;
+
+  });
+
+  // =========================
+  // AUTHORIZED SIGNATORY
+  // =========================
+
+  finalY += 10;
+
+  if (finalY + 25 > doc.internal.pageSize.getHeight() - 10) {
+    doc.addPage();
+    finalY = 25;
+  }
+
+  doc.setFont('helvetica', 'normal');
   doc.text('For Myha Couture', margin, finalY);
 
   finalY += 15;
@@ -527,8 +587,14 @@ doc.text(
   doc.setFont('helvetica', 'bold');
   doc.text('Authorized Signatory', margin, finalY);
 
+  // =========================
+  // DOWNLOAD PDF
+  // =========================
+
   doc.save(`Invoice-${invoiceNumber}.pdf`);
+
 }
+
 
 private amountInWords(amount: number): string {
   const wholeAmount = Math.floor(Number(amount) || 0);
@@ -722,19 +788,23 @@ closeOrder(): void {
   this.router.navigate(['/admin/orders']);
 }
 
-  loadOrder() {
-    this.http.get(`${this.baseUrl}/orders/${this.orderId}`, {
-      headers: this.authHeaders()
-    }).subscribe({
-      next: (res: any) => {
-        this.order = res;
-        this.selectedStatus = res.status || ''; // preselect current
-        this.updateCurrentOrderIndex();
+loadOrder() {
+  this.http.get(`${this.baseUrl}/orders/${this.orderId}`, {
+    headers: this.authHeaders()
+  }).subscribe({
+    next: (res: any) => {
+      this.order = res;
+      this.selectedStatus = res.status || '';
 
-      },
-      error: (err) => console.error('❌ Failed to load order details', err)
-    });
-  }
+      // Load existing invoice number or generate a default
+this.invoiceNumber = '';
+      this.updateCurrentOrderIndex();
+    },
+    error: (err) => console.error('Failed to load order details', err)
+  });
+}
+
+
 
   // 🔹 New: update order status
 updateStatus(): void {
